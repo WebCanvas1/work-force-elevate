@@ -1,24 +1,766 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import {
+  ArrowRight,
+  HardHat,
+  Factory,
+  Wrench,
+  Users,
+  Zap,
+  ShieldCheck,
+  Sparkles,
+  MapPin,
+  Truck,
+  Building2,
+  Warehouse,
+  Hammer,
+  Cog,
+  Store,
+  Home as HomeIcon,
+  Phone,
+  Mail,
+  Check,
+  Quote,
+  ChevronRight,
+} from "lucide-react";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import heroImg from "../assets/hero-construction.jpg";
+import constructionImg from "../assets/service-construction.jpg";
+import manufacturingImg from "../assets/service-manufacturing.jpg";
+import maintenanceImg from "../assets/service-maintenance.jpg";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Your Crew — Melbourne Labour Hire & Workforce Solutions" },
+      {
+        name: "description",
+        content:
+          "Australia's trusted labour hire partner. Skilled construction, manufacturing and maintenance workers, deployed fast across Melbourne and Victoria.",
+      },
+      { property: "og:title", content: "Your Crew — Melbourne Labour Hire" },
+      { property: "og:url", content: "/" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          name: "Your Crew",
+          description:
+            "Labour hire and workforce solutions across Melbourne and Victoria.",
+          telephone: "+61451267768",
+          areaServed: "Victoria, Australia",
+          address: { "@type": "PostalAddress", addressLocality: "Melbourne", addressRegion: "VIC", addressCountry: "AU" },
+        }),
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const mv = useMotionValue(0);
+  const spring = useSpring(mv, { duration: 1600, bounce: 0 });
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    if (inView) mv.set(target);
+  }, [inView, mv, target]);
+
+  useEffect(() => spring.on("change", (v) => setDisplay(Math.round(v))), [spring]);
+
+  return (
+    <span ref={ref}>
+      {display.toLocaleString()}
+      {suffix}
+    </span>
+  );
+}
+
+const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-60px" },
+  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
+};
+
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div>
+      <Hero />
+      <Stats />
+      <Services />
+      <WhyUs />
+      <Industries />
+      <HowItWorks />
+      <Testimonials />
+      <CTABanner />
+      <LatestJobs />
+      <ContactStrip />
     </div>
+  );
+}
+
+function Hero() {
+  return (
+    <section className="relative isolate overflow-hidden bg-primary pt-24 text-white md:pt-28">
+      <div className="absolute inset-0 -z-10">
+        <img
+          src={heroImg}
+          alt="Skilled workers on a Melbourne construction site at sunrise"
+          className="h-full w-full object-cover opacity-60"
+          width={1920}
+          height={1200}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/60 to-primary" />
+      </div>
+
+      {/* animated shapes */}
+      <motion.div
+        aria-hidden
+        className="absolute -right-24 top-24 h-72 w-72 rounded-full bg-accent/25 blur-3xl"
+        animate={{ y: [0, 30, 0], opacity: [0.5, 0.8, 0.5] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        aria-hidden
+        className="absolute -left-32 bottom-10 h-96 w-96 rounded-full bg-white/5 blur-3xl"
+        animate={{ y: [0, -20, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      <div className="container-x relative grid gap-14 pb-24 pt-16 md:pb-32 md:pt-24 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+        <div>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-xs font-medium uppercase tracking-wider backdrop-blur"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            Trusted for 22+ years across Victoria
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="text-balance mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl lg:text-[4.25rem]"
+          >
+            Australia's Trusted{" "}
+            <span className="relative whitespace-nowrap">
+              <span className="relative z-10 text-accent">Labour Hire</span>
+              <svg
+                aria-hidden
+                viewBox="0 0 300 12"
+                className="absolute inset-x-0 -bottom-2 h-3 w-full text-accent/50"
+              >
+                <path d="M2 8 C 80 2, 220 2, 298 8" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
+              </svg>
+            </span>{" "}
+            Partner.
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="mt-6 max-w-xl text-lg leading-relaxed text-white/75"
+          >
+            Your Crew supplies skilled construction, manufacturing and maintenance workers across
+            Melbourne and Victoria — screened, reliable, and ready to work.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="mt-8 flex flex-wrap gap-3"
+          >
+            <Link
+              to="/find-staff"
+              className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-white shadow-xl shadow-accent/30 transition-all hover:translate-y-[-1px] hover:bg-accent/90"
+            >
+              Find Staff
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+            <Link
+              to="/find-a-job"
+              className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition-all hover:bg-white/10"
+            >
+              Find a Job
+            </Link>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs text-white/60"
+          >
+            {["Fully screened workers", "24-hour response", "Melbourne based", "Victoria wide"].map((s) => (
+              <div key={s} className="flex items-center gap-2">
+                <Check className="h-3.5 w-3.5 text-accent" />
+                {s}
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Hero side card */}
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.35 }}
+          className="relative hidden lg:block"
+        >
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl shadow-2xl">
+            <div className="flex items-center gap-3 border-b border-white/10 pb-4">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-accent/20 text-accent">
+                <Zap className="h-5 w-5" />
+              </span>
+              <div>
+                <p className="text-sm font-semibold text-white">Rapid deployment</p>
+                <p className="text-xs text-white/60">Workers on site in as little as 24 hours</p>
+              </div>
+            </div>
+            <div className="mt-4 grid grid-cols-2 gap-3">
+              {[
+                { label: "Construction", n: "820+" },
+                { label: "Manufacturing", n: "540+" },
+                { label: "Maintenance", n: "310+" },
+                { label: "Trades", n: "430+" },
+              ].map((x) => (
+                <div key={x.label} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                  <p className="text-2xl font-bold">{x.n}</p>
+                  <p className="text-xs uppercase tracking-wider text-white/55">{x.label}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 flex items-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-medium text-white">
+              <ShieldCheck className="h-4 w-4" />
+              All workers pre-screened & inducted
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+const stats = [
+  { n: 22, s: "+", label: "Years of Experience" },
+  { n: 750, s: "+", label: "Projects Delivered" },
+  { n: 3200, s: "+", label: "Workers Placed" },
+  { n: 1800, s: "+", label: "Active Workers" },
+];
+
+function Stats() {
+  return (
+    <section className="border-y border-border bg-white">
+      <div className="container-x grid grid-cols-2 gap-y-10 py-14 md:grid-cols-4 md:py-16">
+        {stats.map((s, i) => (
+          <motion.div
+            key={s.label}
+            {...fadeUp}
+            transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+            className="border-r border-border/60 px-3 text-center last:border-r-0 md:px-6"
+          >
+            <p className="text-4xl font-extrabold tracking-tight text-primary md:text-5xl">
+              <Counter target={s.n} suffix={s.s} />
+            </p>
+            <p className="mt-2 text-xs font-medium uppercase tracking-wider text-muted-foreground md:text-sm">
+              {s.label}
+            </p>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+const services = [
+  {
+    icon: HardHat,
+    title: "Construction Labour Hire",
+    img: constructionImg,
+    desc: "Qualified labourers, carpenters, formworkers, concreters, machine operators and site support across Melbourne and regional Victoria.",
+    bullets: ["Site Managers & Forepersons", "Skilled Tradespersons", "General Labourers", "Site Admin Support"],
+  },
+  {
+    icon: Factory,
+    title: "Manufacturing",
+    img: manufacturingImg,
+    desc: "Keep production moving with experienced factory workers, forklift operators, machine operators and warehouse staff ready when you need them.",
+    bullets: ["Machine Operators", "Forklift & Logistics", "Cleaners & Labourers", "Maintenance Technicians"],
+  },
+  {
+    icon: Wrench,
+    title: "Maintenance",
+    img: maintenanceImg,
+    desc: "Reliable maintenance professionals to help keep your properties, facilities and assets safe, functional and well maintained.",
+    bullets: ["Handyman Services", "Plumbing & Electrical", "Landscaping & Grounds", "Emergency Repairs"],
+  },
+];
+
+function Services() {
+  return (
+    <section id="services" className="bg-background py-24 md:py-32">
+      <div className="container-x">
+        <div className="mx-auto max-w-2xl text-center">
+          <motion.p {...fadeUp} className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+            Our Services
+          </motion.p>
+          <motion.h2 {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.05 }} className="text-balance mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
+            Workforce solutions for the industries that build Australia.
+          </motion.h2>
+          <motion.p {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="mt-5 text-lg text-muted-foreground">
+            We take the stress out of hiring by matching you with pre-screened workers who fit your
+            environment and culture.
+          </motion.p>
+        </div>
+
+        <div className="mt-16 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+          {services.map((s, i) => (
+            <motion.article
+              key={s.title}
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+              className="group overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <img
+                  src={s.img}
+                  alt={s.title}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent" />
+                <span className="absolute left-4 top-4 grid h-11 w-11 place-items-center rounded-xl bg-white/95 text-primary shadow-lg backdrop-blur">
+                  <s.icon className="h-5 w-5" />
+                </span>
+              </div>
+              <div className="p-7">
+                <h3 className="text-xl font-bold text-primary">{s.title}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
+                <ul className="mt-5 space-y-2 text-sm">
+                  {s.bullets.map((b) => (
+                    <li key={b} className="flex items-start gap-2">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                      <span className="text-foreground/85">{b}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to="/find-staff"
+                  className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-accent"
+                >
+                  Learn more <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const whys = [
+  { icon: Users, title: "Experienced Team", desc: "Melbourne-based specialists with 22+ years matching people to sites." },
+  { icon: HardHat, title: "Skilled Workforce", desc: "Pre-screened tradespeople and labourers ready to contribute from day one." },
+  { icon: Zap, title: "Rapid Placements", desc: "Workers on site in as little as 24 hours for urgent requests." },
+  { icon: Sparkles, title: "Flexible Solutions", desc: "From one-day labour hire to ongoing, tailored workforce programs." },
+  { icon: MapPin, title: "National Support", desc: "Melbourne base, Victoria-wide coverage, and interstate on request." },
+  { icon: ShieldCheck, title: "Safety Focus", desc: "Full compliance, inductions and licensing — safety is non-negotiable." },
+];
+
+function WhyUs() {
+  return (
+    <section className="relative overflow-hidden bg-primary py-24 text-white md:py-32">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,rgba(249,115,22,0.18),transparent_45%)]" />
+      <div className="container-x">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Why Your Crew</p>
+          <h2 className="text-balance mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+            Built on reliability, expertise and flexibility.
+          </h2>
+          <p className="mt-5 text-lg text-white/70">
+            We deliver skilled, reliable professionals who seamlessly integrate into your team.
+          </p>
+        </div>
+
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {whys.map((w, i) => (
+            <motion.div
+              key={w.title}
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: i * 0.06 }}
+              className="group rounded-2xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur transition-colors hover:border-accent/40 hover:bg-white/[0.07]"
+            >
+              <span className="grid h-12 w-12 place-items-center rounded-xl bg-accent/15 text-accent transition-colors group-hover:bg-accent group-hover:text-white">
+                <w.icon className="h-5.5 w-5.5" />
+              </span>
+              <h3 className="mt-5 text-lg font-bold text-white">{w.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-white/70">{w.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const industries = [
+  { icon: HardHat, label: "Construction" },
+  { icon: Truck, label: "Civil" },
+  { icon: Warehouse, label: "Warehousing" },
+  { icon: Factory, label: "Manufacturing" },
+  { icon: Wrench, label: "Maintenance" },
+  { icon: Store, label: "Commercial" },
+  { icon: HomeIcon, label: "Property" },
+  { icon: Building2, label: "Infrastructure" },
+];
+
+function Industries() {
+  return (
+    <section className="bg-background py-24 md:py-32">
+      <div className="container-x">
+        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Industries</p>
+            <h2 className="text-balance mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
+              Trusted across the sectors that keep Victoria moving.
+            </h2>
+          </div>
+          <p className="text-lg text-muted-foreground">
+            From high-rise construction to precision manufacturing, our people arrive ready with the
+            tickets, PPE and attitude your site expects.
+          </p>
+        </div>
+
+        <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+          {industries.map((i, idx) => (
+            <motion.div
+              key={i.label}
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: idx * 0.05 }}
+              className="group flex flex-col items-start gap-4 rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg"
+            >
+              <span className="grid h-12 w-12 place-items-center rounded-xl bg-primary text-white transition-colors group-hover:bg-accent">
+                <i.icon className="h-5.5 w-5.5" />
+              </span>
+              <p className="text-base font-semibold text-primary">{i.label}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const steps = [
+  { title: "Tell us your needs", desc: "Reach out and we'll discuss your project, roles and timelines in detail." },
+  { title: "We source skilled workers", desc: "We match your requirements, culture and site with the right people from our pool." },
+  { title: "Workers are deployed", desc: "Fully inducted, PPE-ready workers arrive on site and get straight to work." },
+  { title: "Ongoing support", desc: "We stay close, adjusting the crew as needs change through the life of the project." },
+];
+
+function HowItWorks() {
+  return (
+    <section className="relative overflow-hidden bg-white py-24 md:py-32">
+      <div className="container-x">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">How it works</p>
+          <h2 className="text-balance mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
+            Four steps to the right crew on your site.
+          </h2>
+        </div>
+
+        <ol className="mx-auto mt-16 grid max-w-5xl gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {steps.map((s, i) => (
+            <motion.li
+              key={s.title}
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+              className="relative rounded-2xl border border-border bg-background p-7"
+            >
+              <span className="text-xs font-semibold uppercase tracking-widest text-accent">
+                Step {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 className="mt-3 text-lg font-bold text-primary">{s.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
+              {i < steps.length - 1 && (
+                <ChevronRight className="absolute -right-3 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-border lg:block" />
+              )}
+            </motion.li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+const quotes = [
+  {
+    q: "Your Crew consistently delivers reliable workers who fit our sites straight away. Their response time is unmatched.",
+    a: "Site Manager, Tier-2 Builder",
+  },
+  {
+    q: "We ramped up production for a major project in 48 hours thanks to their pool of pre-screened workers.",
+    a: "Operations Lead, Manufacturing",
+  },
+  {
+    q: "Their team listens, understands our culture and only sends people who match. A genuine partnership.",
+    a: "HR Director, Commercial Fit-out",
+  },
+];
+
+function Testimonials() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setI((v) => (v + 1) % quotes.length), 6000);
+    return () => clearInterval(t);
+  }, []);
+  const q = quotes[i];
+  return (
+    <section className="bg-background py-24 md:py-32">
+      <div className="container-x">
+        <div className="mx-auto max-w-4xl rounded-3xl border border-border bg-white p-10 shadow-sm md:p-16">
+          <Quote className="h-10 w-10 text-accent" />
+          <motion.blockquote
+            key={i}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mt-6 text-2xl font-medium leading-relaxed text-primary md:text-3xl"
+          >
+            "{q.q}"
+          </motion.blockquote>
+          <p className="mt-6 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            {q.a}
+          </p>
+          <div className="mt-8 flex gap-2">
+            {quotes.map((_, idx) => (
+              <button
+                key={idx}
+                aria-label={`Testimonial ${idx + 1}`}
+                onClick={() => setI(idx)}
+                className={`h-1.5 rounded-full transition-all ${
+                  idx === i ? "w-10 bg-accent" : "w-4 bg-border"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CTABanner() {
+  return (
+    <section className="bg-background pb-24 md:pb-32">
+      <div className="container-x">
+        <div className="relative overflow-hidden rounded-3xl bg-primary p-10 text-white md:p-16">
+          <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-accent/30 blur-3xl" />
+          <div className="absolute -bottom-24 -left-10 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
+          <div className="relative grid gap-8 md:grid-cols-[1.4fr_1fr] md:items-center">
+            <div>
+              <h2 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
+                Need reliable staff? Request workers today.
+              </h2>
+              <p className="mt-4 max-w-xl text-white/70">
+                Tell us what you need and our Melbourne team will contact you within one business day.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3 md:justify-end">
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent/30 transition-transform hover:-translate-y-0.5"
+              >
+                Contact us <ArrowRight className="h-4 w-4" />
+              </Link>
+              <a
+                href="tel:+61451267768"
+                className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur hover:bg-white/10"
+              >
+                <Phone className="h-4 w-4" /> 0451 267 768
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const jobs = [
+  { title: "Formworker — CBD Project", cat: "Construction", loc: "Melbourne CBD", type: "Full time" },
+  { title: "Forklift Operator", cat: "Manufacturing", loc: "Dandenong", type: "Ongoing" },
+  { title: "General Labourer", cat: "Construction", loc: "Preston", type: "Casual" },
+  { title: "Maintenance Technician", cat: "Maintenance", loc: "Laverton", type: "Full time" },
+];
+
+function LatestJobs() {
+  return (
+    <section className="bg-white py-24 md:py-32">
+      <div className="container-x">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Careers</p>
+            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
+              Latest opportunities
+            </h2>
+          </div>
+          <Link
+            to="/find-a-job"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-accent"
+          >
+            View all jobs <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="mt-10 divide-y divide-border rounded-2xl border border-border bg-card">
+          {jobs.map((j, i) => (
+            <motion.div
+              key={j.title}
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: i * 0.05 }}
+              className="group grid gap-4 p-6 md:grid-cols-[1.6fr_1fr_1fr_auto] md:items-center"
+            >
+              <div>
+                <p className="text-base font-semibold text-primary transition-colors group-hover:text-accent">{j.title}</p>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground">{j.cat}</p>
+              </div>
+              <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                <MapPin className="h-4 w-4 text-accent" /> {j.loc}
+              </p>
+              <p className="text-sm text-muted-foreground">{j.type}</p>
+              <Link
+                to="/find-a-job"
+                className="inline-flex w-fit items-center gap-1 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-accent"
+              >
+                Apply <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ContactStrip() {
+  return (
+    <section className="bg-background py-24 md:py-32">
+      <div className="container-x grid gap-10 lg:grid-cols-[1.1fr_1fr]">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Get in touch</p>
+          <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
+            Quick enquiry
+          </h2>
+          <p className="mt-5 max-w-md text-muted-foreground">
+            Send us a quick message and we'll get back to you within one business day.
+          </p>
+          <ul className="mt-8 space-y-4 text-sm">
+            <li className="flex items-center gap-3">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-white"><Phone className="h-4 w-4" /></span>
+              <a href="tel:+61451267768" className="font-semibold text-primary">0451 267 768</a>
+            </li>
+            <li className="flex items-center gap-3">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-white"><Mail className="h-4 w-4" /></span>
+              <a href="mailto:info@yourcrew.com.au" className="font-semibold text-primary">info@yourcrew.com.au</a>
+            </li>
+            <li className="flex items-center gap-3">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-white"><MapPin className="h-4 w-4" /></span>
+              <span className="font-semibold text-primary">Melbourne, Victoria — servicing statewide</span>
+            </li>
+          </ul>
+          <div className="mt-8 overflow-hidden rounded-2xl border border-border">
+            <iframe
+              title="Melbourne map"
+              src="https://www.openstreetmap.org/export/embed.html?bbox=144.85%2C-37.87%2C145.05%2C-37.76&layer=mapnik"
+              className="h-64 w-full"
+              loading="lazy"
+            />
+          </div>
+        </div>
+
+        <QuickForm />
+      </div>
+    </section>
+  );
+}
+
+function QuickForm() {
+  const [sent, setSent] = useState(false);
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        setSent(true);
+      }}
+      className="rounded-3xl border border-border bg-card p-8 shadow-sm md:p-10"
+    >
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="First name" name="firstName" />
+        <Field label="Last name" name="lastName" />
+        <Field label="Email" name="email" type="email" required />
+        <Field label="Phone" name="phone" type="tel" />
+      </div>
+      <div className="mt-4">
+        <Field label="Message" name="message" as="textarea" />
+      </div>
+      <button
+        type="submit"
+        className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-white transition-all hover:bg-accent"
+      >
+        Send message <ArrowRight className="h-4 w-4" />
+      </button>
+      {sent && (
+        <p className="mt-4 rounded-xl bg-accent/10 px-4 py-3 text-sm text-accent">
+          Thanks — we've received your message and will be in touch within one business day.
+        </p>
+      )}
+    </form>
+  );
+}
+
+export function Field({
+  label,
+  name,
+  type = "text",
+  as = "input",
+  required,
+  ...rest
+}: {
+  label: string;
+  name: string;
+  type?: string;
+  as?: "input" | "textarea" | "select";
+  required?: boolean;
+} & Record<string, unknown>) {
+  const cls =
+    "w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20";
+  return (
+    <label className="block">
+      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {label} {required && <span className="text-accent">*</span>}
+      </span>
+      {as === "textarea" ? (
+        <textarea name={name} rows={4} required={required} className={cls} {...(rest as Record<string, unknown>)} />
+      ) : as === "select" ? (
+        <select name={name} required={required} className={cls} {...(rest as Record<string, unknown>)} />
+      ) : (
+        <input name={name} type={type} required={required} className={cls} {...(rest as Record<string, unknown>)} />
+      )}
+    </label>
   );
 }
