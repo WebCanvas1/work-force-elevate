@@ -83,7 +83,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Your Crew supplies skilled construction, manufacturing and maintenance workers across Melbourne and Victoria. 22+ years of trusted labour hire.",
+          "Australia's trusted labour hire partner. Skilled construction, manufacturing and maintenance workers, deployed fast across Melbourne and Victoria.",
       },
       { name: "author", content: "Your Crew" },
       { property: "og:site_name", content: "Your Crew" },
@@ -91,10 +91,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         property: "og:description",
         content:
-          "Skilled construction, manufacturing and maintenance workers, ready when you need them.",
+          "Australia's trusted labour hire partner. Skilled construction, manufacturing and maintenance workers, deployed fast across Melbourne and Victoria.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Your Crew — Melbourne Labour Hire & Workforce Solutions" },
+      { name: "twitter:description", content: "Australia's trusted labour hire partner. Skilled construction, manufacturing and maintenance workers, deployed fast across Melbourne and Victoria." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3d611ea2-1528-4a31-9fb8-eb902ede06f3/id-preview-7e5e3417--a0d37bb9-2880-47c8-98d6-966e957bd224.lovable.app-1784296078646.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/3d611ea2-1528-4a31-9fb8-eb902ede06f3/id-preview-7e5e3417--a0d37bb9-2880-47c8-98d6-966e957bd224.lovable.app-1784296078646.png" },
     ],
     links: [
       {

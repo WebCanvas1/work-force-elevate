@@ -39,7 +39,7 @@ export const Route = createFileRoute("/")({
         content:
           "Australia's trusted labour hire partner. Skilled construction, manufacturing and maintenance workers, deployed fast across Melbourne and Victoria.",
       },
-      { property: "og:title", content: "Your Crew — Melbourne Labour Hire" },
+      { property: "og:title", content: "Your Crew — Melbourne Labour Hire & Workforce Solutions" },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
