@@ -94,6 +94,7 @@ function Index() {
   return (
     <div>
       <Hero />
+      <FloatingFeatures />
       <Stats />
       <Services />
       <WhyUs />
@@ -104,6 +105,38 @@ function Index() {
       <LatestJobs />
       <ContactStrip />
     </div>
+  );
+}
+
+function FloatingFeatures() {
+  const items = [
+    { icon: ShieldCheck, t: "Skilled Workers", d: "Pre-screened tradespeople ready for site." },
+    { icon: Zap, t: "Fast Placements", d: "Workers deployed in as little as 24 hours." },
+    { icon: MapPin, t: "Australia Wide", d: "Melbourne based, servicing statewide & interstate." },
+  ];
+  return (
+    <section className="relative -mt-16 md:-mt-24 z-10">
+      <div className="container-x">
+        <div className="grid gap-5 rounded-3xl bg-white p-5 shadow-[0_30px_60px_-30px_rgba(14,45,79,0.35)] ring-1 ring-border sm:grid-cols-3 md:p-6">
+          {items.map((it, i) => (
+            <motion.div
+              key={it.t}
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+              className="flex items-start gap-4 rounded-2xl p-4 transition-colors hover:bg-surface"
+            >
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-accent text-primary">
+                <it.icon className="h-5 w-5" />
+              </span>
+              <div className="min-w-0">
+                <p className="font-bold text-primary">{it.t}</p>
+                <p className="mt-0.5 text-sm text-muted-foreground">{it.d}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
