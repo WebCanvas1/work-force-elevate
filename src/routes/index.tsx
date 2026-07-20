@@ -243,7 +243,7 @@ function Hero() {
                 </div>
               ))}
             </div>
-            <div className="mt-4 flex items-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-medium text-white">
+            <div className="mt-4 flex items-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-semibold text-primary">
               <ShieldCheck className="h-4 w-4" />
               All workers pre-screened & inducted
             </div>
@@ -404,7 +404,7 @@ function WhyUs() {
               transition={{ ...fadeUp.transition, delay: i * 0.06 }}
               className="group rounded-2xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur transition-colors hover:border-accent/40 hover:bg-white/[0.07]"
             >
-              <span className="grid h-12 w-12 place-items-center rounded-xl bg-accent/15 text-accent transition-colors group-hover:bg-accent group-hover:text-white">
+              <span className="grid h-12 w-12 place-items-center rounded-xl bg-accent/15 text-accent transition-colors group-hover:bg-accent group-hover:text-primary">
                 <w.icon className="h-5.5 w-5.5" />
               </span>
               <h3 className="mt-5 text-lg font-bold text-white">{w.title}</h3>
