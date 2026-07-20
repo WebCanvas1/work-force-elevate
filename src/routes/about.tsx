@@ -184,7 +184,7 @@ export default function About() {
             Ready to build your dream team?
           </h2>
           <div className="flex gap-3">
-            <Link to="/find-staff" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-white">
+            <Link to="/find-staff" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary">
               Request staff <ArrowRight className="h-4 w-4" />
             </Link>
             <Link to="/contact" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-sm font-semibold">

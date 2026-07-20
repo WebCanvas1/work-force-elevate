@@ -54,7 +54,7 @@ function FindAJob() {
             construction, manufacturing, maintenance, trades and more.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#register" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent/30">
+            <a href="#register" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary shadow-lg shadow-accent/30">
               Register now <ArrowRight className="h-4 w-4" />
             </a>
             <a href="#jobs" className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white">
@@ -147,7 +147,7 @@ function MultiStepForm() {
   if (done) {
     return (
       <div className="mt-10 rounded-3xl border border-border bg-background p-12 text-center">
-        <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-accent text-white">
+        <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-accent text-primary">
           <Check className="h-7 w-7" />
         </span>
         <h3 className="mt-6 text-2xl font-bold text-primary">Registration successful.</h3>
@@ -168,7 +168,7 @@ function MultiStepForm() {
       <div className="mb-8 flex items-center gap-3">
         {steps.map((s, i) => (
           <div key={s} className="flex flex-1 items-center gap-3">
-            <div className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-bold transition-colors ${i <= step ? "bg-accent text-white" : "bg-border text-muted-foreground"}`}>
+            <div className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-bold transition-colors ${i <= step ? "bg-accent text-primary" : "bg-border text-muted-foreground"}`}>
               {i + 1}
             </div>
             <span className={`hidden text-sm font-semibold sm:inline ${i <= step ? "text-primary" : "text-muted-foreground"}`}>{s}</span>
@@ -207,7 +207,7 @@ function MultiStepForm() {
                     key={l}
                     type="button"
                     onClick={() => setLicData((d) => ({ ...d, [l]: !on }))}
-                    className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${on ? "border-accent bg-accent text-white" : "border-border bg-white text-primary hover:border-accent"}`}
+                    className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${on ? "border-accent bg-accent text-primary" : "border-border bg-white text-primary hover:border-accent"}`}
                   >
                     {on && <Check className="mr-1 inline h-3.5 w-3.5" />}{l}
                   </button>

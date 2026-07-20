@@ -58,7 +58,7 @@ export function Navigation({ transparentOnTop = true }: { transparentOnTop?: boo
         <div className="hidden lg:block">
           <Link
             to="/find-staff"
-            className="inline-flex items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-accent/30 transition-all hover:translate-y-[-1px] hover:bg-accent/90"
+            className="inline-flex items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-primary shadow-lg shadow-accent/30 transition-all hover:translate-y-[-1px] hover:bg-accent/90"
           >
             Request Staff
           </Link>
@@ -91,7 +91,7 @@ export function Navigation({ transparentOnTop = true }: { transparentOnTop?: boo
               <Link
                 to="/find-staff"
                 onClick={() => setOpen(false)}
-                className="block rounded-full bg-accent px-5 py-3 text-center text-base font-semibold text-white"
+                className="block rounded-full bg-accent px-5 py-3 text-center text-base font-semibold text-primary"
               >
                 Request Staff
               </Link>

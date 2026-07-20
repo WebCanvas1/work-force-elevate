@@ -94,6 +94,7 @@ function Index() {
   return (
     <div>
       <Hero />
+      <FloatingFeatures />
       <Stats />
       <Services />
       <WhyUs />
@@ -104,6 +105,38 @@ function Index() {
       <LatestJobs />
       <ContactStrip />
     </div>
+  );
+}
+
+function FloatingFeatures() {
+  const items = [
+    { icon: ShieldCheck, t: "Skilled Workers", d: "Pre-screened tradespeople ready for site." },
+    { icon: Zap, t: "Fast Placements", d: "Workers deployed in as little as 24 hours." },
+    { icon: MapPin, t: "Australia Wide", d: "Melbourne based, servicing statewide & interstate." },
+  ];
+  return (
+    <section className="relative -mt-16 md:-mt-24 z-10">
+      <div className="container-x">
+        <div className="grid gap-5 rounded-3xl bg-white p-5 shadow-[0_30px_60px_-30px_rgba(14,45,79,0.35)] ring-1 ring-border sm:grid-cols-3 md:p-6">
+          {items.map((it, i) => (
+            <motion.div
+              key={it.t}
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+              className="flex items-start gap-4 rounded-2xl p-4 transition-colors hover:bg-surface"
+            >
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-accent text-primary">
+                <it.icon className="h-5 w-5" />
+              </span>
+              <div className="min-w-0">
+                <p className="font-bold text-primary">{it.t}</p>
+                <p className="mt-0.5 text-sm text-muted-foreground">{it.d}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -185,7 +218,7 @@ function Hero() {
           >
             <Link
               to="/find-staff"
-              className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-white shadow-xl shadow-accent/30 transition-all hover:translate-y-[-1px] hover:bg-accent/90"
+              className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary shadow-xl shadow-accent/30 transition-all hover:translate-y-[-1px] hover:bg-accent/90"
             >
               Find Staff
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -243,7 +276,7 @@ function Hero() {
                 </div>
               ))}
             </div>
-            <div className="mt-4 flex items-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-medium text-white">
+            <div className="mt-4 flex items-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-semibold text-primary">
               <ShieldCheck className="h-4 w-4" />
               All workers pre-screened & inducted
             </div>
@@ -311,7 +344,7 @@ const services = [
 
 function Services() {
   return (
-    <section id="services" className="bg-background py-24 md:py-32">
+    <section id="services" className="bg-surface py-24 md:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-2xl text-center">
           <motion.p {...fadeUp} className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
@@ -326,46 +359,58 @@ function Services() {
           </motion.p>
         </div>
 
-        <div className="mt-16 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-          {services.map((s, i) => (
-            <motion.article
-              key={s.title}
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-              className="group overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <img
-                  src={s.img}
-                  alt={s.title}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent" />
-                <span className="absolute left-4 top-4 grid h-11 w-11 place-items-center rounded-xl bg-white/95 text-primary shadow-lg backdrop-blur">
-                  <s.icon className="h-5 w-5" />
+        <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {services.map((s, i) => {
+            const featured = i === 1;
+            return (
+              <motion.article
+                key={s.title}
+                {...fadeUp}
+                transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+                className={`group relative overflow-hidden rounded-[28px] p-8 shadow-sm ring-1 transition-all hover:-translate-y-1 hover:shadow-2xl ${
+                  featured
+                    ? "bg-accent ring-accent text-primary"
+                    : "bg-white ring-border"
+                }`}
+              >
+                <span
+                  aria-hidden
+                  className={`pointer-events-none absolute -right-2 -bottom-6 select-none text-[9rem] font-extrabold leading-none tracking-tighter ${
+                    featured ? "text-primary/10" : "text-primary/[0.06]"
+                  }`}
+                >
+                  0{i + 1}
                 </span>
-              </div>
-              <div className="p-7">
-                <h3 className="text-xl font-bold text-primary">{s.title}</h3>
-                <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
-                <ul className="mt-5 space-y-2 text-sm">
+                <span
+                  className={`relative grid h-14 w-14 place-items-center rounded-2xl ${
+                    featured ? "bg-primary text-accent" : "bg-primary/5 text-primary"
+                  }`}
+                >
+                  <s.icon className="h-6 w-6" />
+                </span>
+                <h3 className={`relative mt-6 text-xl font-bold ${featured ? "text-primary" : "text-primary"}`}>{s.title}</h3>
+                <p className={`relative mt-3 text-sm leading-relaxed ${featured ? "text-primary/80" : "text-muted-foreground"}`}>{s.desc}</p>
+                <ul className="relative mt-5 space-y-2 text-sm">
                   {s.bullets.map((b) => (
                     <li key={b} className="flex items-start gap-2">
-                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                      <span className="text-foreground/85">{b}</span>
+                      <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${featured ? "bg-primary" : "bg-accent"}`} />
+                      <span className={featured ? "text-primary/90" : "text-foreground/85"}>{b}</span>
                     </li>
                   ))}
                 </ul>
                 <Link
                   to="/find-staff"
-                  className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-accent"
+                  className={`relative mt-7 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all ${
+                    featured
+                      ? "bg-primary text-accent hover:bg-primary/90"
+                      : "bg-primary/5 text-primary hover:bg-primary hover:text-accent"
+                  }`}
                 >
-                  Learn more <ArrowRight className="h-4 w-4" />
+                  Learn more <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
-              </div>
-            </motion.article>
-          ))}
+              </motion.article>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -404,7 +449,7 @@ function WhyUs() {
               transition={{ ...fadeUp.transition, delay: i * 0.06 }}
               className="group rounded-2xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur transition-colors hover:border-accent/40 hover:bg-white/[0.07]"
             >
-              <span className="grid h-12 w-12 place-items-center rounded-xl bg-accent/15 text-accent transition-colors group-hover:bg-accent group-hover:text-white">
+              <span className="grid h-12 w-12 place-items-center rounded-xl bg-accent/15 text-accent transition-colors group-hover:bg-accent group-hover:text-primary">
                 <w.icon className="h-5.5 w-5.5" />
               </span>
               <h3 className="mt-5 text-lg font-bold text-white">{w.title}</h3>
@@ -474,11 +519,12 @@ const steps = [
 
 function HowItWorks() {
   return (
-    <section className="relative overflow-hidden bg-white py-24 md:py-32">
+    <section className="relative overflow-hidden bg-primary py-24 text-white md:py-32">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_80%_20%,rgba(245,197,66,0.15),transparent_50%)]" />
       <div className="container-x">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">How it works</p>
-          <h2 className="text-balance mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
+          <h2 className="text-balance mt-3 text-4xl font-bold tracking-tight md:text-5xl">
             Four steps to the right crew on your site.
           </h2>
         </div>
@@ -489,15 +535,18 @@ function HowItWorks() {
               key={s.title}
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-              className="relative rounded-2xl border border-border bg-background p-7"
+              className="group relative rounded-2xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur transition-all hover:-translate-y-1 hover:border-accent/50 hover:bg-white/[0.07]"
             >
-              <span className="text-xs font-semibold uppercase tracking-widest text-accent">
-                Step {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="mt-3 text-lg font-bold text-primary">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
+              <div className="flex items-center gap-4">
+                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-accent text-primary shadow-lg shadow-accent/20">
+                  {[<HardHat key="a" className="h-6 w-6" />, <Users key="b" className="h-6 w-6" />, <ShieldCheck key="c" className="h-6 w-6" />, <Sparkles key="d" className="h-6 w-6" />][i]}
+                </span>
+                <span className="text-3xl font-extrabold text-white/20">{String(i + 1).padStart(2, "0")}</span>
+              </div>
+              <h3 className="mt-5 text-lg font-bold text-white">{s.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-white/65">{s.desc}</p>
               {i < steps.length - 1 && (
-                <ChevronRight className="absolute -right-3 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-border lg:block" />
+                <ChevronRight className="absolute -right-3 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-white/20 lg:block" />
               )}
             </motion.li>
           ))}
@@ -583,7 +632,7 @@ function CTABanner() {
             <div className="flex flex-wrap gap-3 md:justify-end">
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent/30 transition-transform hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary shadow-lg shadow-accent/30 transition-transform hover:-translate-y-0.5"
               >
                 Contact us <ArrowRight className="h-4 w-4" />
               </Link>

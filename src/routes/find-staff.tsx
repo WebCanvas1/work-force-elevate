@@ -71,7 +71,7 @@ function FindStaff() {
             Fully screened workers, 24-hour response, Victoria wide.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#request" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent/30">
+            <a href="#request" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary shadow-lg shadow-accent/30">
               Request staff <ArrowRight className="h-4 w-4" />
             </a>
             <a href="tel:+61451267768" className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white">
@@ -94,7 +94,7 @@ function FindStaff() {
               { icon: Users, t: "Culture fit", d: "We match people to your site and your team, not just the role." },
             ].map((x) => (
               <div key={x.t} className="rounded-3xl border border-border bg-background p-8">
-                <span className="grid h-12 w-12 place-items-center rounded-xl bg-accent text-white">
+                <span className="grid h-12 w-12 place-items-center rounded-xl bg-accent text-primary">
                   <x.icon className="h-5 w-5" />
                 </span>
                 <h3 className="mt-6 text-xl font-bold text-primary">{x.t}</h3>
