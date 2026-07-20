@@ -486,11 +486,12 @@ const steps = [
 
 function HowItWorks() {
   return (
-    <section className="relative overflow-hidden bg-white py-24 md:py-32">
+    <section className="relative overflow-hidden bg-primary py-24 text-white md:py-32">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_80%_20%,rgba(245,197,66,0.15),transparent_50%)]" />
       <div className="container-x">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">How it works</p>
-          <h2 className="text-balance mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
+          <h2 className="text-balance mt-3 text-4xl font-bold tracking-tight md:text-5xl">
             Four steps to the right crew on your site.
           </h2>
         </div>
@@ -501,15 +502,18 @@ function HowItWorks() {
               key={s.title}
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-              className="relative rounded-2xl border border-border bg-background p-7"
+              className="group relative rounded-2xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur transition-all hover:-translate-y-1 hover:border-accent/50 hover:bg-white/[0.07]"
             >
-              <span className="text-xs font-semibold uppercase tracking-widest text-accent">
-                Step {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="mt-3 text-lg font-bold text-primary">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
+              <div className="flex items-center gap-4">
+                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-accent text-primary shadow-lg shadow-accent/20">
+                  {[<HardHat key="a" className="h-6 w-6" />, <Users key="b" className="h-6 w-6" />, <ShieldCheck key="c" className="h-6 w-6" />, <Sparkles key="d" className="h-6 w-6" />][i]}
+                </span>
+                <span className="text-3xl font-extrabold text-white/20">{String(i + 1).padStart(2, "0")}</span>
+              </div>
+              <h3 className="mt-5 text-lg font-bold text-white">{s.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-white/65">{s.desc}</p>
               {i < steps.length - 1 && (
-                <ChevronRight className="absolute -right-3 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-border lg:block" />
+                <ChevronRight className="absolute -right-3 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-white/20 lg:block" />
               )}
             </motion.li>
           ))}
