@@ -185,7 +185,7 @@ function Hero() {
           >
             <Link
               to="/find-staff"
-              className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-white shadow-xl shadow-accent/30 transition-all hover:translate-y-[-1px] hover:bg-accent/90"
+              className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary shadow-xl shadow-accent/30 transition-all hover:translate-y-[-1px] hover:bg-accent/90"
             >
               Find Staff
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -583,7 +583,7 @@ function CTABanner() {
             <div className="flex flex-wrap gap-3 md:justify-end">
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-accent/30 transition-transform hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary shadow-lg shadow-accent/30 transition-transform hover:-translate-y-0.5"
               >
                 Contact us <ArrowRight className="h-4 w-4" />
               </Link>
