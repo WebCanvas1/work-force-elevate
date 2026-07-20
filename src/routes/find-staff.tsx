@@ -94,7 +94,7 @@ function FindStaff() {
               { icon: Users, t: "Culture fit", d: "We match people to your site and your team, not just the role." },
             ].map((x) => (
               <div key={x.t} className="rounded-3xl border border-border bg-background p-8">
-                <span className="grid h-12 w-12 place-items-center rounded-xl bg-accent text-white">
+                <span className="grid h-12 w-12 place-items-center rounded-xl bg-accent text-primary">
                   <x.icon className="h-5 w-5" />
                 </span>
                 <h3 className="mt-6 text-xl font-bold text-primary">{x.t}</h3>

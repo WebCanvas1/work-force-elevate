@@ -91,7 +91,7 @@ export function Navigation({ transparentOnTop = true }: { transparentOnTop?: boo
               <Link
                 to="/find-staff"
                 onClick={() => setOpen(false)}
-                className="block rounded-full bg-accent px-5 py-3 text-center text-base font-semibold text-white"
+                className="block rounded-full bg-accent px-5 py-3 text-center text-base font-semibold text-primary"
               >
                 Request Staff
               </Link>
