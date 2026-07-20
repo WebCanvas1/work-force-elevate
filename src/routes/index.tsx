@@ -311,7 +311,7 @@ const services = [
 
 function Services() {
   return (
-    <section id="services" className="bg-background py-24 md:py-32">
+    <section id="services" className="bg-surface py-24 md:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-2xl text-center">
           <motion.p {...fadeUp} className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
@@ -326,46 +326,58 @@ function Services() {
           </motion.p>
         </div>
 
-        <div className="mt-16 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-          {services.map((s, i) => (
-            <motion.article
-              key={s.title}
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-              className="group overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <img
-                  src={s.img}
-                  alt={s.title}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent" />
-                <span className="absolute left-4 top-4 grid h-11 w-11 place-items-center rounded-xl bg-white/95 text-primary shadow-lg backdrop-blur">
-                  <s.icon className="h-5 w-5" />
+        <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {services.map((s, i) => {
+            const featured = i === 1;
+            return (
+              <motion.article
+                key={s.title}
+                {...fadeUp}
+                transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+                className={`group relative overflow-hidden rounded-[28px] p-8 shadow-sm ring-1 transition-all hover:-translate-y-1 hover:shadow-2xl ${
+                  featured
+                    ? "bg-accent ring-accent text-primary"
+                    : "bg-white ring-border"
+                }`}
+              >
+                <span
+                  aria-hidden
+                  className={`pointer-events-none absolute -right-2 -bottom-6 select-none text-[9rem] font-extrabold leading-none tracking-tighter ${
+                    featured ? "text-primary/10" : "text-primary/[0.06]"
+                  }`}
+                >
+                  0{i + 1}
                 </span>
-              </div>
-              <div className="p-7">
-                <h3 className="text-xl font-bold text-primary">{s.title}</h3>
-                <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
-                <ul className="mt-5 space-y-2 text-sm">
+                <span
+                  className={`relative grid h-14 w-14 place-items-center rounded-2xl ${
+                    featured ? "bg-primary text-accent" : "bg-primary/5 text-primary"
+                  }`}
+                >
+                  <s.icon className="h-6 w-6" />
+                </span>
+                <h3 className={`relative mt-6 text-xl font-bold ${featured ? "text-primary" : "text-primary"}`}>{s.title}</h3>
+                <p className={`relative mt-3 text-sm leading-relaxed ${featured ? "text-primary/80" : "text-muted-foreground"}`}>{s.desc}</p>
+                <ul className="relative mt-5 space-y-2 text-sm">
                   {s.bullets.map((b) => (
                     <li key={b} className="flex items-start gap-2">
-                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                      <span className="text-foreground/85">{b}</span>
+                      <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${featured ? "bg-primary" : "bg-accent"}`} />
+                      <span className={featured ? "text-primary/90" : "text-foreground/85"}>{b}</span>
                     </li>
                   ))}
                 </ul>
                 <Link
                   to="/find-staff"
-                  className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition-colors hover:text-accent"
+                  className={`relative mt-7 inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all ${
+                    featured
+                      ? "bg-primary text-accent hover:bg-primary/90"
+                      : "bg-primary/5 text-primary hover:bg-primary hover:text-accent"
+                  }`}
                 >
-                  Learn more <ArrowRight className="h-4 w-4" />
+                  Learn more <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
-              </div>
-            </motion.article>
-          ))}
+              </motion.article>
+            );
+          })}
         </div>
       </div>
     </section>
