@@ -9,18 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as FindStaffRouteImport } from './routes/find-staff'
 import { Route as FindAJobRouteImport } from './routes/find-a-job'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const FindStaffRoute = FindStaffRouteImport.update({
   id: '/find-staff',
   path: '/find-staff',
@@ -53,7 +47,6 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/find-a-job': typeof FindAJobRoute
   '/find-staff': typeof FindStaffRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -61,7 +54,6 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/find-a-job': typeof FindAJobRoute
   '/find-staff': typeof FindStaffRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -70,33 +62,13 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/find-a-job': typeof FindAJobRoute
   '/find-staff': typeof FindStaffRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/about'
-    | '/contact'
-    | '/find-a-job'
-    | '/find-staff'
-    | '/sitemap.xml'
+  fullPaths: '/' | '/about' | '/contact' | '/find-a-job' | '/find-staff'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/about'
-    | '/contact'
-    | '/find-a-job'
-    | '/find-staff'
-    | '/sitemap.xml'
-  id:
-    | '__root__'
-    | '/'
-    | '/about'
-    | '/contact'
-    | '/find-a-job'
-    | '/find-staff'
-    | '/sitemap.xml'
+  to: '/' | '/about' | '/contact' | '/find-a-job' | '/find-staff'
+  id: '__root__' | '/' | '/about' | '/contact' | '/find-a-job' | '/find-staff'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -105,18 +77,10 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   FindAJobRoute: typeof FindAJobRoute
   FindStaffRoute: typeof FindStaffRoute
-  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/find-staff': {
       id: '/find-staff'
       path: '/find-staff'
@@ -161,18 +125,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   FindAJobRoute: FindAJobRoute,
   FindStaffRoute: FindStaffRoute,
-  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
