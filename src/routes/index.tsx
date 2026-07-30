@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   HardHat,
@@ -62,27 +62,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function Counter({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  const mv = useMotionValue(0);
-  const spring = useSpring(mv, { duration: 1600, bounce: 0 });
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    if (inView) mv.set(target);
-  }, [inView, mv, target]);
-
-  useEffect(() => spring.on("change", (v) => setDisplay(Math.round(v))), [spring]);
-
-  return (
-    <span ref={ref}>
-      {display.toLocaleString()}
-      {suffix}
-    </span>
-  );
-}
-
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
@@ -95,7 +74,6 @@ function Index() {
     <div>
       <Hero />
       <FloatingFeatures />
-      <Stats />
       <Services />
       <WhyUs />
       <Industries />
@@ -264,15 +242,14 @@ function Hero() {
               </div>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3">
-              {[
-                { label: "Construction", n: "820+" },
-                { label: "Manufacturing", n: "540+" },
-                { label: "Maintenance", n: "310+" },
-                { label: "Trades", n: "430+" },
-              ].map((x) => (
-                <div key={x.label} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-2xl font-bold">{x.n}</p>
-                  <p className="text-xs uppercase tracking-wider text-white/55">{x.label}</p>
+              {["Construction", "Manufacturing", "Maintenance", "Trades"].map((label) => (
+                <div
+                  key={label}
+                  className="flex min-h-20 items-center rounded-xl border border-white/10 bg-white/[0.03] p-4"
+                >
+                  <p className="text-sm font-semibold uppercase tracking-wider text-white/80">
+                    {label}
+                  </p>
                 </div>
               ))}
             </div>
@@ -282,37 +259,6 @@ function Hero() {
             </div>
           </div>
         </motion.div>
-      </div>
-    </section>
-  );
-}
-
-const stats = [
-  { n: 22, s: "+", label: "Years of Experience" },
-  { n: 750, s: "+", label: "Projects Delivered" },
-  { n: 3200, s: "+", label: "Workers Placed" },
-  { n: 1800, s: "+", label: "Active Workers" },
-];
-
-function Stats() {
-  return (
-    <section className="border-y border-border bg-white">
-      <div className="container-x grid grid-cols-2 gap-y-10 py-14 md:grid-cols-4 md:py-16">
-        {stats.map((s, i) => (
-          <motion.div
-            key={s.label}
-            {...fadeUp}
-            transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-            className="border-r border-border/60 px-3 text-center last:border-r-0 md:px-6"
-          >
-            <p className="text-4xl font-extrabold tracking-tight text-primary md:text-5xl">
-              <Counter target={s.n} suffix={s.s} />
-            </p>
-            <p className="mt-2 text-xs font-medium uppercase tracking-wider text-muted-foreground md:text-sm">
-              {s.label}
-            </p>
-          </motion.div>
-        ))}
       </div>
     </section>
   );
