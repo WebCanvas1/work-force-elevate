@@ -14,8 +14,6 @@ import {
   Truck,
   Building2,
   Warehouse,
-  Hammer,
-  Cog,
   Store,
   Home as HomeIcon,
   Phone,
@@ -290,7 +288,7 @@ const services = [
 
 function Services() {
   return (
-    <section id="services" className="bg-surface py-24 md:py-32">
+    <section id="services" className="bg-white py-24 md:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-2xl text-center">
           <motion.p {...fadeUp} className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
@@ -374,15 +372,14 @@ const whys = [
 
 function WhyUs() {
   return (
-    <section className="relative overflow-hidden bg-primary py-24 text-white md:py-32">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,rgba(249,115,22,0.18),transparent_45%)]" />
+    <section className="relative overflow-hidden bg-white py-24 text-primary md:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Why Your Crew</p>
           <h2 className="text-balance mt-3 text-4xl font-bold tracking-tight md:text-5xl">
             Built on reliability, expertise and flexibility.
           </h2>
-          <p className="mt-5 text-lg text-white/70">
+          <p className="mt-5 text-lg text-muted-foreground">
             We deliver skilled, reliable professionals who seamlessly integrate into your team.
           </p>
         </div>
@@ -393,13 +390,13 @@ function WhyUs() {
               key={w.title}
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: i * 0.06 }}
-              className="group rounded-2xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur transition-colors hover:border-accent/40 hover:bg-white/[0.07]"
+              className="group rounded-2xl border border-border bg-white p-7 shadow-sm transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg"
             >
               <span className="grid h-12 w-12 place-items-center rounded-xl bg-accent/15 text-accent transition-colors group-hover:bg-accent group-hover:text-primary">
                 <w.icon className="h-5.5 w-5.5" />
               </span>
-              <h3 className="mt-5 text-lg font-bold text-white">{w.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/70">{w.desc}</p>
+              <h3 className="mt-5 text-lg font-bold text-primary">{w.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{w.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -421,7 +418,7 @@ const industries = [
 
 function Industries() {
   return (
-    <section className="bg-background py-24 md:py-32">
+    <section className="bg-white py-24 md:py-32">
       <div className="container-x">
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
           <div>
@@ -465,8 +462,7 @@ const steps = [
 
 function HowItWorks() {
   return (
-    <section className="relative overflow-hidden bg-primary py-24 text-white md:py-32">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_80%_20%,rgba(245,197,66,0.15),transparent_50%)]" />
+    <section className="relative overflow-hidden bg-white py-24 text-primary md:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">How it works</p>
@@ -481,18 +477,18 @@ function HowItWorks() {
               key={s.title}
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-              className="group relative rounded-2xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur transition-all hover:-translate-y-1 hover:border-accent/50 hover:bg-white/[0.07]"
+              className="group relative rounded-2xl border border-border bg-white p-7 shadow-sm transition-all hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg"
             >
               <div className="flex items-center gap-4">
                 <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-accent text-primary shadow-lg shadow-accent/20">
                   {[<HardHat key="a" className="h-6 w-6" />, <Users key="b" className="h-6 w-6" />, <ShieldCheck key="c" className="h-6 w-6" />, <Sparkles key="d" className="h-6 w-6" />][i]}
                 </span>
-                <span className="text-3xl font-extrabold text-white/20">{String(i + 1).padStart(2, "0")}</span>
+                <span className="text-3xl font-extrabold text-primary/20">{String(i + 1).padStart(2, "0")}</span>
               </div>
-              <h3 className="mt-5 text-lg font-bold text-white">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/65">{s.desc}</p>
+              <h3 className="mt-5 text-lg font-bold text-primary">{s.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
               {i < steps.length - 1 && (
-                <ChevronRight className="absolute -right-3 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-white/20 lg:block" />
+                <ChevronRight className="absolute -right-3 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-primary/20 lg:block" />
               )}
             </motion.li>
           ))}
@@ -525,7 +521,7 @@ function Testimonials() {
   }, []);
   const q = quotes[i];
   return (
-    <section className="bg-background py-24 md:py-32">
+    <section className="bg-white py-24 md:py-32">
       <div className="container-x">
         <div className="mx-auto max-w-4xl rounded-3xl border border-border bg-white p-10 shadow-sm md:p-16">
           <Quote className="h-10 w-10 text-accent" />
@@ -561,7 +557,7 @@ function Testimonials() {
 
 function CTABanner() {
   return (
-    <section className="bg-background pb-24 md:pb-32">
+    <section className="bg-white pb-24 md:pb-32">
       <div className="container-x">
         <div className="relative overflow-hidden rounded-3xl bg-primary p-10 text-white md:p-16">
           <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-accent/30 blur-3xl" />
@@ -654,7 +650,7 @@ function LatestJobs() {
 
 function ContactStrip() {
   return (
-    <section className="bg-background py-24 md:py-32">
+    <section className="bg-white py-24 md:py-32">
       <div className="container-x grid gap-10 lg:grid-cols-[1.1fr_1fr]">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Get in touch</p>
@@ -702,7 +698,7 @@ function QuickForm() {
         e.preventDefault();
         setSent(true);
       }}
-      className="rounded-3xl border border-border bg-card p-8 shadow-sm md:p-10"
+      className="rounded-3xl border border-border bg-white p-8 shadow-sm md:p-10"
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="First name" name="firstName" />
@@ -743,7 +739,7 @@ export function Field({
   required?: boolean;
 } & Record<string, unknown>) {
   const cls =
-    "w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20";
+    "w-full rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20";
   return (
     <label className="block">
       <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
