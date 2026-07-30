@@ -118,38 +118,15 @@ function FloatingFeatures() {
 
 function Hero() {
   return (
-    <section className="relative isolate overflow-hidden bg-black pt-24 text-white md:pt-28">
-      <div className="absolute inset-0 -z-10">
-        <img
-          src={heroImg}
-          alt="Skilled workers on a Melbourne construction site at sunrise"
-          className="h-full w-full object-cover"
-          width={1920}
-          height={1200}
-        />
-      </div>
-
-      {/* animated shapes */}
-      <motion.div
-        aria-hidden
-        className="absolute -right-24 top-24 h-72 w-72 rounded-full bg-accent/25 blur-3xl"
-        animate={{ y: [0, 30, 0], opacity: [0.5, 0.8, 0.5] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        aria-hidden
-        className="absolute -left-32 bottom-10 h-96 w-96 rounded-full bg-white/5 blur-3xl"
-        animate={{ y: [0, -20, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      <div className="container-x relative grid gap-14 pb-24 pt-16 md:pb-32 md:pt-24 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-        <div>
+    <section className="relative overflow-hidden bg-[#f7f3e8] pt-24 text-primary md:pt-28">
+      <div className="container-x grid min-h-[720px] gap-12 py-16 lg:grid-cols-[1fr_0.95fr] lg:items-center lg:py-20">
+        {/* Left content */}
+        <div className="relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-xs font-medium uppercase tracking-wider backdrop-blur"
+            className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white px-3.5 py-1.5 text-xs font-medium uppercase tracking-wider shadow-sm"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
             Trusted for 22+ years across Victoria
@@ -159,17 +136,23 @@ function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-balance mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight drop-shadow-lg sm:text-5xl md:text-6xl lg:text-[4.25rem]"
+            className="mt-7 max-w-3xl text-balance text-5xl font-extrabold leading-[1.04] tracking-tight text-primary sm:text-6xl lg:text-7xl"
           >
-            Australia's Trusted{" "}
+            Australia&apos;s Trusted{" "}
             <span className="relative whitespace-nowrap">
               <span className="relative z-10 text-accent">Labour Hire</span>
               <svg
                 aria-hidden
                 viewBox="0 0 300 12"
-                className="absolute inset-x-0 -bottom-2 h-3 w-full text-accent/50"
+                className="absolute inset-x-0 -bottom-2 h-3 w-full text-accent/45"
               >
-                <path d="M2 8 C 80 2, 220 2, 298 8" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
+                <path
+                  d="M2 8 C 80 2, 220 2, 298 8"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  fill="none"
+                  strokeLinecap="round"
+                />
               </svg>
             </span>{" "}
             Partner.
@@ -179,7 +162,7 @@ function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="mt-6 max-w-xl text-lg leading-relaxed text-white/75"
+            className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground"
           >
             Your Crew supplies skilled construction, manufacturing and maintenance workers across
             Melbourne and Victoria — screened, reliable, and ready to work.
@@ -193,14 +176,15 @@ function Hero() {
           >
             <Link
               to="/find-staff"
-              className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary shadow-xl shadow-accent/30 transition-all hover:translate-y-[-1px] hover:bg-accent/90"
+              className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary shadow-lg transition-all hover:-translate-y-0.5 hover:bg-accent/90"
             >
               Find Staff
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
+
             <Link
               to="/find-a-job"
-              className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition-all hover:bg-white/10"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white px-6 py-3.5 text-sm font-semibold text-primary transition-all hover:border-accent hover:text-accent"
             >
               Find a Job
             </Link>
@@ -210,49 +194,48 @@ function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs text-white/60"
+            className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs text-muted-foreground"
           >
-            {["Fully screened workers", "24-hour response", "Melbourne based", "Victoria wide"].map((s) => (
-              <div key={s} className="flex items-center gap-2">
-                <Check className="h-3.5 w-3.5 text-accent" />
-                {s}
-              </div>
-            ))}
+            {["Fully screened workers", "24-hour response", "Melbourne based", "Victoria wide"].map(
+              (item) => (
+                <div key={item} className="flex items-center gap-2">
+                  <Check className="h-3.5 w-3.5 text-accent" />
+                  {item}
+                </div>
+              ),
+            )}
           </motion.div>
         </div>
 
-        {/* Hero side card */}
+        {/* Right-side image */}
         <motion.div
-          initial={{ opacity: 0, y: 32 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.35 }}
-          className="relative hidden lg:block"
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="relative min-h-[420px] sm:min-h-[520px] lg:min-h-[620px]"
         >
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl shadow-2xl">
-            <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-accent/20 text-accent">
+          <div className="absolute inset-6 rounded-[3rem] bg-primary/10" />
+
+          <img
+            src={heroImg}
+            alt="Skilled construction workers"
+            className="absolute inset-0 h-full w-full rounded-[3rem] object-cover object-center shadow-2xl"
+            width={900}
+            height={1100}
+          />
+
+          <div className="absolute bottom-6 left-6 right-6 rounded-3xl border border-white/50 bg-white/90 p-5 shadow-xl backdrop-blur sm:bottom-8 sm:left-8 sm:right-8">
+            <div className="flex items-center gap-3">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent text-primary">
                 <Zap className="h-5 w-5" />
               </span>
+
               <div>
-                <p className="text-sm font-semibold text-white">Rapid deployment</p>
-                <p className="text-xs text-white/60">Workers on site in as little as 24 hours</p>
+                <p className="font-semibold text-primary">Rapid deployment</p>
+                <p className="text-sm text-muted-foreground">
+                  Workers on site in as little as 24 hours
+                </p>
               </div>
-            </div>
-            <div className="mt-4 grid grid-cols-2 gap-3">
-              {["Construction", "Manufacturing", "Maintenance", "Trades"].map((label) => (
-                <div
-                  key={label}
-                  className="flex min-h-20 items-center rounded-xl border border-white/10 bg-white/[0.03] p-4"
-                >
-                  <p className="text-sm font-semibold uppercase tracking-wider text-white/80">
-                    {label}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 flex items-center gap-2 rounded-xl bg-accent px-4 py-3 text-sm font-semibold text-primary">
-              <ShieldCheck className="h-4 w-4" />
-              All workers pre-screened & inducted
             </div>
           </div>
         </motion.div>
