@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
+import logo from "../assets/your-crew-logo.png";
 import { useState } from "react";
-import { Menu, X, HardHat } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const links = [
   { to: "/", label: "Home" },
@@ -14,14 +15,18 @@ export function Navigation() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-primary/95 shadow-[0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-lg">
-      <nav className="container-x flex h-16 items-center justify-between md:h-20">
-        <Link to="/" className="flex items-center gap-2.5 text-white">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-accent shadow-lg shadow-accent/25">
-            <HardHat className="h-5 w-5 text-white" strokeWidth={2.4} />
-          </span>
-
-          <span className="text-lg font-bold tracking-tight">Your Crew</span>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-primary/90 shadow-[0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-xl">
+      <nav className="container-x flex h-20 items-center justify-between md:h-24">
+        <Link
+          to="/"
+          aria-label="Your Crew home"
+          className="flex items-center transition-transform duration-300 hover:scale-[1.03]"
+        >
+          <img
+            src={logo}
+            alt="Your Crew — Flexible Workforce Specialists"
+            className="h-14 w-auto object-contain md:h-16"
+          />
         </Link>
 
         <ul className="hidden items-center gap-1 lg:flex">
@@ -29,8 +34,10 @@ export function Navigation() {
             <li key={link.to}>
               <Link
                 to={link.to}
-                className="rounded-md px-3.5 py-2 text-sm font-medium text-white/85 transition-colors hover:text-white"
-                activeProps={{ className: "text-white" }}
+                className="rounded-full px-4 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/5 hover:text-accent"
+                activeProps={{
+                  className: "bg-white/10 text-accent",
+                }}
                 activeOptions={{ exact: true }}
               >
                 {link.label}
@@ -42,7 +49,7 @@ export function Navigation() {
         <div className="hidden lg:block">
           <Link
             to="/find-staff"
-            className="inline-flex items-center gap-1.5 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-primary shadow-lg shadow-accent/30 transition-all hover:-translate-y-px hover:bg-accent/90"
+            className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-primary shadow-lg shadow-accent/30 transition-all duration-300 hover:-translate-y-px hover:bg-accent/90"
           >
             Request Staff
           </Link>
@@ -53,6 +60,7 @@ export function Navigation() {
           onClick={() => setOpen((current) => !current)}
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
+          aria-controls="mobile-navigation"
           className="grid h-11 w-11 place-items-center rounded-md text-white transition-colors hover:bg-white/10 lg:hidden"
         >
           {open ? (
@@ -64,15 +72,20 @@ export function Navigation() {
       </nav>
 
       {open && (
-        <div className="border-t border-white/10 bg-primary lg:hidden">
+        <div
+          id="mobile-navigation"
+          className="border-t border-white/10 bg-primary/95 backdrop-blur-xl lg:hidden"
+        >
           <ul className="container-x flex flex-col py-3">
             {links.map((link) => (
               <li key={link.to}>
                 <Link
                   to={link.to}
                   onClick={() => setOpen(false)}
-                  className="block rounded-md px-3 py-3 text-base font-medium text-white/90 transition-colors hover:bg-white/5 hover:text-white"
-                  activeProps={{ className: "bg-white/5 text-white" }}
+                  className="block rounded-md px-3 py-3 text-base font-medium text-white/90 transition-colors hover:bg-white/5 hover:text-accent"
+                  activeProps={{
+                    className: "bg-white/5 text-accent",
+                  }}
                   activeOptions={{ exact: true }}
                 >
                   {link.label}
