@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import logo from "../assets/your-crew-logo.png";
+import logo from "../../assets/your-crew-logo.png";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
