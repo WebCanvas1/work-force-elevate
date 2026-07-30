@@ -118,16 +118,15 @@ function FloatingFeatures() {
 
 function Hero() {
   return (
-    <section className="relative isolate overflow-hidden bg-primary pt-24 text-white md:pt-28">
+    <section className="relative isolate overflow-hidden bg-black pt-24 text-white md:pt-28">
       <div className="absolute inset-0 -z-10">
         <img
           src={heroImg}
           alt="Skilled workers on a Melbourne construction site at sunrise"
-          className="h-full w-full object-cover opacity-60"
+          className="h-full w-full object-cover"
           width={1920}
           height={1200}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/60 to-primary" />
       </div>
 
       {/* animated shapes */}
@@ -160,7 +159,7 @@ function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-balance mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl lg:text-[4.25rem]"
+            className="text-balance mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight drop-shadow-lg sm:text-5xl md:text-6xl lg:text-[4.25rem]"
           >
             Australia's Trusted{" "}
             <span className="relative whitespace-nowrap">
