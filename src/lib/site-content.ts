@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, createElement } from "react";
 
 /** Content overrides are downloaded from the protected CMS API. Public pages use their original copy as fallback. */
 export type ContentMap = Record<string, string>;
@@ -31,5 +31,5 @@ export function EditableText({ id, children, as: Tag = "span", ...props }: {
   id: string; children: string; as?: keyof React.JSX.IntrinsicElements; className?: string;
 }) {
   const value = useContentValue(id, children);
-  return <Tag {...props}>{value}</Tag>;
+  return createElement(Tag, props, value);
 }
