@@ -1,3 +1,4 @@
+import { ContentText } from "../lib/site-content";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Phone, Mail, MapPin, Clock, ArrowRight } from "lucide-react";
@@ -23,7 +24,7 @@ function Contact() {
         <div className="container-x max-w-4xl">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Contact</p>
           <h1 className="text-balance mt-4 text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl">
-            Let's build your dream team.
+            <ContentText id="contact.hero.title" fallback="Let’s build your dream team." />
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-white/75">
             Call, email or send a message — our Melbourne team responds within one business day.
@@ -35,7 +36,7 @@ function Contact() {
         <div className="container-x grid gap-12 lg:grid-cols-[1fr_1.1fr]">
           <div>
             <div className="rounded-3xl border border-border bg-white p-8 md:p-10">
-              <h2 className="text-2xl font-bold text-primary">Company information</h2>
+              <h2 className="text-2xl font-bold text-primary"><ContentText id="contact.info.title" fallback="Company information" /></h2>
               <ul className="mt-6 space-y-5">
                 <ContactRow icon={Phone} label="Phone" value="0451 267 768" href="tel:+61451267768" />
                 <ContactRow icon={Mail} label="Email" value="info@yourcrew.com.au" href="mailto:info@yourcrew.com.au" />
@@ -82,7 +83,7 @@ function ContactForm() {
       onSubmit={(e) => { e.preventDefault(); setSent(true); }}
       className="rounded-3xl border border-border bg-white p-8 shadow-sm md:p-10"
     >
-      <h2 className="text-2xl font-bold text-primary">Send a message</h2>
+      <h2 className="text-2xl font-bold text-primary"><ContentText id="contact.form.title" fallback="Send a message" /></h2>
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <Field label="Name" name="name" required />
         <Field label="Company" name="company" />
