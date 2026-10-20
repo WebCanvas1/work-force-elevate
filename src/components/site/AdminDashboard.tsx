@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Save, Eye, Image as ImageIcon, LayoutDashboard, Settings, FileText, LogOut, RotateCcw, Search, CheckCircle2, AlertCircle, ExternalLink } from "lucide-react";
-import { getContent, setContent, type ContentMap } from "../../lib/site-content";
+import { setContent, type ContentMap } from "../../lib/site-content";
 
 type Field = { id: string; label: string; type?: "text" | "textarea" | "image"; hint?: string };
 type Group = { id: string; title: string; description: string; fields: Field[]; page: string };
