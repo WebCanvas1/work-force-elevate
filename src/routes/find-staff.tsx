@@ -1,3 +1,4 @@
+import { ContentText, useContentValue } from "../lib/site-content";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -58,13 +59,13 @@ function FindStaff() {
     <div>
       <section className="relative isolate overflow-hidden bg-primary pt-32 pb-24 text-white md:pt-40 md:pb-32">
         <div className="absolute inset-0 -z-10">
-          <img src={findStaff} alt="Hiring skilled workers" className="h-full w-full object-cover opacity-35" />
+          <img src={useContentValue("staff.hero.image", findStaff)} alt="Hiring skilled workers" className="h-full w-full object-cover opacity-35" />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-primary" />
         </div>
         <div className="container-x max-w-4xl">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">For Employers</p>
           <h1 className="text-balance mt-4 text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl">
-            The right workers on your site, when you need them.
+            <ContentText id="staff.hero.title" fallback="The right workers on your site, when you need them." />
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-white/75">
             Request skilled labour hire for construction, manufacturing, maintenance and more.
@@ -85,7 +86,7 @@ function FindStaff() {
         <div className="container-x">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Why choose us</p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">Reliable labour hire, without the hassle.</h2>
+            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl"><ContentText id="staff.benefits.title" fallback="Reliable labour hire, without the hassle." /></h2>
           </div>
           <div className="mt-14 grid gap-6 md:grid-cols-3">
             {[
@@ -109,7 +110,7 @@ function FindStaff() {
         <div className="container-x">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Industries</p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">Trusted across every sector we serve.</h2>
+            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl"><ContentText id="staff.industries.title" fallback="Trusted across every sector we serve." /></h2>
           </div>
           <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {industries.map((i) => (
@@ -125,7 +126,7 @@ function FindStaff() {
         <div className="container-x">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Available workforce</p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">Skilled people, ready to work.</h2>
+            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl"><ContentText id="staff.workforce.title" fallback="Skilled people, ready to work." /></h2>
           </div>
           <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             {workforce.map((w, i) => (
@@ -151,7 +152,7 @@ function FindStaff() {
         <div className="container-x mx-auto max-w-4xl">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">FAQ</p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">Frequently asked questions</h2>
+            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl"><ContentText id="staff.faq.title" fallback="Frequently asked questions" /></h2>
           </div>
           <div className="mt-12 divide-y divide-border rounded-3xl border border-border bg-white">
             {faqs.map((f, i) => <FAQItem key={i} {...f} />)}
@@ -163,7 +164,7 @@ function FindStaff() {
         <div className="container-x mx-auto max-w-3xl">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Request staff</p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">Tell us what you need.</h2>
+            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl"><ContentText id="staff.form.title" fallback="Tell us what you need." /></h2>
             <p className="mt-4 text-muted-foreground">We'll come back to you within one business day.</p>
           </div>
           <RequestForm />
