@@ -18,6 +18,8 @@ export const Route = createFileRoute("/contact")({
 });
 
 function Contact() {
+  const phone=useContentValue("global.phone","0451 267 768");
+  const email=useContentValue("global.email","info@yourcrew.com.au");
   return (
     <div>
       <section className="bg-primary pt-32 pb-16 text-white md:pt-40 md:pb-20">
@@ -38,8 +40,8 @@ function Contact() {
             <div className="rounded-3xl border border-border bg-white p-8 md:p-10">
               <h2 className="text-2xl font-bold text-primary"><ContentText id="contact.info.title" fallback="Company information" /></h2>
               <ul className="mt-6 space-y-5">
-                <ContactRow icon={Phone} label="Phone" value={useContentValue("global.phone","0451 267 768")} href={"tel:"+useContentValue("global.phone","0451 267 768").replace(/[^+0-9]/g,"")} />
-                <ContactRow icon={Mail} label="Email" value={useContentValue("global.email","info@yourcrew.com.au")} href={"mailto:"+useContentValue("global.email","info@yourcrew.com.au")} />
+                <ContactRow icon={Phone} label="Phone" value={phone} href={"tel:"+phone.replace(/[^+0-9]/g,"")} />
+                <ContactRow icon={Mail} label="Email" value={email} href={"mailto:"+email} />
                 <ContactRow icon={MapPin} label="Office" value="Melbourne, Victoria — servicing statewide" />
                 <ContactRow icon={Clock} label="Business hours" value="Mon – Fri, 7:00am – 6:00pm" />
               </ul>
