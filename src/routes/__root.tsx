@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navigation } from "../components/site/Navigation";
 import { Footer } from "../components/site/Footer";
-import { AdminDashboard } from "../components/site/AdminDashboard";
+
 
 function NotFoundComponent() {
   return (
@@ -80,15 +80,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const isAdmin = typeof window !== "undefined" && window.location.hash.startsWith("#/admin");
+
 
   return (
     <QueryClientProvider client={queryClient}>
-      {isAdmin ? <AdminDashboard /> : <>
-        <Navigation />
-        <main className="min-h-screen"><Outlet /></main>
-        <Footer />
-      </>}
+      <Navigation />
+      <main className="min-h-screen"><Outlet /></main>
+      <Footer />
     </QueryClientProvider>
   );
 }
