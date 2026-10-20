@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 
 import heroImg from "../assets/hero-construction.jpg";
+import { ContentText, useContentValue } from "../lib/site-content";
 import constructionImg from "../assets/service-construction.jpg";
 import manufacturingImg from "../assets/service-manufacturing.jpg";
 import maintenanceImg from "../assets/service-maintenance.jpg";
@@ -129,7 +130,7 @@ function Hero() {
             className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white px-3.5 py-1.5 text-xs font-medium uppercase tracking-wider shadow-sm"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-            Trusted for 22+ years across Victoria
+            <ContentText id="home.hero.badge" fallback="Trusted for 22+ years across Victoria" />
           </motion.div>
 
           <motion.h1
@@ -138,9 +139,9 @@ function Hero() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="mt-7 max-w-3xl text-balance text-5xl font-extrabold leading-[1.04] tracking-tight text-primary sm:text-6xl lg:text-7xl"
           >
-            Australia&apos;s Trusted{" "}
+            <ContentText id="home.hero.lead" fallback="Australia’s Trusted" />{" "}
             <span className="relative whitespace-nowrap">
-              <span className="relative z-10 text-accent">Labour Hire</span>
+              <span className="relative z-10 text-accent"><ContentText id="home.hero.emphasis" fallback="Labour Hire" /></span>
               <svg
                 aria-hidden
                 viewBox="0 0 300 12"
@@ -155,7 +156,7 @@ function Hero() {
                 />
               </svg>
             </span>{" "}
-            Partner.
+            <ContentText id="home.hero.end" fallback="Partner." />
           </motion.h1>
 
           <motion.p
@@ -217,7 +218,7 @@ function Hero() {
           <div className="absolute inset-6 rounded-[3rem] bg-primary/10" />
 
           <img
-            src={heroImg}
+            src={useContentValue("home.hero.image",heroImg)}
             alt="Skilled construction workers"
             className="absolute inset-0 h-full w-full rounded-[3rem] object-cover object-center shadow-2xl"
             width={900}
@@ -277,7 +278,7 @@ function Services() {
             Our Services
           </motion.p>
           <motion.h2 {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.05 }} className="text-balance mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
-            Workforce solutions for the industries that build Australia.
+            <ContentText id="home.services.title" fallback="Workforce solutions for the industries that build Australia." />
           </motion.h2>
           <motion.p {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="mt-5 text-lg text-muted-foreground">
             We take the stress out of hiring by matching you with pre-screened workers who fit your
@@ -359,7 +360,7 @@ function WhyUs() {
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Why Your Crew</p>
           <h2 className="text-balance mt-3 text-4xl font-bold tracking-tight md:text-5xl">
-            Built on reliability, expertise and flexibility.
+            <ContentText id="home.why.title" fallback="Built on reliability, expertise and flexibility." />
           </h2>
           <p className="mt-5 text-lg text-muted-foreground">
             We deliver skilled, reliable professionals who seamlessly integrate into your team.
@@ -406,7 +407,7 @@ function Industries() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Industries</p>
             <h2 className="text-balance mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
-              Trusted across the sectors that keep Victoria moving.
+              <ContentText id="home.industries.title" fallback="Trusted across the sectors that keep Victoria moving." />
             </h2>
           </div>
           <p className="text-lg text-muted-foreground">
@@ -449,7 +450,7 @@ function HowItWorks() {
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">How it works</p>
           <h2 className="text-balance mt-3 text-4xl font-bold tracking-tight md:text-5xl">
-            Four steps to the right crew on your site.
+            <ContentText id="home.process.title" fallback="Four steps to the right crew on your site." />
           </h2>
         </div>
 
@@ -547,7 +548,7 @@ function CTABanner() {
           <div className="relative grid gap-8 md:grid-cols-[1.4fr_1fr] md:items-center">
             <div>
               <h2 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
-                Need reliable staff? Request workers today.
+                <ContentText id="home.cta.title" fallback="Need reliable staff? Request workers today." />
               </h2>
               <p className="mt-4 max-w-xl text-white/70">
                 Tell us what you need and our Melbourne team will contact you within one business day.
@@ -589,7 +590,7 @@ function LatestJobs() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Careers</p>
             <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
-              Latest opportunities
+              <ContentText id="home.jobs.title" fallback="Latest opportunities" />
             </h2>
           </div>
           <Link
@@ -637,7 +638,7 @@ function ContactStrip() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Get in touch</p>
           <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
-            Quick enquiry
+            <ContentText id="home.contact.title" fallback="Quick enquiry" />
           </h2>
           <p className="mt-5 max-w-md text-muted-foreground">
             Send us a quick message and we'll get back to you within one business day.
