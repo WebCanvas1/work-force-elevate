@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { ContentText, useContentValue } from "../../lib/site-content";
 import { HardHat, Phone, Mail, MapPin } from "lucide-react";
 
 const SOCIALS = [
@@ -25,7 +26,7 @@ export function Footer() {
             <span className="grid h-9 w-9 place-items-center rounded-lg bg-accent">
               <HardHat className="h-5 w-5" strokeWidth={2.4} />
             </span>
-            <span className="text-lg font-bold">Your Crew</span>
+            <span className="text-lg font-bold"><ContentText id="global.company" fallback="Your Crew" /></span>
           </div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed">
             Labour hire and workforce solutions across Melbourne and Victoria — 22+ years supplying
@@ -84,11 +85,11 @@ export function Footer() {
           <ul className="mt-4 space-y-3 text-sm">
             <li className="flex items-start gap-2.5">
               <Phone className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-              <a href="tel:+61451267768" className="hover:text-white">0451 267 768</a>
+              <a href={`tel:${useContentValue("global.phone", "0451 267 768").replace(/[^+0-9]/g, "")}`} className="hover:text-white"><ContentText id="global.phone" fallback="0451 267 768" /></a>
             </li>
             <li className="flex items-start gap-2.5">
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-              <a href="mailto:info@yourcrew.com.au" className="hover:text-white">info@yourcrew.com.au</a>
+              <a href={`mailto:${useContentValue("global.email", "info@yourcrew.com.au")}`} className="hover:text-white"><ContentText id="global.email" fallback="info@yourcrew.com.au" /></a>
             </li>
             <li className="flex items-start gap-2.5">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
