@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, Award, Handshake, Compass, ShieldCheck, HeartHandshake, Sparkles } from "lucide-react";
 import aboutTeam from "../assets/about-team.jpg";
+import { ContentText, useContentValue } from "../lib/site-content";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -34,13 +35,13 @@ export default function About() {
     <div>
       <section className="relative isolate overflow-hidden bg-primary pt-32 pb-24 text-white md:pt-40 md:pb-32">
         <div className="absolute inset-0 -z-10">
-          <img src={aboutTeam} alt="Your Crew team" className="h-full w-full object-cover opacity-40" />
+          <img src={useContentValue("about.hero.image", aboutTeam)} alt="Your Crew team" className="h-full w-full object-cover opacity-40" />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-primary" />
         </div>
         <div className="container-x max-w-4xl">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Our Story</p>
           <h1 className="text-balance mt-4 text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl">
-            Building strong teams. Empowering Australian businesses.
+            <ContentText id="about.hero.title" fallback="Building strong teams. Empowering Australian businesses." />
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-white/75">
             For 22+ years, Your Crew has connected companies across construction, manufacturing and
@@ -54,7 +55,7 @@ export default function About() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Mission & Vision</p>
             <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
-              More than staffing — lasting workforce solutions.
+              <ContentText id="about.mission.title" fallback="More than staffing — lasting workforce solutions." />
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
               At Your Crew, we believe in more than just staffing — we create lasting workforce
@@ -87,7 +88,7 @@ export default function About() {
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Our Values</p>
             <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
-              The principles behind every placement.
+              <ContentText id="about.values.title" fallback="The principles behind every placement." />
             </h2>
           </div>
           <div className="mt-14 grid gap-6 md:grid-cols-3">
@@ -116,7 +117,7 @@ export default function About() {
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Timeline</p>
             <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
-              22+ years of growth.
+              <ContentText id="about.timeline.title" fallback="22+ years of growth." />
             </h2>
           </div>
           <div className="mx-auto mt-16 grid max-w-5xl gap-6 md:grid-cols-2">
@@ -143,7 +144,7 @@ export default function About() {
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Why businesses trust us</p>
             <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
-              We value our people, so they deliver their best for you.
+              <ContentText id="about.trust.title" fallback="We value our people, so they deliver their best for you." />
             </h2>
             <ul className="mt-8 space-y-4">
               {[
@@ -181,7 +182,7 @@ export default function About() {
       <section className="bg-primary py-20 text-white md:py-28">
         <div className="container-x flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
           <h2 className="text-balance text-3xl font-bold md:text-4xl">
-            Ready to build your dream team?
+            <ContentText id="about.cta.title" fallback="Ready to build your dream team?" />
           </h2>
           <div className="flex gap-3">
             <Link to="/find-staff" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary">
