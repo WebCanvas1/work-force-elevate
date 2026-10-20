@@ -1,4 +1,4 @@
-import { ContentText } from "../lib/site-content";
+import { ContentText, useContentValue } from "../lib/site-content";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Phone, Mail, MapPin, Clock, ArrowRight } from "lucide-react";
@@ -38,8 +38,8 @@ function Contact() {
             <div className="rounded-3xl border border-border bg-white p-8 md:p-10">
               <h2 className="text-2xl font-bold text-primary"><ContentText id="contact.info.title" fallback="Company information" /></h2>
               <ul className="mt-6 space-y-5">
-                <ContactRow icon={Phone} label="Phone" value="0451 267 768" href="tel:+61451267768" />
-                <ContactRow icon={Mail} label="Email" value="info@yourcrew.com.au" href="mailto:info@yourcrew.com.au" />
+                <ContactRow icon={Phone} label="Phone" value={useContentValue("global.phone","0451 267 768")} href={"tel:"+useContentValue("global.phone","0451 267 768").replace(/[^+0-9]/g,"")} />
+                <ContactRow icon={Mail} label="Email" value={useContentValue("global.email","info@yourcrew.com.au")} href={"mailto:"+useContentValue("global.email","info@yourcrew.com.au")} />
                 <ContactRow icon={MapPin} label="Office" value="Melbourne, Victoria — servicing statewide" />
                 <ContactRow icon={Clock} label="Business hours" value="Mon – Fri, 7:00am – 6:00pm" />
               </ul>
