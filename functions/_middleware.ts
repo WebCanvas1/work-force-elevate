@@ -54,7 +54,8 @@ export async function onRequest(ctx:Context) {
   if(path==="/api/admin/content"&&request.method==="PUT"){
    const raw=await request.text();
    if(raw.length>150000)return error("Content is too large",413);
-   const data=JSON.parse(raw) as {content?:Record<string,unknown>};
+   let data: {content?:Record<string,unknown>};
+   try { data=JSON.parse(raw) as {content?:Record<string,unknown>}; } catch { return error("Invalid JSON"); }
    if(!data.content||typeof data.content!=="object"||Array.isArray(data.content))return error("Invalid content");
    const entries=Object.entries(data.content);
    if(entries.length>500||entries.some(([key,val])=>key.length>120||!/^([a-z0-9-]+\.)+[a-z0-9-]+$/.test(key)||typeof val!=="string"||val.length>10000))return error("Content validation failed");
