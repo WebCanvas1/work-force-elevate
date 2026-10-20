@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import logo from "../../assets/your-crew-logo.png";
+import { useContentValue } from "../../lib/site-content";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -13,6 +14,7 @@ const links = [
 
 export function Navigation() {
   const [open, setOpen] = useState(false);
+  const logoUrl = useContentValue("global.logo", logo);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-primary/90 shadow-[0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-xl">
@@ -23,7 +25,7 @@ export function Navigation() {
           className="flex items-center transition-transform duration-300 hover:scale-[1.03]"
         >
           <img
-            src={logo}
+            src={logoUrl}
             alt="Your Crew — Flexible Workforce Specialists"
             className="h-14 w-auto object-contain md:h-16"
           />
