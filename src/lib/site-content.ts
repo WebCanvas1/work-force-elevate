@@ -5,6 +5,7 @@ export type ContentMap = Record<string, string>;
 let content: ContentMap = {};
 const subscribers = new Set<() => void>();
 export const getContent = () => content;
+export const getValue = (key: string, fallback: string) => content[key] ?? fallback;
 export const setContent = (next: ContentMap) => {
   content = next;
   subscribers.forEach(fn => fn());
