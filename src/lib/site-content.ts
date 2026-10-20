@@ -28,12 +28,6 @@ export async function loadPublicContent() {
     }
   } catch { /* Site stays functional if CMS is unavailable. */ }
 }
-export function EditableText({ id, children, as: Tag = "span", ...props }: {
-  id: string; children: string; as?: keyof React.JSX.IntrinsicElements; className?: string;
-}) {
-  const value = useContentValue(id, children);
-  return createElement(Tag, props, value);
-}
 
 /** Render a string through the CMS without changing the existing HTML structure. */
 export function ContentText({ id, fallback }: { id: string; fallback: string }) {
