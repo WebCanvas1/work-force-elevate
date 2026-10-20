@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { ContentText, useContentValue } from "../../lib/site-content";
+import { ContentText } from "../../lib/site-content";
+import { FooterContact } from "./FooterContact";
 import { HardHat, Phone, Mail, MapPin } from "lucide-react";
 
 const SOCIALS = [
@@ -85,11 +86,11 @@ export function Footer() {
           <ul className="mt-4 space-y-3 text-sm">
             <li className="flex items-start gap-2.5">
               <Phone className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-              <a href={`tel:${useContentValue("global.phone", "0451 267 768").replace(/[^+0-9]/g, "")}`} className="hover:text-white"><ContentText id="global.phone" fallback="0451 267 768" /></a>
+              <FooterContact kind="phone" />
             </li>
             <li className="flex items-start gap-2.5">
               <Mail className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-              <a href={`mailto:${useContentValue("global.email", "info@yourcrew.com.au")}`} className="hover:text-white"><ContentText id="global.email" fallback="info@yourcrew.com.au" /></a>
+              <FooterContact kind="email" />
             </li>
             <li className="flex items-start gap-2.5">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
