@@ -1,3 +1,4 @@
+import { ContentText, useContentValue } from "../lib/site-content";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -41,13 +42,13 @@ function FindAJob() {
     <div>
       <section className="relative isolate overflow-hidden bg-primary pt-32 pb-24 text-white md:pt-40 md:pb-32">
         <div className="absolute inset-0 -z-10">
-          <img src={findJob} alt="Skilled worker on site" className="h-full w-full object-cover opacity-40" />
+          <img src={useContentValue("jobs.hero.image", findJob)} alt="Skilled worker on site" className="h-full w-full object-cover opacity-40" />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-primary" />
         </div>
         <div className="container-x max-w-4xl">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">For Job Seekers</p>
           <h1 className="text-balance mt-4 text-4xl font-extrabold leading-tight sm:text-5xl md:text-6xl">
-            Work with a crew that has your back.
+            <ContentText id="jobs.hero.title" fallback="Work with a crew that has your back." />
           </h1>
           <p className="mt-6 max-w-2xl text-lg text-white/75">
             Register today and get matched with meaningful work on great sites across Victoria —
@@ -68,7 +69,7 @@ function FindAJob() {
         <div className="container-x">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Why work with us</p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">Benefits of joining Your Crew.</h2>
+            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl"><ContentText id="jobs.benefits.title" fallback="Benefits of joining Your Crew." /></h2>
           </div>
           <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {benefits.map((b) => (
@@ -87,7 +88,7 @@ function FindAJob() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Opportunities</p>
-              <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">Current opportunities</h2>
+              <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl"><ContentText id="jobs.openings.title" fallback="Current opportunities" /></h2>
             </div>
             <div className="flex flex-wrap gap-2">
               {categories.map((c) => (
@@ -126,7 +127,7 @@ function FindAJob() {
         <div className="container-x mx-auto max-w-3xl">
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Registration</p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">Register with Your Crew.</h2>
+            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl"><ContentText id="jobs.register.title" fallback="Register with Your Crew." /></h2>
             <p className="mt-4 text-muted-foreground">Complete the form below and our team will be in touch.</p>
           </div>
           <MultiStepForm />
