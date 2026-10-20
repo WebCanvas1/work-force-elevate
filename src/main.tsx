@@ -5,6 +5,7 @@ import { RouterProvider } from "@tanstack/react-router";
 import "./styles.css";
 import { getRouter } from "./router";
 import { loadPublicContent } from "./lib/site-content";
+import { AdminDashboard } from "./components/site/AdminDashboard";
 
 const router = getRouter();
 
@@ -12,6 +13,6 @@ void loadPublicContent();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    {window.location.hash.startsWith("#/admin") ? <AdminDashboard /> : <RouterProvider router={router} />}
   </StrictMode>,
 );
