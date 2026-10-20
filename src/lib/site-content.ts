@@ -34,3 +34,12 @@ export function EditableText({ id, children, as: Tag = "span", ...props }: {
   const value = useContentValue(id, children);
   return createElement(Tag, props, value);
 }
+
+/** Render a string through the CMS without changing the existing HTML structure. */
+export function ContentText({ id, fallback }: { id: string; fallback: string }) {
+  return createElement("span", { style: { display: "contents" } }, useContentValue(id, fallback));
+}
+export function ContentImage({ id, fallback, alt, className }: { id: string; fallback: string; alt: string; className?: string }) {
+  const src = useContentValue(id, fallback);
+  return createElement("img", { src, alt, className, loading: "lazy" });
+}
