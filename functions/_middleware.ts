@@ -27,6 +27,7 @@ export async function onRequest(ctx:Context) {
    return Response.json({content},{headers:{"cache-control":"public, max-age=45"}});
   }
   if(path==="/api/admin/login" && request.method==="POST"){
+   const origin=request.headers.get("origin");if(!origin||origin!==url.origin)return error("Invalid request origin",403);
    if(!env.ADMIN_PASSWORD||!env.SESSION_SECRET)return error("Admin secrets are not configured",503);
    if(Number(request.headers.get("content-length")||0)>10000)return error("Invalid request");
    const payload=await request.json().catch(()=>({})) as {password?:string};
