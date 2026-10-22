@@ -1,20 +1,16 @@
 interface Env { CMS_CONTENT: KVNamespace; ADMIN_PASSWORD: string; SESSION_SECRET: string; CMS_MEDIA?: R2Bucket }
 type Context = { request: Request; env: Env; next: () => Promise<Response> };
-const encoder = new TextEncoder();
-const error = (message: string, status = 400) => Response.json({error:message},{status});
-const cookie = (request:Request) => request.headers.get("cookie")?.match(/(?:^|;\s*)wfe_session=([^;]+)/)?.[1] || "";
-const hash = async (value:string) => new Uint8Array(await crypto.subtle.digest("SHA-256", encoder.encode(value)));
-const toHex = (bytes:Uint8Array) => [...bytes].map(n=>n.toString(16).padStart(2,"0")).join("");
-const sign = async (value:string, secret:string) => {
- const key=await crypto.subtle.importKey("raw",encoder.encode(secret),"HMAC",false,["sign"]);
- return toHex(new Uint8Array(await crypto.subtle.sign("HMAC",key,encoder.encode(value))));
-};
+const error = (message: string, status = 400) => Response.json({error:message},{status,headers:{"cache-control":"no-store"}});
+const cookie = (request:Request) => request.headers.get("cookie")?.match(/(?:^|;\\s*)wfe_session=([^;]+)/)?.[1] || "";
+const sessionKey = (token:string) => "cms_session:"+token;
 const trusted = async (request:Request,env:Env) => {
- const token=cookie(request),[expiry,signature]=token.split(".");
- if(!expiry||!signature||!env.SESSION_SECRET||!/^[0-9]{10,15}$/.test(expiry)||Number(expiry)<Date.now())return false;
- const expected=await sign(expiry,env.SESSION_SECRET);
- if(expected.length!==signature.length)return false;
- let diff=0;for(let i=0;i<expected.length;i++)diff|=expected.charCodeAt(i)^signature.charCodeAt(i);
+ const token=cookie(request);
+ if(!/^[0-9a-f-]{36}$/.test(token) || !env.CMS_CONTENT) return false;
+ return (await env.CMS_CONTENT.get(sessionKey(token))) === "active";
+};
+const equalPassword = (a:string,b:string) => {
+ let diff=a.length ^ b.length;
+ for(let i=0;i<Math.max(a.length,b.length);i++) diff |= (a.charCodeAt(i)||0) ^ (b.charCodeAt(i)||0);
  return diff===0;
 };
 async function handleRequest(ctx:Context) {
@@ -31,16 +27,16 @@ async function handleRequest(ctx:Context) {
    if(!env.ADMIN_PASSWORD||!env.SESSION_SECRET)return error("Admin secrets are not configured",503);
    if(Number(request.headers.get("content-length")||0)>10000)return error("Invalid request");
    const payload=await request.json().catch(()=>({})) as {password?:string};
-   const actual=await hash(typeof payload.password==="string"?payload.password:"");
-   const expected=await hash(env.ADMIN_PASSWORD);
-   let diff=0;for(let i=0;i<actual.length;i++)diff|=actual[i]^expected[i];
-   if(diff!==0)return error("Incorrect password",401);
-   const expiry=String(Date.now()+8*60*60*1000);
-   const signature=await sign(expiry,env.SESSION_SECRET);
-   return Response.json({ok:true},{headers:{"set-cookie":`wfe_session=${expiry}.${signature}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800`,"cache-control":"no-store"}});
+   if(!equalPassword(typeof payload.password==="string"?payload.password:"",env.ADMIN_PASSWORD))return error("Incorrect password",401);
+   const token=crypto.randomUUID();
+   await env.CMS_CONTENT.put(sessionKey(token),"active",{expirationTtl:28800});
+   return Response.json({ok:true},{headers:{"set-cookie":`wfe_session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800`,"cache-control":"no-store"}});
   }
-  if(path==="/api/admin/logout" && request.method==="POST")
-   return Response.json({ok:true},{headers:{"set-cookie":"wfe_session=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0"}});
+  if(path==="/api/admin/logout" && request.method==="POST"){
+   const token=cookie(request);
+   if(/^[0-9a-f-]{36}$/.test(token))await env.CMS_CONTENT.delete(sessionKey(token));
+   return Response.json({ok:true},{headers:{"set-cookie":"wfe_session=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0","cache-control":"no-store"}});
+  }
   if(!path.startsWith("/api/admin/"))return error("Not found",404);
   if(!(await trusted(request,env)))return error("Unauthorised",401);
   if(request.method!=="GET"&&request.method!=="HEAD"){
