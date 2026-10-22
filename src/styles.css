@@ -273,3 +273,25 @@
 .cms-field>input,.cms-field>textarea{margin-top:0;min-height:46px}
 .cms-field-head{margin-bottom:18px}
 @media(max-width:650px){.cms-current{padding:17px 18px;margin-bottom:24px}.cms-current p{font-size:15px}}
+
+/* Dynamic page builder */
+.cms-editor-tabs{display:flex;gap:8px;margin:24px 0 18px;border-bottom:1px solid #dce3ea;flex-wrap:wrap}
+.cms-editor-tabs button{padding:12px 17px;border:0;background:transparent;color:#52667a;font-weight:700;cursor:pointer;border-bottom:3px solid transparent}
+.cms-editor-tabs button.active{color:#163a52;border-bottom-color:#e4b54c}
+.cms-builder{display:grid;gap:16px}
+.cms-builder-intro,.cms-builder-section,.cms-builder-empty{background:#fff;border:1px solid #e1e7ee;border-radius:10px;padding:22px}
+.cms-builder-intro h3{font-size:20px;font-weight:750;color:#19384e}
+.cms-builder-intro p{color:#607185;margin:8px 0 20px}
+.cms-builder-intro label,.cms-builder-body label{display:grid;gap:9px;color:#314b62;font-size:13px;font-weight:700}
+.cms-builder-intro select,.cms-builder-body input,.cms-builder-body textarea{width:100%;border:1px solid #cad4df;border-radius:7px;background:#fff;color:#24394b;padding:12px;font-size:14px;font-weight:400}
+.cms-builder-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #e7ebf0;padding-bottom:16px;margin-bottom:20px}
+.cms-builder-toolbar strong{font-size:16px;color:#173a54}
+.cms-builder-toolbar span{background:#f1f5f9;border-radius:5px;padding:5px 9px;color:#5e7082;font-size:12px}
+.cms-builder-toolbar>div{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.cms-builder-toolbar button,.cms-builder-items button{border:1px solid #d3dce5;background:#fff;color:#29465c;border-radius:6px;padding:7px 10px;font-size:12px;cursor:pointer}
+.cms-builder-toolbar button:disabled{opacity:.35;cursor:not-allowed}
+.cms-builder-body{display:grid;gap:18px}
+.cms-builder-items{display:grid;gap:12px;padding:16px;background:#f8fafc;border-radius:8px}
+.cms-builder-items>div{display:grid;gap:9px;border-bottom:1px solid #e1e7ee;padding-bottom:12px}
+.cms-builder-empty{color:#64748b;text-align:center}
+@media(max-width:650px){.cms-builder-intro,.cms-builder-section{padding:16px}.cms-builder-toolbar>div{margin-left:0}}
