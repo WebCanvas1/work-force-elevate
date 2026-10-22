@@ -91,7 +91,10 @@ export function AdminDashboard() {
     e.preventDefault();setBusy(true);setError("");
     try {
       const response=await fetch("/api/admin/login",{method:"POST",credentials:"same-origin",headers:{"content-type":"application/json"},body:JSON.stringify({password})});
-      if(!response.ok)throw new Error(response.status===401?"Incorrect password":"Unable to log in");
+      if(!response.ok){
+        const data=await response.json().catch(()=>({})) as {error?:string};
+        throw new Error(data.error || (response.status===401?"Incorrect password":`Unable to log in (HTTP ${response.status})`));
+      }
       setLoggedIn(true);setPassword("");await refresh();
     } catch(e){setError((e as Error).message)} finally{setBusy(false)}
   }
