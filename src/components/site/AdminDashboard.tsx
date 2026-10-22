@@ -137,7 +137,7 @@ export function AdminDashboard() {
       const response=await fetch("/api/admin/upload",{method:"POST",credentials:"same-origin",body});
       const data=await response.json() as {url?:string;error?:string};
       if(!response.ok || !data.url)throw new Error(data.error||"Image upload failed");
-      setDraft(prev=>({...prev,[id]:data.url!}));setStatus("Image uploaded. Click Publish Changes to use it on your website.");
+      setDraft(prev=>{if(id.startsWith("section-image.")){const sectionId=id.slice("section-image.".length);const key=sectionKey(tab);const items=parseSections(prev[key]??"[]").map(s=>s.id===sectionId?{...s,image:data.url!}:s);return {...prev,[key]:JSON.stringify(items)}}return {...prev,[id]:data.url!}});setStatus("Image uploaded. Click Publish Changes to use it on your website.");
     }catch(e){setError((e as Error).message)}finally{setBusy(false)}
   }
   const filtered=useMemo(()=>selected.fields.filter(f=>!query||`${f.label} ${f.id}`.toLowerCase().includes(query.toLowerCase())),[selected,query]);
