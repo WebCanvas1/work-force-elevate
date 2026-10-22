@@ -5,7 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
 export default defineConfig({
-  base: "/work-force-elevate/",
+  base: "/",
   build: { outDir: "dist" },
   server: { host: "::", port: 8080, strictPort: true },
   plugins: [
