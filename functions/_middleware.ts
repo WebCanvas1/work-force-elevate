@@ -17,7 +17,7 @@ const trusted = async (request:Request,env:Env) => {
  let diff=0;for(let i=0;i<expected.length;i++)diff|=expected.charCodeAt(i)^signature.charCodeAt(i);
  return diff===0;
 };
-export async function onRequest(ctx:Context) {
+async function handleRequest(ctx:Context) {
  const {request,env}=ctx;
  const url=new URL(request.url),path=url.pathname;
  if(path.startsWith("/api/")) {
@@ -86,4 +86,15 @@ export async function onRequest(ctx:Context) {
   return new Response(object.body,{headers:{"content-type":object.httpMetadata?.contentType||"application/octet-stream","cache-control":"public, max-age=86400","x-content-type-options":"nosniff"}});
  }
  return ctx.next();
+}
+
+/** Keep unexpected Pages runtime failures observable without exposing credentials. */
+export async function onRequest(ctx: Context): Promise<Response> {
+ try { return await handleRequest(ctx); }
+ catch (cause) {
+  const path = new URL(ctx.request.url).pathname;
+  const message = cause instanceof Error ? cause.message : String(cause);
+  console.error("CMS function exception", {path, message, stack: cause instanceof Error ? cause.stack : undefined});
+  return Response.json({error:"CMS server error. Check Cloudflare Pages Functions logs.",code:"CMS_RUNTIME_ERROR"},{status:500,headers:{"cache-control":"no-store"}});
+ }
 }
