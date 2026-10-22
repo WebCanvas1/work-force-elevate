@@ -264,3 +264,12 @@
 .cms-field-footer button:disabled{opacity:.4;cursor:not-allowed}
 .cms-bottom-save{position:sticky;bottom:12px;box-shadow:0 8px 24px #1e293b18;z-index:3}
 @media(max-width:950px){.cms-app{grid-template-columns:1fr}.cms-content{padding:16px}.cms-sidebar{min-height:auto}.cms-field{padding:17px}.cms-bottom-save{bottom:0}}
+
+/* Clear visual hierarchy between published copy and editable replacement. */
+.cms-current{padding:20px 22px;margin:14px 0 28px;background:#f8fafc;border:1px solid #e3e9f0;border-left:3px solid #91a5b8;border-radius:9px}
+.cms-current .cms-field-caption{font-size:11px;letter-spacing:.065em;color:#64748b;font-weight:700;margin:0 0 15px;line-height:1.5}
+.cms-current p{font-size:16px;line-height:1.75;color:#1c344a;font-weight:600;letter-spacing:-.01em}
+.cms-edit-label{display:block;font-size:12px;letter-spacing:.035em;font-weight:750;color:#24465f;margin:0 0 12px;line-height:1.5}
+.cms-field>input,.cms-field>textarea{margin-top:0;min-height:46px}
+.cms-field-head{margin-bottom:18px}
+@media(max-width:650px){.cms-current{padding:17px 18px;margin-bottom:24px}.cms-current p{font-size:15px}}
