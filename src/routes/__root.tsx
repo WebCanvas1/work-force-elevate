@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navigation } from "../components/site/Navigation";
 import { Footer } from "../components/site/Footer";
+import { DynamicSections } from "../components/site/DynamicSections";
 
 
 function NotFoundComponent() {
@@ -85,7 +86,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Navigation />
-      <main className="min-h-screen"><Outlet /></main>
+      <main className="min-h-screen"><Outlet /><DynamicSections /></main>
       <Footer />
     </QueryClientProvider>
   );
