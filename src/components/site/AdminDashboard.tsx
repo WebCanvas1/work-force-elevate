@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Save, Eye, Image as ImageIcon, LayoutDashboard, Settings, FileText, LogOut, RotateCcw, Search, CheckCircle2, AlertCircle, ExternalLink } from "lucide-react";
 import { setContent, type ContentMap } from "../../lib/site-content";
+import homeImage from "../../assets/hero-construction.jpg";
+import aboutImage from "../../assets/about-team.jpg";
+import staffImage from "../../assets/find-staff.jpg";
+import jobsImage from "../../assets/find-job.jpg";
+import logoImage from "../../assets/your-crew-logo.png";
 
 type Field = { id: string; label: string; type?: "text" | "textarea" | "image"; hint?: string };
 type Group = { id: string; title: string; description: string; fields: Field[]; page: string };
@@ -56,13 +61,17 @@ const groups: Group[] = [
     {id:"global.email",label:"Contact email"}
   ]}
 ];
+const builtInDefaults: ContentMap = {...{"home.hero.badge":"Trusted for 22+ years across Victoria","home.hero.lead":"Australia’s Trusted","home.hero.emphasis":"Labour Hire","home.hero.end":"Partner.","home.services.title":"Workforce solutions for the industries that build Australia.","home.why.title":"Built on reliability, expertise and flexibility.","home.industries.title":"Trusted across the sectors that keep Victoria moving.","home.process.title":"Four steps to the right crew on your site.","home.cta.title":"Need reliable staff? Request workers today.","home.jobs.title":"Latest opportunities","home.contact.title":"Quick enquiry","about.hero.title":"Building strong teams. Empowering Australian businesses.","about.mission.title":"More than staffing — lasting workforce solutions.","about.values.title":"The principles behind every placement.","about.timeline.title":"22+ years of growth.","about.trust.title":"We value our people, so they deliver their best for you.","about.cta.title":"Ready to build your dream team?","staff.hero.title":"The right workers on your site, when you need them.","staff.benefits.title":"Reliable labour hire, without the hassle.","staff.industries.title":"Trusted across every sector we serve.","staff.workforce.title":"Skilled people, ready to work.","staff.faq.title":"Frequently asked questions","staff.form.title":"Tell us what you need.","jobs.hero.title":"Work with a crew that has your back.","jobs.benefits.title":"Benefits of joining Your Crew.","jobs.openings.title":"Current opportunities","jobs.register.title":"Register with Your Crew.","contact.hero.title":"Let’s build your dream team.","contact.info.title":"Company information","contact.form.title":"Send a message","global.company":"Your Crew","global.phone":"0451 267 768","global.email":"info@yourcrew.com.au"},
+  "home.hero.image":homeImage,"about.hero.image":aboutImage,"staff.hero.image":staffImage,
+  "jobs.hero.image":jobsImage,"global.logo":logoImage
+};
 const pretty = (id: string) => id.split(".").slice(1).join(" ");
 const preview = (page: string) => `#${page}`;
 export function AdminDashboard() {
   const [tab,setTab]=useState("home");
   const [draft,setDraft]=useState<ContentMap>({});
   const [original,setOriginal]=useState<ContentMap>({});
-  const [defaults,setDefaults]=useState<ContentMap>({});
+  const [defaults,setDefaults]=useState<ContentMap>(builtInDefaults);
   const [loggedIn,setLoggedIn]=useState(false);
   const [ready,setReady]=useState(false);
   const [password,setPassword]=useState("");
@@ -73,6 +82,7 @@ export function AdminDashboard() {
   const [showPreview,setShowPreview]=useState(false);
   const selected=groups.find(g=>g.id===tab) || groups[0];
   const dirty=JSON.stringify(draft)!==JSON.stringify(original);
+  const changedCount=Object.keys({...draft,...original}).filter(k=>(draft[k]??defaults[k]??"")!==(original[k]??defaults[k]??"")).length;
   useEffect(()=>{void (async()=>{
     try {
       const response=await fetch("/api/admin/session",{credentials:"same-origin"});
@@ -85,7 +95,7 @@ export function AdminDashboard() {
     if(!response.ok) throw new Error("Unable to load website content");
     const data=await response.json() as {content?:ContentMap;defaults?:ContentMap};
     const values=data.content||{};
-    setOriginal(values);setDraft(values);setDefaults(data.defaults||{});
+    setOriginal(values);setDraft(values);setDefaults({...builtInDefaults,...(data.defaults||{})});
   }
   async function signIn(e: React.FormEvent){
     e.preventDefault();setBusy(true);setError("");
@@ -129,12 +139,23 @@ export function AdminDashboard() {
   return <div className="cms-app">
     <aside className="cms-sidebar"><div className="cms-brand"><span className="cms-logo">W</span><span>Website Editor<small>Work-Force Elevate</small></span></div><p className="cms-section-title">CONTENT MANAGEMENT</p><nav aria-label="Admin navigation">{groups.map(g=><button key={g.id} type="button" className={tab===g.id?"active":""} onClick={()=>{setTab(g.id);setQuery("");setStatus("");setShowPreview(false)}}>{g.id==="settings"?<Settings size={18}/>:g.id==="home"?<LayoutDashboard size={18}/>:<FileText size={18}/>} {g.title}</button>)}</nav><div className="cms-sidebar-bottom"><a href="#/" target="_blank" rel="noreferrer"><ExternalLink size={17}/> View website</a><button onClick={logout}><LogOut size={17}/> Sign out</button></div></aside>
     <div className="cms-workspace"><header className="cms-topbar"><div><h1>{selected.title}</h1><span>{selected.description}</span></div><div className="cms-actions"><button className="cms-ghost" onClick={()=>setShowPreview(v=>!v)}><Eye size={17}/> {showPreview?"Hide preview":"Preview"}</button><button className="cms-save" disabled={!dirty||busy} onClick={save}><Save size={17}/>{busy?"Working…":"Publish changes"}</button></div></header>
-    <div className="cms-content"><div className="cms-welcome"><div><p className="cms-eyebrow">SITE CONTENT</p><h2>Edit {selected.title}</h2><p>Make changes in the fields below, preview your page, then publish when you're ready.</p></div><span className={dirty?"cms-pill unsaved":"cms-pill"}>{dirty?"Unsaved changes":"Up to date"}</span></div>
+    <div className="cms-content"><div className="cms-welcome"><div><p className="cms-eyebrow">SITE CONTENT</p><h2>{selected.title} editor</h2><p>Make changes in the fields below, preview your page, then publish when you're ready.</p></div><span className={dirty?"cms-pill unsaved":"cms-pill"}>{dirty?`${changedCount} unpublished change${changedCount===1?"":"s"}`:"All changes published"}</span></div>
     {error&&<div className="cms-error" role="alert"><AlertCircle size={17}/>{error}</div>}
     {status&&<div className="cms-success" role="status"><CheckCircle2 size={18}/>{status}</div>}
     {showPreview&&<div className="cms-preview"><div><strong>Live website preview</strong><a href={preview(selected.page)} target="_blank" rel="noreferrer">Open in new tab <ExternalLink size={14}/></a></div><iframe title="Website preview" src={preview(selected.page)}/></div>}
-    <div className="cms-edit-heading"><h3>Page Content <small>{filtered.length} editable fields</small></h3><label><Search size={16}/><input placeholder="Search fields…" value={query} onChange={e=>setQuery(e.target.value)}/></label></div>
-    <div className="cms-fields">{filtered.map(field=><div className="cms-field" key={field.id}><div className="cms-field-head"><label htmlFor={field.id}>{field.label}</label><small>{pretty(field.id)}</small></div>{field.type==="image"?<><div className="cms-image-preview">{draft[field.id]||defaults[field.id]?<img src={draft[field.id]||defaults[field.id]} alt={field.label}/>:<ImageIcon size={35}/>}</div><div className="cms-image-actions"><label className="cms-upload">Upload image<input type="file" hidden accept="image/*" onChange={e=>{const file=e.target.files?.[0];if(file)void upload(file,field.id);e.target.value=""}}/></label><input id={field.id} placeholder="Or enter image URL" value={draft[field.id]??defaults[field.id]??""} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/></div></>:field.type==="textarea"?<textarea id={field.id} rows={3} value={draft[field.id]??defaults[field.id]??""} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/>:<input id={field.id} value={draft[field.id]??defaults[field.id]??""} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/>}<div className="cms-field-footer"><span>{field.hint||"Updates will appear after publishing."}</span><button type="button" onClick={()=>setDraft(p=>{const n={...p};delete n[field.id];return n})}><RotateCcw size={13}/> Restore default</button></div></div>)}</div>
+    <div className="cms-edit-heading"><h3>Editable sections <small>{filtered.length} editable fields</small></h3><label><Search size={16}/><input placeholder="Search fields…" value={query} onChange={e=>setQuery(e.target.value)}/></label></div>
+    <div className="cms-fields">{filtered.map(field=>{
+      const current=original[field.id]??defaults[field.id]??"";
+      const next=draft[field.id]??defaults[field.id]??"";
+      const modified=current!==next;
+      return <section className={modified?"cms-field cms-field-modified":"cms-field"} key={field.id}>
+        <div className="cms-field-head"><label htmlFor={field.id}>{field.label}</label>{modified&&<span className="cms-change-label">Unpublished change</span>}</div>
+        <div className="cms-current"><span className="cms-field-caption">CURRENTLY ON YOUR WEBSITE</span>{field.type==="image"?<div className="cms-current-image">{current?<img src={current} alt={field.label+" currently live"}/>:<span>No image set</span>}</div>:<p>{current||"No content set"}</p>}</div>
+        <label className="cms-field-caption cms-edit-label" htmlFor={field.id}>{field.type==="image"?"REPLACEMENT IMAGE":"EDIT CONTENT"}</label>
+        {field.type==="image"?<><div className="cms-image-preview">{next?<img src={next} alt={"New "+field.label}/>:<ImageIcon size={35}/>}</div><div className="cms-image-actions"><label className="cms-upload">Choose new image<input type="file" hidden accept="image/jpeg,image/png,image/webp,image/gif" onChange={e=>{const file=e.target.files?.[0];if(file)void upload(file,field.id);e.target.value=""}}/></label><input id={field.id} aria-label={"Image URL for "+field.label} placeholder="Or paste an image URL" value={next} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/></div></>:field.type==="textarea"?<textarea id={field.id} rows={3} value={next} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/>:<input id={field.id} value={next} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/>}
+        <div className="cms-field-footer"><span>{modified?"Your website will not change until you publish.":"Showing the current published content above."}</span><div className="cms-field-buttons"><button type="button" disabled={!modified} onClick={()=>setDraft(p=>({...p,[field.id]:current}))}>Undo edit</button><button type="button" onClick={()=>setDraft(p=>{const n={...p};delete n[field.id];return n})}><RotateCcw size={13}/> Use original</button></div></div>
+      </section>;
+    })}</div>
     <div className="cms-bottom-save"><span>{dirty?"You have unpublished changes.":"Your content is saved."}</span><button className="cms-save" disabled={!dirty||busy} onClick={save}><Save size={16}/> Publish changes</button></div>
     </div></div>
   </div>;
