@@ -165,7 +165,7 @@ export function AdminDashboard() {
         <div className="cms-field-footer"><span>{modified?"Your website will not change until you publish.":"Showing the current published content above."}</span><div className="cms-field-buttons"><button type="button" disabled={!modified} onClick={()=>setDraft(p=>({...p,[field.id]:current}))}>Undo edit</button><button type="button" onClick={()=>setDraft(p=>{const n={...p};delete n[field.id];return n})}><RotateCcw size={13}/> Use original</button></div></div>
       </section>;
     })}</div>
-</>
+</>}
     <div className="cms-bottom-save"><span>{dirty?"You have unpublished changes.":"Your content is saved."}</span><button className="cms-save" disabled={!dirty||busy} onClick={save}><Save size={16}/> Publish changes</button></div>
     </div></div>
   </div>;
