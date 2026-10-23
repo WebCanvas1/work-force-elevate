@@ -55,7 +55,7 @@ async function handleRequest(ctx:Context) {
    try { data=JSON.parse(raw) as {content?:Record<string,unknown>}; } catch { return error("Invalid JSON"); }
    if(!data.content||typeof data.content!=="object"||Array.isArray(data.content))return error("Invalid content");
    const entries=Object.entries(data.content);
-   if(entries.length>500||entries.some(([key,val])=>key.length>120||!/^([a-z0-9-]+\.)+[a-z0-9-]+$/.test(key)||typeof val!=="string"||val.length>10000))return error("Content validation failed");
+   if(entries.length>500||entries.some(([key,val])=>key.length>120||!/^([a-z0-9-]+\.)+[a-z0-9-]+$/.test(key)||typeof val!=="string"||val.length>(key.startsWith("sections.")?100000:10000)))return error("Content validation failed");
    await env.CMS_CONTENT.put("website_content",JSON.stringify(data.content));
    return Response.json({ok:true});
   }
