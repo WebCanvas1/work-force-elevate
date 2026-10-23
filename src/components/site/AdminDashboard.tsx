@@ -67,6 +67,12 @@ const builtInDefaults: ContentMap = {...{"home.hero.badge":"Trusted for 22+ year
   "jobs.hero.image":jobsImage,"global.logo":logoImage
 };
 const preview = (page: string) => `#${page}`;
+// Compare effective published values rather than raw KV keys. An empty page builder
+// is identical to one that has never stored a sections key.
+const effectiveValue = (key:string, value:ContentMap, defaults:ContentMap) => {
+  if(key.startsWith("sections.")) return JSON.stringify(parseSections(value[key]??"[]"));
+  return value[key]??defaults[key]??"";
+};
 export function AdminDashboard() {
   const [tab,setTab]=useState("home");
   const [draft,setDraft]=useState<ContentMap>({});
@@ -83,11 +89,17 @@ export function AdminDashboard() {
   const [editorMode,setEditorMode]=useState<"fields"|"sections">("fields");
   const selected=groups.find(g=>g.id===tab) || groups[0];
   const sections=parseSections(draft[sectionKey(tab)]??"[]");
-  const setSections=(items:SiteSection[])=>setDraft(prev=>({...prev,[sectionKey(tab)]:JSON.stringify(items)}));
+  const setSections=(items:SiteSection[])=>setDraft(prev=>{
+    const key=sectionKey(tab);
+    const next={...prev};
+    if(items.length===0 && !original[key]) delete next[key];
+    else next[key]=JSON.stringify(items);
+    return next;
+  });
   const changeSection=(id:string,patch:Partial<SiteSection>)=>setSections(sections.map(s=>s.id===id?{...s,...patch}:s));
   const addSection=(kind:SectionKind)=>{if(sections.length>=40){setError("Maximum of 40 sections per page.");return;}setSections([...sections,{id:crypto.randomUUID(),kind,title:"New "+kind+" section",body:"",items:kind==="cards"||kind==="faq"||kind==="stats"?[{title:"Item 1",body:"Description"}]:[]}]);};
   const moveSection=(index:number,delta:number)=>{const next=[...sections];const other=index+delta;if(other<0||other>=next.length)return;[next[index],next[other]]=[next[other],next[index]];setSections(next)};
-  const changedKeys=Object.keys({...draft,...original}).filter(k=>(draft[k]??defaults[k]??"")!==(original[k]??defaults[k]??""));
+  const changedKeys=Object.keys({...draft,...original}).filter(k=>effectiveValue(k,draft,defaults)!==effectiveValue(k,original,defaults));
   const dirty=changedKeys.length>0;
   const changedCount=changedKeys.length;
   useEffect(()=>{const warn=(event:BeforeUnloadEvent)=>{if(dirty){event.preventDefault();event.returnValue=""}};window.addEventListener("beforeunload",warn);return()=>window.removeEventListener("beforeunload",warn)},[dirty]);
