@@ -66,7 +66,6 @@ const builtInDefaults: ContentMap = {...{"home.hero.badge":"Trusted for 22+ year
   "home.hero.image":homeImage,"about.hero.image":aboutImage,"staff.hero.image":staffImage,
   "jobs.hero.image":jobsImage,"global.logo":logoImage
 };
-const pretty = (id: string) => id.split(".").slice(1).join(" ");
 const preview = (page: string) => `#${page}`;
 export function AdminDashboard() {
   const [tab,setTab]=useState("home");
@@ -86,10 +85,12 @@ export function AdminDashboard() {
   const sections=parseSections(draft[sectionKey(tab)]??"[]");
   const setSections=(items:SiteSection[])=>setDraft(prev=>({...prev,[sectionKey(tab)]:JSON.stringify(items)}));
   const changeSection=(id:string,patch:Partial<SiteSection>)=>setSections(sections.map(s=>s.id===id?{...s,...patch}:s));
-  const addSection=(kind:SectionKind)=>setSections([...sections,{id:crypto.randomUUID(),kind,title:"New "+kind+" section",body:"",items:kind==="cards"||kind==="faq"||kind==="stats"?[{title:"Item 1",body:"Description"}]:[]}]);
+  const addSection=(kind:SectionKind)=>{if(sections.length>=40){setError("Maximum of 40 sections per page.");return;}setSections([...sections,{id:crypto.randomUUID(),kind,title:"New "+kind+" section",body:"",items:kind==="cards"||kind==="faq"||kind==="stats"?[{title:"Item 1",body:"Description"}]:[]}]);};
   const moveSection=(index:number,delta:number)=>{const next=[...sections];const other=index+delta;if(other<0||other>=next.length)return;[next[index],next[other]]=[next[other],next[index]];setSections(next)};
-  const dirty=JSON.stringify(draft)!==JSON.stringify(original);
-  const changedCount=Object.keys({...draft,...original}).filter(k=>(draft[k]??defaults[k]??"")!==(original[k]??defaults[k]??"")).length;
+  const changedKeys=Object.keys({...draft,...original}).filter(k=>(draft[k]??defaults[k]??"")!==(original[k]??defaults[k]??""));
+  const dirty=changedKeys.length>0;
+  const changedCount=changedKeys.length;
+  useEffect(()=>{const warn=(event:BeforeUnloadEvent)=>{if(dirty){event.preventDefault();event.returnValue=""}};window.addEventListener("beforeunload",warn);return()=>window.removeEventListener("beforeunload",warn)},[dirty]);
   useEffect(()=>{void (async()=>{
     try {
       const response=await fetch("/api/admin/session",{credentials:"same-origin"});
@@ -102,7 +103,7 @@ export function AdminDashboard() {
     if(!response.ok) throw new Error("Unable to load website content");
     const data=await response.json() as {content?:ContentMap;defaults?:ContentMap};
     const values=data.content||{};
-    setOriginal(values);setDraft(values);setDefaults({...builtInDefaults,...(data.defaults||{})});
+    setOriginal({...values});setDraft({...values});setDefaults({...builtInDefaults,...(data.defaults||{})});
   }
   async function signIn(e: React.FormEvent){
     e.preventDefault();setBusy(true);setError("");
@@ -112,23 +113,27 @@ export function AdminDashboard() {
         const data=await response.json().catch(()=>({})) as {error?:string};
         throw new Error(data.error || (response.status===401?"Incorrect password":`Unable to log in (HTTP ${response.status})`));
       }
-      setLoggedIn(true);setPassword("");await refresh();
+      await refresh();setLoggedIn(true);setPassword("");
     } catch(e){setError((e as Error).message)} finally{setBusy(false)}
   }
   async function logout() {
+    if(dirty&&!window.confirm("You have unpublished changes. Sign out and discard them?"))return;
     await fetch("/api/admin/logout",{method:"POST",credentials:"same-origin"}).catch(()=>{});
     setLoggedIn(false);setDraft({});setOriginal({});
   }
   async function save(){
+    if(busy||!dirty)return;
+    const contentToPublish={...draft};
     setBusy(true);setError("");setStatus("");
     try {
-      const response=await fetch("/api/admin/content",{method:"PUT",credentials:"same-origin",headers:{"content-type":"application/json"},body:JSON.stringify({content:draft})});
+      const response=await fetch("/api/admin/content",{method:"PUT",credentials:"same-origin",headers:{"content-type":"application/json"},body:JSON.stringify({content:contentToPublish})});
       const data=await response.json().catch(()=>({}));
       if(!response.ok)throw new Error((data as {error?:string}).error||"Unable to publish changes");
-      setOriginal({...draft});setContent(draft);setStatus("All changes published successfully.");
+      setOriginal(contentToPublish);setContent(contentToPublish);setStatus("Changes published. Your website content is now updated.");
     } catch(e){setError((e as Error).message)} finally{setBusy(false)}
   }
   async function upload(file:File,id:string){
+    if(busy)return;
     if(file.size>5*1024*1024){setError("Please choose an image smaller than 5 MB.");return}
     if(!file.type.startsWith("image/")){setError("Only image files can be uploaded.");return}
     setBusy(true);setError("");
@@ -149,9 +154,9 @@ export function AdminDashboard() {
     <div className="cms-content"><div className="cms-welcome"><div><p className="cms-eyebrow">SITE CONTENT</p><h2>{selected.title} editor</h2><p>Make changes in the fields below, preview your page, then publish when you're ready.</p></div><span className={dirty?"cms-pill unsaved":"cms-pill"}>{dirty?`${changedCount} unpublished change${changedCount===1?"":"s"}`:"All changes published"}</span></div>
     {error&&<div className="cms-error" role="alert"><AlertCircle size={17}/>{error}</div>}
     {status&&<div className="cms-success" role="status"><CheckCircle2 size={18}/>{status}</div>}
-    {showPreview&&<div className="cms-preview"><div><strong>Live website preview</strong><a href={preview(selected.page)} target="_blank" rel="noreferrer">Open in new tab <ExternalLink size={14}/></a></div><iframe title="Website preview" src={preview(selected.page)}/></div>}
+    {showPreview&&<div className="cms-preview"><div><strong>Published website preview</strong><a href={preview(selected.page)} target="_blank" rel="noreferrer">Open in new tab <ExternalLink size={14}/></a></div><iframe title="Website preview" src={preview(selected.page)}/></div>}
     {tab!=="settings"&&<div className="cms-editor-tabs"><button type="button" className={editorMode==="fields"?"active":""} onClick={()=>setEditorMode("fields")}>Edit existing content</button><button type="button" className={editorMode==="sections"?"active":""} onClick={()=>setEditorMode("sections")}>Page builder ({sections.length})</button></div>}
-    {editorMode==="sections"&&tab!=="settings"?<div className="cms-builder"><div className="cms-builder-intro"><h3>Custom sections</h3><p>Add sections below the existing page content. Reorder, hide, duplicate or remove them. Publish when ready.</p><label>Add a section <select defaultValue="" onChange={e=>{if(e.target.value)addSection(e.target.value as SectionKind);e.target.value=""}}><option value="" disabled>Choose a layout…</option>{(["text","image","cards","faq","cta","video","stats"] as SectionKind[]).map(kind=><option key={kind} value={kind}>{kind.charAt(0).toUpperCase()+kind.slice(1)}</option>)}</select></label></div>{sections.length===0&&<div className="cms-builder-empty">No custom sections yet. Choose a layout above to add one.</div>}{sections.map((s,i)=><article className="cms-builder-section" key={s.id}><div className="cms-builder-toolbar"><strong>{i+1}. {s.title||"Untitled section"}</strong><span>{s.kind}</span><div><button disabled={i===0} onClick={()=>moveSection(i,-1)} aria-label="Move up">↑</button><button disabled={i===sections.length-1} onClick={()=>moveSection(i,1)} aria-label="Move down">↓</button><button onClick={()=>changeSection(s.id,{hidden:!s.hidden})}>{s.hidden?"Show":"Hide"}</button><button onClick={()=>setSections([...sections.slice(0,i+1),{...s,id:crypto.randomUUID(),title:s.title+" (copy)"},...sections.slice(i+1)])}>Duplicate</button><button onClick={()=>{if(window.confirm("Delete this section?"))setSections(sections.filter(x=>x.id!==s.id))}}>Delete</button></div></div><div className="cms-builder-body"><label>Heading<input value={s.title} onChange={e=>changeSection(s.id,{title:e.target.value})}/></label><label>Description<textarea rows={4} value={s.body} onChange={e=>changeSection(s.id,{body:e.target.value})}/></label>{(["image","text","cta"] as string[]).includes(s.kind)&&<label>Image URL (optional)<input value={s.image||""} onChange={e=>changeSection(s.id,{image:e.target.value})}/><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={async e=>{const file=e.target.files?.[0];if(!file)return;const id="section-image."+s.id;await upload(file,id);e.target.value=""}}/><small>Use the upload option, then publish. The uploaded image will be applied automatically.</small></label>}{(s.kind==="cta"||s.kind==="text"||s.kind==="image")&&<><label>Button label<input value={s.buttonText||""} onChange={e=>changeSection(s.id,{buttonText:e.target.value})}/></label><label>Button URL<input value={s.buttonUrl||""} onChange={e=>changeSection(s.id,{buttonUrl:e.target.value})} placeholder="/contact"/></label></>}{s.kind==="video"&&<label>Embed URL (YouTube or Vimeo)<input value={s.buttonUrl||""} onChange={e=>changeSection(s.id,{buttonUrl:e.target.value})} placeholder="https://www.youtube.com/embed/…"/></label>}{(s.kind==="cards"||s.kind==="faq"||s.kind==="stats")&&<div className="cms-builder-items"><strong>Items</strong>{(s.items||[]).map((item,j)=><div key={j}><input aria-label={"Item "+(j+1)+" title"} placeholder="Item title" value={item.title} onChange={e=>changeSection(s.id,{items:(s.items||[]).map((v,k)=>k===j?{...v,title:e.target.value}:v)})}/><textarea aria-label={"Item "+(j+1)+" description"} placeholder="Description" rows={2} value={item.body} onChange={e=>changeSection(s.id,{items:(s.items||[]).map((v,k)=>k===j?{...v,body:e.target.value}:v)})}/><button onClick={()=>changeSection(s.id,{items:(s.items||[]).filter((_,k)=>k!==j)})}>Remove item</button></div>)}<button onClick={()=>changeSection(s.id,{items:[...(s.items||[]),{title:"New item",body:""}]})}>+ Add item</button></div>}</div></article>)}</div>:<>
+    {editorMode==="sections"&&tab!=="settings"?<div className="cms-builder"><div className="cms-builder-intro"><h3>Custom sections</h3><p>Add sections below the existing page content. Reorder, hide, duplicate or remove them. Publish when ready.</p><label>Add a section <select defaultValue="" onChange={e=>{if(e.target.value)addSection(e.target.value as SectionKind);e.target.value=""}}><option value="" disabled>Choose a layout…</option>{(["text","image","cards","faq","cta","video","stats"] as SectionKind[]).map(kind=><option key={kind} value={kind}>{kind.charAt(0).toUpperCase()+kind.slice(1)}</option>)}</select></label></div>{sections.length===0&&<div className="cms-builder-empty">No custom sections yet. Choose a layout above to add one.</div>}{sections.map((s,i)=><article className="cms-builder-section" key={s.id}><div className="cms-builder-toolbar"><strong>{i+1}. {s.title||"Untitled section"}</strong><span>{s.kind}</span><div><button disabled={i===0} onClick={()=>moveSection(i,-1)} aria-label="Move up">↑</button><button disabled={i===sections.length-1} onClick={()=>moveSection(i,1)} aria-label="Move down">↓</button><button onClick={()=>changeSection(s.id,{hidden:!s.hidden})}>{s.hidden?"Show":"Hide"}</button><button disabled={sections.length>=40} onClick={()=>setSections([...sections.slice(0,i+1),{...s,id:crypto.randomUUID(),title:s.title+" (copy)"},...sections.slice(i+1)])}>Duplicate</button><button onClick={()=>{if(window.confirm("Delete this section?"))setSections(sections.filter(x=>x.id!==s.id))}}>Delete</button></div></div><div className="cms-builder-body"><label>Heading<input value={s.title} onChange={e=>changeSection(s.id,{title:e.target.value})}/></label><label>Description<textarea rows={4} value={s.body} onChange={e=>changeSection(s.id,{body:e.target.value})}/></label>{(["image","text","cta"] as string[]).includes(s.kind)&&<label>Image URL (optional)<input value={s.image||""} onChange={e=>changeSection(s.id,{image:e.target.value})}/><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={async e=>{const file=e.target.files?.[0];if(!file)return;const id="section-image."+s.id;await upload(file,id);e.target.value=""}}/><small>Use the upload option, then publish. The uploaded image will be applied automatically.</small></label>}{(s.kind==="cta"||s.kind==="text"||s.kind==="image")&&<><label>Button label<input value={s.buttonText||""} onChange={e=>changeSection(s.id,{buttonText:e.target.value})}/></label><label>Button URL<input value={s.buttonUrl||""} onChange={e=>changeSection(s.id,{buttonUrl:e.target.value})} placeholder="/contact"/></label></>}{s.kind==="video"&&<label>Embed URL (YouTube or Vimeo)<input value={s.buttonUrl||""} onChange={e=>changeSection(s.id,{buttonUrl:e.target.value})} placeholder="https://www.youtube.com/embed/…"/></label>}{(s.kind==="cards"||s.kind==="faq"||s.kind==="stats")&&<div className="cms-builder-items"><strong>Items</strong>{(s.items||[]).map((item,j)=><div key={j}><input aria-label={"Item "+(j+1)+" title"} placeholder="Item title" value={item.title} onChange={e=>changeSection(s.id,{items:(s.items||[]).map((v,k)=>k===j?{...v,title:e.target.value}:v)})}/><textarea aria-label={"Item "+(j+1)+" description"} placeholder="Description" rows={2} value={item.body} onChange={e=>changeSection(s.id,{items:(s.items||[]).map((v,k)=>k===j?{...v,body:e.target.value}:v)})}/><button onClick={()=>changeSection(s.id,{items:(s.items||[]).filter((_,k)=>k!==j)})}>Remove item</button></div>)}<button disabled={(s.items||[]).length>=16} onClick={()=>changeSection(s.id,{items:[...(s.items||[]),{title:"New item",body:""}]})}>+ Add item</button></div>}</div></article>)}</div>:<>
     <div className="cms-edit-heading"><h3>Editable sections <small>{filtered.length} editable fields</small></h3><label><Search size={16}/><input placeholder="Search fields…" value={query} onChange={e=>setQuery(e.target.value)}/></label></div>
     <div className="cms-fields">{filtered.map(field=>{
       const current=original[field.id]??defaults[field.id]??"";
@@ -162,7 +167,7 @@ export function AdminDashboard() {
         <div className="cms-current"><span className="cms-field-caption">CURRENTLY ON YOUR WEBSITE</span>{field.type==="image"?<div className="cms-current-image">{current?<img src={current} alt={field.label+" currently live"}/>:<span>No image set</span>}</div>:<p>{current||"No content set"}</p>}</div>
         <label className="cms-field-caption cms-edit-label" htmlFor={field.id}>{field.type==="image"?"REPLACEMENT IMAGE":"EDIT CONTENT"}</label>
         {field.type==="image"?<><div className="cms-image-preview">{next?<img src={next} alt={"New "+field.label}/>:<ImageIcon size={35}/>}</div><div className="cms-image-actions"><label className="cms-upload">Choose new image<input type="file" hidden accept="image/jpeg,image/png,image/webp,image/gif" onChange={e=>{const file=e.target.files?.[0];if(file)void upload(file,field.id);e.target.value=""}}/></label><input id={field.id} aria-label={"Image URL for "+field.label} placeholder="Or paste an image URL" value={next} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/></div></>:field.type==="textarea"?<textarea id={field.id} rows={3} value={next} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/>:<input id={field.id} value={next} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/>}
-        <div className="cms-field-footer"><span>{modified?"Your website will not change until you publish.":"Showing the current published content above."}</span><div className="cms-field-buttons"><button type="button" disabled={!modified} onClick={()=>setDraft(p=>({...p,[field.id]:current}))}>Undo edit</button><button type="button" onClick={()=>setDraft(p=>{const n={...p};delete n[field.id];return n})}><RotateCcw size={13}/> Use original</button></div></div>
+        <div className="cms-field-footer"><span>{modified?"Your website will not change until you publish.":"Showing the current published content above."}</span><div className="cms-field-buttons"><button type="button" disabled={!modified} onClick={()=>setDraft(p=>({...p,[field.id]:current}))}>Undo edit</button><button type="button" onClick={()=>setDraft(p=>({...p,[field.id]:defaults[field.id]??""}))}><RotateCcw size={13}/> Restore original</button></div></div>
       </section>;
     })}</div>
 </>}
