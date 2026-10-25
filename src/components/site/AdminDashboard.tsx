@@ -84,6 +84,11 @@ export function AdminDashboard() {
   const [error,setError]=useState("");
   const [busy,setBusy]=useState(false);
   const [status,setStatus]=useState("");
+  useEffect(()=>{
+    if(!status)return;
+    const timeout=window.setTimeout(()=>setStatus(""),4000);
+    return ()=>window.clearTimeout(timeout);
+  },[status]);
   const [query,setQuery]=useState("");
   const [showPreview,setShowPreview]=useState(false);
   const previewFrame=useRef<HTMLIFrameElement>(null);
