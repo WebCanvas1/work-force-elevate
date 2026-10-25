@@ -4,7 +4,7 @@ import { RouterProvider } from "@tanstack/react-router";
 
 import "./styles.css";
 import { getRouter } from "./router";
-import { loadPublicContent } from "./lib/site-content";
+import { loadPublicContent, setContent, type ContentMap } from "./lib/site-content";
 import { AdminDashboard } from "./components/site/AdminDashboard";
 
 const router = getRouter();
@@ -38,6 +38,15 @@ function AppRoot(){
   return admin ? <AdminDashboard/> : <RouterProvider router={router}/>;
 }
 
+// Only accept draft previews from the same-origin parent admin window.
+if(window.parent!==window){
+  window.addEventListener("message",(event:MessageEvent)=>{
+    if(event.origin!==window.location.origin || event.source!==window.parent)return;
+    const payload=event.data;
+    if(payload?.type!=="wfe-cms-draft" || !payload.content || typeof payload.content!=="object" || Array.isArray(payload.content))return;
+    setContent(payload.content as ContentMap);
+  });
+}
 void loadPublicContent();
 
 createRoot(document.getElementById("root")!).render(
