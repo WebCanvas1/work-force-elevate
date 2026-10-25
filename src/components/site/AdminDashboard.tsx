@@ -84,6 +84,13 @@ export function AdminDashboard() {
   const [error,setError]=useState("");
   const [busy,setBusy]=useState(false);
   const [status,setStatus]=useState("");
+  const [showPublishedIndicator,setShowPublishedIndicator]=useState(false);
+  useEffect(()=>{
+    if(dirty){setShowPublishedIndicator(false);return;}
+    setShowPublishedIndicator(true);
+    const timeout=window.setTimeout(()=>setShowPublishedIndicator(false),4000);
+    return ()=>window.clearTimeout(timeout);
+  },[dirty]);
   useEffect(()=>{
     if(!status)return;
     const timeout=window.setTimeout(()=>setStatus(""),4000);
@@ -171,7 +178,7 @@ export function AdminDashboard() {
   return <div className="cms-app">
     <aside className="cms-sidebar"><div className="cms-brand"><span className="cms-logo">W</span><span>Website Editor<small>Work-Force Elevate</small></span></div><p className="cms-section-title">CONTENT MANAGEMENT</p><nav aria-label="Admin navigation">{groups.map(g=><button key={g.id} type="button" className={tab===g.id?"active":""} onClick={()=>{setTab(g.id);setEditorMode("fields");setQuery("");setStatus("");setShowPreview(false)}}>{g.id==="settings"?<Settings size={18}/>:g.id==="home"?<LayoutDashboard size={18}/>:<FileText size={18}/>} {g.title}</button>)}</nav><div className="cms-sidebar-bottom"><a href="#/" target="_blank" rel="noreferrer"><ExternalLink size={17}/> View website</a><button onClick={logout}><LogOut size={17}/> Sign out</button></div></aside>
     <div className="cms-workspace"><header className="cms-topbar"><div><h1>{selected.title}</h1><span>{selected.description}</span></div><div className="cms-actions"><button className="cms-ghost" onClick={()=>setShowPreview(v=>!v)}><Eye size={17}/> {showPreview?"Hide preview":"Preview"}</button><button className="cms-save" disabled={!dirty||busy} onClick={save}><Save size={17}/>{busy?"Working…":"Publish changes"}</button></div></header>
-    <div className="cms-content"><div className="cms-welcome"><div><p className="cms-eyebrow">SITE CONTENT</p><h2>{selected.title} editor</h2><p>Make changes in the fields below, preview your page, then publish when you're ready.</p></div><span className={dirty?"cms-pill unsaved":"cms-pill"}>{dirty?`${changedCount} unpublished change${changedCount===1?"":"s"}`:"All changes published"}</span></div>
+    <div className="cms-content"><div className="cms-welcome"><div><p className="cms-eyebrow">SITE CONTENT</p><h2>{selected.title} editor</h2><p>Make changes in the fields below, preview your page, then publish when you're ready.</p></div>{(dirty||showPublishedIndicator)&&<span className={dirty?"cms-pill unsaved":"cms-pill"}>{dirty?`${changedCount} unpublished change${changedCount===1?"":"s"}`:showPublishedIndicator?"All changes published":""}</span>}</div>
     {error&&<div className="cms-error" role="alert"><AlertCircle size={17}/>{error}</div>}
     {status&&<div className="cms-success" role="status"><CheckCircle2 size={18}/>{status}</div>}
     {showPreview&&<div className="cms-preview"><div><strong>Live preview — unpublished changes</strong><a href={preview(selected.page)} target="_blank" rel="noreferrer">Open in new tab <ExternalLink size={14}/></a></div><iframe ref={previewFrame} title="Live website draft preview" src={preview(selected.page)} onLoad={sendDraftPreview}/></div>}
