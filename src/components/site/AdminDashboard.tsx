@@ -7,7 +7,8 @@ import { parseSections, sectionKey, type SiteSection, type SectionKind } from ".
 import homeImage from "../../assets/hero-construction.jpg";
 import aboutImage from "../../assets/about-team.jpg";
 import staffImage from "../../assets/find-staff.jpg";
-import jobsImage from "../../assets/find-job.jpg";
+import jobsImage from "../../assets/your-crew-recruitment.jpg";
+import { jobPageCopy, jobBenefits } from "../../lib/job-page-content";
 import logoImage from "../../assets/your-crew-logo.png";
 
 type Field = { id: string; label: string; type?: "text" | "textarea" | "image"; hint?: string };
@@ -69,6 +70,18 @@ const builtInDefaults: ContentMap = {...{"home.hero.badge":"Trusted for 22+ year
   "home.hero.image":homeImage,"about.hero.image":aboutImage,"staff.hero.image":staffImage,
   "jobs.hero.image":jobsImage,"global.logo":logoImage
 };
+Object.assign(builtInDefaults,jobPageCopy);
+const jobGroup=groups.find(g=>g.id==="jobs")!;
+for (const [id,value] of Object.entries(jobPageCopy)) {
+  if (!jobGroup.fields.some(f=>f.id===id)) jobGroup.fields.push({id,label:id.replace("jobs.","").replaceAll("."," "),type:"textarea"});
+}
+jobBenefits.forEach((benefit,i)=> {
+  for(const [suffix,value] of [["title",benefit.title],["body",benefit.body]]) {
+    const id=`jobs.benefit.${i}.${suffix}`;
+    builtInDefaults[id]=value;
+    jobGroup.fields.push({id,label:`${benefit.title}: ${suffix}`,type:"textarea"});
+  }
+});
 for (const [audience, faqGroups] of [["staff",staffFaqs],["jobs",jobFaqs]] as const) {
   const group=groups.find(g=>g.id===audience)!;
   for (const topic of faqGroups) topic.items.forEach((faq,i)=> {
