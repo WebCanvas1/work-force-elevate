@@ -327,3 +327,30 @@
  .cms-current p{overflow-wrap:anywhere}
 }
 @media(prefers-reduced-motion:reduce){.cms-app button,.cms-app input,.cms-app textarea,.cms-app select{transition:none}}
+/* Public typography: the homepage introduction (18px) is the minimum size.
+   Keep the protected editor's compact interface independent. */
+.public-site {
+  --text-xs: 1.125rem;
+  --text-xs--line-height: 1.65;
+  --text-sm: 1.125rem;
+  --text-sm--line-height: 1.65;
+  --text-base: 1.125rem;
+  --text-base--line-height: 1.65;
+  --muted-foreground: oklch(0.44 0.025 260);
+  font-size: 1.125rem;
+  line-height: 1.7;
+  font-weight: 500;
+}
+.public-site small { font-size: 1.125rem; }
+.public-site :where(a, button, input, textarea, select, summary):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
+}
+.public-site [id] { scroll-margin-top: 9rem; }
+.public-site details[open] summary { color: var(--primary); }
+.public-site details summary::marker { color: var(--primary); }
+.public-site main :where(.text-white\/75, .text-white\/70) { color: oklch(1 0 0 / 90%); }
+.public-site footer .text-white\/50 { color: oklch(1 0 0 / 80%); }
+@media (prefers-reduced-motion: reduce) {
+  .public-site { scroll-behavior: auto; }
+}

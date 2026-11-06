@@ -30,7 +30,7 @@ function SectionView({s}:{s:SiteSection}){
 }
 export function DynamicSections(){
  const pathname=useRouterState({select:s=>s.location.pathname});
- const page=pathname==="/about"?"about":pathname==="/find-staff"?"staff":pathname==="/find-a-job"?"jobs":pathname==="/contact"?"contact":"home";
+ const page=pathname==="/about"?"about":pathname==="/find-staff"?"staff":pathname==="/find-a-job"?"jobs":pathname==="/contact"?"contact":pathname.startsWith("/news")?"news":"home";
  const raw=useContentValue(sectionKey(page),"[]");
  return <>{parseSections(raw).filter(s=>!s.hidden).map(s=><SectionView key={s.id} s={s}/>)}</>;
 }

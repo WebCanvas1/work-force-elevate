@@ -1,3 +1,4 @@
+import { FaqSection, staffFaqs } from "../components/site/FaqSection";
 import { ContentText, useContentValue } from "../lib/site-content";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
@@ -46,13 +47,6 @@ const workforce = [
 ];
 
 const industries = ["Construction", "Civil", "Warehousing", "Manufacturing", "Maintenance", "Commercial", "Property", "Infrastructure"];
-
-const faqs = [
-  { q: "How quickly can you provide workers?", a: "Depending on your requirements, we can often provide skilled workers within 24 hours. For urgent requests, call us directly on 0451 267 768." },
-  { q: "Do your workers have the necessary certifications?", a: "Yes — we carefully vet all workers to ensure they hold the required licences, tickets and industry experience for their role." },
-  { q: "Can I hire for short-term and long-term projects?", a: "Absolutely. We offer flexible hiring — a single day, a few weeks, or ongoing long-term placements." },
-  { q: "What areas do you service?", a: "We are Melbourne-based and service metro and regional Victoria, with interstate placements on request." },
-];
 
 function FindStaff() {
   return (
@@ -148,17 +142,7 @@ function FindStaff() {
         </div>
       </section>
 
-      <section className="bg-background py-24 md:py-32">
-        <div className="container-x mx-auto max-w-4xl">
-          <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">FAQ</p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl"><ContentText id="staff.faq.title" fallback="Frequently asked questions" /></h2>
-          </div>
-          <div className="mt-12 divide-y divide-border rounded-3xl border border-border bg-white">
-            {faqs.map((f, i) => <FAQItem key={i} {...f} />)}
-          </div>
-        </div>
-      </section>
+      <FaqSection audience="staff" groups={staffFaqs} />
 
       <section id="request" className="bg-white py-24 md:py-32">
         <div className="container-x mx-auto max-w-3xl">
@@ -170,31 +154,6 @@ function FindStaff() {
           <RequestForm />
         </div>
       </section>
-    </div>
-  );
-}
-
-function FAQItem({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div>
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between gap-4 px-6 py-6 text-left"
-      >
-        <span className="font-semibold text-primary">{q}</span>
-        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent/10 text-accent">
-          {open ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-        </span>
-      </button>
-      <motion.div
-        initial={false}
-        animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
-        className="overflow-hidden"
-      >
-        <p className="px-6 pb-6 text-sm leading-relaxed text-muted-foreground">{a}</p>
-      </motion.div>
     </div>
   );
 }

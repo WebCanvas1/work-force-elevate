@@ -9,25 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as FindStaffRouteImport } from './routes/find-staff'
-import { Route as FindAJobRouteImport } from './routes/find-a-job'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as FindAJobRouteImport } from './routes/find-a-job'
+import { Route as FindStaffRouteImport } from './routes/find-staff'
+import { Route as NewsRouteImport } from './routes/news'
+import { Route as NewsArticleIdRouteImport } from './routes/news_.$articleId'
 
-const FindStaffRoute = FindStaffRouteImport.update({
-  id: '/find-staff',
-  path: '/find-staff',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FindAJobRoute = FindAJobRouteImport.update({
-  id: '/find-a-job',
-  path: '/find-a-job',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -35,9 +27,29 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FindAJobRoute = FindAJobRouteImport.update({
+  id: '/find-a-job',
+  path: '/find-a-job',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FindStaffRoute = FindStaffRouteImport.update({
+  id: '/find-staff',
+  path: '/find-staff',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsRoute = NewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsArticleIdRoute = NewsArticleIdRouteImport.update({
+  id: '/news_/$articleId',
+  path: '/news/$articleId',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -47,6 +59,8 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/find-a-job': typeof FindAJobRoute
   '/find-staff': typeof FindStaffRoute
+  '/news': typeof NewsRoute
+  '/news/$articleId': typeof NewsArticleIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +68,8 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/find-a-job': typeof FindAJobRoute
   '/find-staff': typeof FindStaffRoute
+  '/news': typeof NewsRoute
+  '/news/$articleId': typeof NewsArticleIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +78,37 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/find-a-job': typeof FindAJobRoute
   '/find-staff': typeof FindStaffRoute
+  '/news': typeof NewsRoute
+  '/news_/$articleId': typeof NewsArticleIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/contact' | '/find-a-job' | '/find-staff'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/find-a-job'
+    | '/find-staff'
+    | '/news'
+    | '/news/$articleId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/contact' | '/find-a-job' | '/find-staff'
-  id: '__root__' | '/' | '/about' | '/contact' | '/find-a-job' | '/find-staff'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/find-a-job'
+    | '/find-staff'
+    | '/news'
+    | '/news/$articleId'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/find-a-job'
+    | '/find-staff'
+    | '/news'
+    | '/news_/$articleId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,29 +117,17 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   FindAJobRoute: typeof FindAJobRoute
   FindStaffRoute: typeof FindStaffRoute
+  NewsRoute: typeof NewsRoute
+  NewsArticleIdRoute: typeof NewsArticleIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/find-staff': {
-      id: '/find-staff'
-      path: '/find-staff'
-      fullPath: '/find-staff'
-      preLoaderRoute: typeof FindStaffRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/find-a-job': {
-      id: '/find-a-job'
-      path: '/find-a-job'
-      fullPath: '/find-a-job'
-      preLoaderRoute: typeof FindAJobRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -109,11 +137,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/find-a-job': {
+      id: '/find-a-job'
+      path: '/find-a-job'
+      fullPath: '/find-a-job'
+      preLoaderRoute: typeof FindAJobRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/find-staff': {
+      id: '/find-staff'
+      path: '/find-staff'
+      fullPath: '/find-staff'
+      preLoaderRoute: typeof FindStaffRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news': {
+      id: '/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news_/$articleId': {
+      id: '/news_/$articleId'
+      path: '/news/$articleId'
+      fullPath: '/news/$articleId'
+      preLoaderRoute: typeof NewsArticleIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -125,6 +181,8 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   FindAJobRoute: FindAJobRoute,
   FindStaffRoute: FindStaffRoute,
+  NewsRoute: NewsRoute,
+  NewsArticleIdRoute: NewsArticleIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
