@@ -1,3 +1,5 @@
+import { NewsEditor } from "./NewsEditor";
+import { staffFaqs, jobFaqs } from "./FaqSection";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Save, Eye, Image as ImageIcon, LayoutDashboard, Settings, FileText, LogOut, RotateCcw, Search, CheckCircle2, AlertCircle, ExternalLink } from "lucide-react";
 import { setContent, type ContentMap } from "../../lib/site-content";
@@ -55,6 +57,7 @@ const groups: Group[] = [
     {id:"contact.info.title",label:"Company information heading"},
     {id:"contact.form.title",label:"Contact form heading"}
   ]},
+  {id:"news",title:"News",description:"Write and publish news articles.",page:"/news",fields:[{id:"news.title",label:"Page heading"},{id:"news.intro",label:"Introduction",type:"textarea"}]},
   {id:"settings",title:"Website Settings",description:"Company branding, navigation logo and contact details.",page:"/",fields:[
     {id:"global.company",label:"Footer company name"},
     {id:"global.logo",label:"Website logo",type:"image"},
@@ -66,6 +69,18 @@ const builtInDefaults: ContentMap = {...{"home.hero.badge":"Trusted for 22+ year
   "home.hero.image":homeImage,"about.hero.image":aboutImage,"staff.hero.image":staffImage,
   "jobs.hero.image":jobsImage,"global.logo":logoImage
 };
+for (const [audience, faqGroups] of [["staff",staffFaqs],["jobs",jobFaqs]] as const) {
+  const group=groups.find(g=>g.id===audience)!;
+  for (const topic of faqGroups) topic.items.forEach((faq,i)=> {
+    for (const [suffix,label,value] of [["question","question",faq.q],["answer","answer",faq.a]]) {
+      const id=`${audience}.faq.${topic.id}.${i}.${suffix}`;
+      group.fields.push({id,label:`${topic.title}: ${faq.q} (${label})`,type:"textarea"});
+      builtInDefaults[id]=value;
+    }
+  });
+}
+builtInDefaults["news.title"]="News";
+builtInDefaults["news.intro"]="The latest news, stories and updates from Your Crew.";
 const preview = (page: string) => `#${page}`;
 // Compare effective published values rather than raw KV keys. An empty page builder
 // is identical to one that has never stored a sections key.
@@ -85,12 +100,6 @@ export function AdminDashboard() {
   const [busy,setBusy]=useState(false);
   const [status,setStatus]=useState("");
   const [showPublishedIndicator,setShowPublishedIndicator]=useState(false);
-  useEffect(()=>{
-    if(dirty){setShowPublishedIndicator(false);return;}
-    setShowPublishedIndicator(true);
-    const timeout=window.setTimeout(()=>setShowPublishedIndicator(false),4000);
-    return ()=>window.clearTimeout(timeout);
-  },[dirty]);
   useEffect(()=>{
     if(!status)return;
     const timeout=window.setTimeout(()=>setStatus(""),4000);
@@ -117,6 +126,13 @@ export function AdminDashboard() {
   const changedKeys=Object.keys({...draft,...original}).filter(k=>effectiveValue(k,draft,defaults)!==effectiveValue(k,original,defaults));
   const dirty=changedKeys.length>0;
   const changedCount=changedKeys.length;
+  useEffect(()=>{
+    if(dirty){setShowPublishedIndicator(false);return;}
+    setShowPublishedIndicator(true);
+    const timeout=window.setTimeout(()=>setShowPublishedIndicator(false),4000);
+    return ()=>window.clearTimeout(timeout);
+  },[dirty]);
+
   useEffect(()=>{const warn=(event:BeforeUnloadEvent)=>{if(dirty){event.preventDefault();event.returnValue=""}};window.addEventListener("beforeunload",warn);return()=>window.removeEventListener("beforeunload",warn)},[dirty]);
   useEffect(()=>{void (async()=>{
     try {
@@ -183,6 +199,7 @@ export function AdminDashboard() {
     {status&&<div className="cms-success" role="status"><CheckCircle2 size={18}/>{status}</div>}
     {showPreview&&<div className="cms-preview"><div><strong>Live preview — unpublished changes</strong><a href={preview(selected.page)} target="_blank" rel="noreferrer">Open in new tab <ExternalLink size={14}/></a></div><iframe ref={previewFrame} title="Live website draft preview" src={preview(selected.page)} onLoad={sendDraftPreview}/></div>}
     {tab!=="settings"&&<div className="cms-editor-tabs"><button type="button" className={editorMode==="fields"?"active":""} onClick={()=>setEditorMode("fields")}>Edit existing content</button><button type="button" className={editorMode==="sections"?"active":""} onClick={()=>setEditorMode("sections")}>Page builder ({sections.length})</button></div>}
+    {tab==="news"&&<NewsEditor value={draft["news.articles"]??"[]"} onChange={value=>setDraft(prev=>({...prev,"news.articles":value}))}/>}
     {editorMode==="sections"&&tab!=="settings"?<div className="cms-builder"><div className="cms-builder-intro"><h3>Custom sections</h3><p>Add sections below the existing page content. Reorder, hide, duplicate or remove them. Publish when ready.</p><label>Add a section <select defaultValue="" onChange={e=>{if(e.target.value)addSection(e.target.value as SectionKind);e.target.value=""}}><option value="" disabled>Choose a layout…</option>{(["text","image","cards","faq","cta","video","stats"] as SectionKind[]).map(kind=><option key={kind} value={kind}>{kind.charAt(0).toUpperCase()+kind.slice(1)}</option>)}</select></label></div>{sections.length===0&&<div className="cms-builder-empty">No custom sections yet. Choose a layout above to add one.</div>}{sections.map((s,i)=><article className="cms-builder-section" key={s.id}><div className="cms-builder-toolbar"><strong>{i+1}. {s.title||"Untitled section"}</strong><span>{s.kind}</span><div><button disabled={i===0} onClick={()=>moveSection(i,-1)} aria-label="Move up">↑</button><button disabled={i===sections.length-1} onClick={()=>moveSection(i,1)} aria-label="Move down">↓</button><button onClick={()=>changeSection(s.id,{hidden:!s.hidden})}>{s.hidden?"Show":"Hide"}</button><button disabled={sections.length>=40} onClick={()=>setSections([...sections.slice(0,i+1),{...s,id:crypto.randomUUID(),title:s.title+" (copy)"},...sections.slice(i+1)])}>Duplicate</button><button onClick={()=>{if(window.confirm("Delete this section?"))setSections(sections.filter(x=>x.id!==s.id))}}>Delete</button></div></div><div className="cms-builder-body"><label>Heading<input value={s.title} onChange={e=>changeSection(s.id,{title:e.target.value})}/></label><label>Description<textarea rows={4} value={s.body} onChange={e=>changeSection(s.id,{body:e.target.value})}/></label>{(["image","text","cta"] as string[]).includes(s.kind)&&<label>Image URL (optional)<input value={s.image||""} onChange={e=>changeSection(s.id,{image:e.target.value})}/><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={async e=>{const file=e.target.files?.[0];if(!file)return;const id="section-image."+s.id;await upload(file,id);e.target.value=""}}/><small>Use the upload option, then publish. The uploaded image will be applied automatically.</small></label>}{(s.kind==="cta"||s.kind==="text"||s.kind==="image")&&<><label>Button label<input value={s.buttonText||""} onChange={e=>changeSection(s.id,{buttonText:e.target.value})}/></label><label>Button URL<input value={s.buttonUrl||""} onChange={e=>changeSection(s.id,{buttonUrl:e.target.value})} placeholder="/contact"/></label></>}{s.kind==="video"&&<label>Embed URL (YouTube or Vimeo)<input value={s.buttonUrl||""} onChange={e=>changeSection(s.id,{buttonUrl:e.target.value})} placeholder="https://www.youtube.com/embed/…"/></label>}{(s.kind==="cards"||s.kind==="faq"||s.kind==="stats")&&<div className="cms-builder-items"><strong>Items</strong>{(s.items||[]).map((item,j)=><div key={j}><input aria-label={"Item "+(j+1)+" title"} placeholder="Item title" value={item.title} onChange={e=>changeSection(s.id,{items:(s.items||[]).map((v,k)=>k===j?{...v,title:e.target.value}:v)})}/><textarea aria-label={"Item "+(j+1)+" description"} placeholder="Description" rows={2} value={item.body} onChange={e=>changeSection(s.id,{items:(s.items||[]).map((v,k)=>k===j?{...v,body:e.target.value}:v)})}/><button onClick={()=>changeSection(s.id,{items:(s.items||[]).filter((_,k)=>k!==j)})}>Remove item</button></div>)}<button disabled={(s.items||[]).length>=16} onClick={()=>changeSection(s.id,{items:[...(s.items||[]),{title:"New item",body:""}]})}>+ Add item</button></div>}</div></article>)}</div>:<>
     <div className="cms-edit-heading"><h3>Editable sections <small>{filtered.length} editable fields</small></h3><label><Search size={16}/><input placeholder="Search fields…" value={query} onChange={e=>setQuery(e.target.value)}/></label></div>
     <div className="cms-fields">{filtered.map(field=>{

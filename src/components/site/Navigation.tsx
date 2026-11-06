@@ -9,6 +9,7 @@ const links = [
   { to: "/about", label: "About Us" },
   { to: "/find-staff", label: "Find Staff" },
   { to: "/find-a-job", label: "Find a Job" },
+  { to: "/news", label: "News" },
   { to: "/contact", label: "Contact" },
 ] as const;
 
@@ -18,25 +19,25 @@ export function Navigation() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-primary/90 shadow-[0_1px_0_0_rgba(255,255,255,0.06)] backdrop-blur-xl">
-      <nav className="container-x flex h-20 items-center justify-between md:h-24">
+      <nav className="container-x flex h-24 items-center justify-between gap-4 md:h-28">
         <Link
           to="/"
           aria-label="Your Crew home"
-          className="flex items-center transition-transform duration-300 hover:scale-[1.03]"
+          className="relative block h-[88px] w-[185px] shrink-0 overflow-hidden md:h-[104px] md:w-[220px] transition-transform duration-300 hover:scale-[1.03]"
         >
           <img
             src={logoUrl}
             alt="Your Crew — Flexible Workforce Specialists"
-            className="h-14 w-auto object-contain md:h-16"
+            className={logoUrl === logo ? "absolute left-1/2 top-1/2 h-auto w-[260px] max-w-none -translate-x-1/2 -translate-y-[45%] md:w-[310px]" : "h-full w-full object-contain"}
           />
         </Link>
 
-        <ul className="hidden items-center gap-1 lg:flex">
+        <ul className="hidden items-center gap-1 xl:flex">
           {links.map((link) => (
             <li key={link.to}>
               <Link
                 to={link.to}
-                className="rounded-full px-4 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/5 hover:text-accent"
+                className="rounded-full px-3 py-2 text-lg font-medium text-white/85 transition-colors hover:bg-white/5 hover:text-accent"
                 activeProps={{
                   className: "bg-white/10 text-accent",
                 }}
@@ -48,10 +49,10 @@ export function Navigation() {
           ))}
         </ul>
 
-        <div className="hidden lg:block">
+        <div className="hidden xl:block">
           <Link
             to="/find-staff"
-            className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-primary shadow-lg shadow-accent/30 transition-all duration-300 hover:-translate-y-px hover:bg-accent/90"
+            className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-lg font-semibold text-primary shadow-lg shadow-accent/30 transition-all duration-300 hover:-translate-y-px hover:bg-accent/90"
           >
             Request Staff
           </Link>
@@ -63,7 +64,7 @@ export function Navigation() {
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls="mobile-navigation"
-          className="grid h-11 w-11 place-items-center rounded-md text-white transition-colors hover:bg-white/10 lg:hidden"
+          className="grid h-11 w-11 place-items-center rounded-md text-white transition-colors hover:bg-white/10 xl:hidden"
         >
           {open ? (
             <X className="h-6 w-6" />
@@ -76,7 +77,7 @@ export function Navigation() {
       {open && (
         <div
           id="mobile-navigation"
-          className="border-t border-white/10 bg-primary/95 backdrop-blur-xl lg:hidden"
+          className="border-t border-white/10 bg-primary/95 backdrop-blur-xl xl:hidden"
         >
           <ul className="container-x flex flex-col py-3">
             {links.map((link) => (

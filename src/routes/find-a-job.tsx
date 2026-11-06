@@ -1,3 +1,4 @@
+import { FaqSection, jobFaqs } from "../components/site/FaqSection";
 import { ContentText, useContentValue } from "../lib/site-content";
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
@@ -122,6 +123,8 @@ function FindAJob() {
           </div>
         </div>
       </section>
+
+      <FaqSection audience="jobs" groups={jobFaqs} />
 
       <section id="register" className="bg-white py-24 md:py-32">
         <div className="container-x mx-auto max-w-3xl">
