@@ -1,7 +1,7 @@
 interface Env { CMS_CONTENT: KVNamespace; ADMIN_PASSWORD: string; SESSION_SECRET: string; CMS_MEDIA?: R2Bucket }
 type Context = { request: Request; env: Env; next: () => Promise<Response> };
 const error = (message: string, status = 400) => Response.json({error:message},{status,headers:{"cache-control":"no-store"}});
-const cookie = (request:Request) => request.headers.get("cookie")?.match(/(?:^|;\\s*)wfe_session=([^;]+)/)?.[1] || "";
+const cookie = (request:Request) => request.headers.get("cookie")?.match(/(?:^|;\s*)wfe_session=([^;]+)/)?.[1] || "";
 const sessionKey = (token:string) => "cms_session:"+token;
 const trusted = async (request:Request,env:Env) => {
  const token=cookie(request);
