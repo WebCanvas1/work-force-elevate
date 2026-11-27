@@ -7,7 +7,7 @@ export const jobPageCopy = {
   "jobs.steps.title": "How to find a job with Your Crew",
   "jobs.steps.intro": "Looking for immediate opportunities in manufacturing, construction or facilities maintenance? Follow our checklist below:",
   "jobs.openings.title": "Current opportunities",
-  "jobs.register.title": "Create an account",
+  "jobs.register.intro": "Ready to work with Your Crew? Register your details, upload your CV and licences, and let us help you find your next opportunity.",
   "jobs.contact.title": "Questions regarding your job application or search?",
   "jobs.faq.title": "Frequently asked questions",
 } as const;

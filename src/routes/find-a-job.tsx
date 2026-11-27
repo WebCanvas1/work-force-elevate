@@ -1,3 +1,4 @@
+import { workforceOne } from "../lib/workforce-one";
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, Check } from "lucide-react";
 import { FaqSection, jobFaqs } from "../components/site/FaqSection";
@@ -76,10 +77,12 @@ function FindAJob() {
       <WorkforceOneEmbed kind="jobs" />
     </div></section>
 
-    <section id="register" tabIndex={-1} className="bg-surface py-20 md:py-24"><div className="container-x">
-      <h2 className="mb-7 text-4xl font-bold text-primary md:text-5xl"><Copy id="jobs.register.title" /></h2>
-      <WorkforceOneEmbed kind="registration" />
-    </div></section>
+    <section id="register" tabIndex={-1} aria-label="Register with Your Crew" className="border-b border-white/15 bg-primary py-16 text-white md:py-20">
+      <div className="container-x flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
+        <p className="max-w-3xl text-xl leading-relaxed text-white/90"><Copy id="jobs.register.intro" /></p>
+        <a href={workforceOne.registration} className="inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-accent px-8 py-4 font-bold text-primary shadow-lg transition-colors hover:bg-accent/90">Register now <ArrowRight className="h-5 w-5" aria-hidden="true" /></a>
+      </div>
+    </section>
 
     <section className="bg-primary py-16 text-white"><div className="container-x">
       <h2 className="max-w-3xl text-3xl font-bold md:text-4xl"><Copy id="jobs.contact.title" /></h2>

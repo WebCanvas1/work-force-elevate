@@ -52,7 +52,7 @@ const groups: Group[] = [
     {id:"jobs.hero.image",label:"Banner photograph",type:"image"},
     {id:"jobs.benefits.title",label:"Benefits heading"},
     {id:"jobs.openings.title",label:"Job openings heading"},
-    {id:"jobs.register.title",label:"Registration heading"}
+    {id:"jobs.register.intro",label:"Registration invitation",type:"textarea"}
   ]},
   {id:"contact",title:"Contact",description:"Edit the contact page introductory copy.",page:"/contact",fields:[
     {id:"contact.hero.title",label:"Contact page headline",type:"textarea"},
