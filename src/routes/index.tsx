@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   ArrowRight,
   HardHat,
@@ -19,7 +19,6 @@ import {
   Phone,
   Mail,
   Check,
-  Quote,
   ChevronRight,
 } from "lucide-react";
 
@@ -79,7 +78,6 @@ function Index() {
       <WhyUs />
       <Certifications />
       <HowItWorks />
-      <Testimonials />
       <CTABanner />
       <LatestJobs />
       <ContactStrip />
@@ -421,63 +419,6 @@ function HowItWorks() {
             </li>
           ))}
         </ol>
-      </div>
-    </section>
-  );
-}
-
-const quotes = [
-  {
-    q: "Your Crew consistently delivers reliable workers who fit our sites straight away. Their response time is unmatched.",
-    a: "Site Manager, Tier-2 Builder",
-  },
-  {
-    q: "We ramped up production for a major project in 48 hours thanks to their pool of pre-screened workers.",
-    a: "Operations Lead, Manufacturing",
-  },
-  {
-    q: "Their team listens, understands our culture and only sends people who match. A genuine partnership.",
-    a: "HR Director, Commercial Fit-out",
-  },
-];
-
-function Testimonials() {
-  const [i, setI] = useState(0);
-  useEffect(() => {
-    const t = setInterval(() => setI((v) => (v + 1) % quotes.length), 6000);
-    return () => clearInterval(t);
-  }, []);
-  const q = quotes[i];
-  return (
-    <section className="bg-white py-24 md:py-32">
-      <div className="container-x">
-        <div className="mx-auto max-w-4xl rounded-3xl border border-border bg-white p-10 shadow-sm md:p-16">
-          <Quote className="h-10 w-10 text-accent" />
-          <motion.blockquote
-            key={i}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mt-6 text-2xl font-medium leading-relaxed text-primary md:text-3xl"
-          >
-            "{q.q}"
-          </motion.blockquote>
-          <p className="mt-6 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-            {q.a}
-          </p>
-          <div className="mt-8 flex gap-2">
-            {quotes.map((_, idx) => (
-              <button
-                key={idx}
-                aria-label={`Testimonial ${idx + 1}`}
-                onClick={() => setI(idx)}
-                className={`h-1.5 rounded-full transition-all ${
-                  idx === i ? "w-10 bg-accent" : "w-4 bg-border"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   );
