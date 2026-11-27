@@ -431,10 +431,9 @@ function Certifications() {
     { title: "Your Crew 2024 Enterprise Agreement for On Site Construction Workers", offset: "-222.1354%" },
   ];
   return (
-    <section aria-labelledby="certifications-heading" className="bg-surface py-16 md:py-24">
+    <section aria-label="Certifications and enterprise agreements" className="bg-surface py-16 md:py-24">
       <div className="container-x">
-        <h2 id="certifications-heading" className="text-center text-3xl font-bold text-primary md:text-4xl">Certifications and enterprise agreements</h2>
-        <div className="mx-auto mt-10 grid max-w-6xl gap-6 md:grid-cols-3">
+        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
           {certificates.map(certificate => (
             <div key={certificate.title} className="relative mx-auto aspect-square w-full max-w-sm overflow-hidden">
               <img src={certificationsImg} alt={certificate.title} loading="lazy" width={1276} height={418} className="absolute max-w-none" style={{ width: "332.2917%", height: "108.8542%", top: "-2.34375%", left: certificate.offset }} />
