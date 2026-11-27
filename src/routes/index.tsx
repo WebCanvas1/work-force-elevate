@@ -76,7 +76,6 @@ function Index() {
       <WorkforceFeatures />
       <Services />
       <WhyUs />
-      <Industries />
       <Certifications />
       <HowItWorks />
       <Testimonials />
@@ -368,54 +367,6 @@ function WhyUs() {
               </span>
               <h3 className="mt-5 text-lg font-bold text-primary">{w.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{w.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const industries = [
-  { icon: HardHat, label: "Construction" },
-  { icon: Truck, label: "Civil" },
-  { icon: Warehouse, label: "Warehousing" },
-  { icon: Factory, label: "Manufacturing" },
-  { icon: Wrench, label: "Maintenance" },
-  { icon: Store, label: "Commercial" },
-  { icon: HomeIcon, label: "Property" },
-  { icon: Building2, label: "Infrastructure" },
-];
-
-function Industries() {
-  return (
-    <section className="bg-white py-24 md:py-32">
-      <div className="container-x">
-        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Industries</p>
-            <h2 className="text-balance mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
-              <ContentText id="home.industries.title" fallback="Trusted across the sectors that keep Victoria moving." />
-            </h2>
-          </div>
-          <p className="text-lg text-muted-foreground">
-            From high-rise construction to precision manufacturing, our people arrive ready with the
-            tickets, PPE and attitude your site expects.
-          </p>
-        </div>
-
-        <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-          {industries.map((i, idx) => (
-            <motion.div
-              key={i.label}
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: idx * 0.05 }}
-              className="group flex flex-col items-start gap-4 rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg"
-            >
-              <span className="grid h-12 w-12 place-items-center rounded-xl bg-primary text-white transition-colors group-hover:bg-accent">
-                <i.icon className="h-5.5 w-5.5" />
-              </span>
-              <p className="text-base font-semibold text-primary">{i.label}</p>
             </motion.div>
           ))}
         </div>
