@@ -44,7 +44,7 @@ export const jobFaqs: FaqGroup[] = [
 export function FaqSection({audience,groups}:{audience:"staff"|"jobs";groups:FaqGroup[]}) {
   return <section id="faq" className="bg-surface py-20 md:py-28" aria-labelledby={`${audience}-faq-heading`}>
     <div className="container-x max-w-5xl">
-      <p className="font-semibold uppercase tracking-widest text-primary">Frequently asked questions</p>
+      {audience === "staff" && <p className="font-semibold uppercase tracking-widest text-primary">Frequently asked questions</p>}
       <h2 id={`${audience}-faq-heading`} className="mt-4 text-4xl font-bold text-primary md:text-5xl"><ContentText id={`${audience}.faq.title`} fallback={audience==="staff"?"Your staffing questions, answered.":"Frequently asked questions"}/></h2>
       <p className="mt-5 max-w-3xl text-muted-foreground">Choose a topic, then open a question to read the answer.</p>
       <nav aria-label="FAQ topics" className="my-8 flex flex-wrap gap-3">{groups.map(g=><a key={g.id} href={`#faq-${g.id}`} onClick={e=>{e.preventDefault();document.getElementById(`faq-${g.id}`)?.scrollIntoView({behavior:"smooth",block:"start"});document.getElementById(`faq-${g.id}`)?.focus({preventScroll:true});}} className="rounded-full border border-border bg-white px-5 py-3 font-semibold text-primary hover:border-primary">{g.title}</a>)}</nav>
