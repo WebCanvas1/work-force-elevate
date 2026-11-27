@@ -1,3 +1,4 @@
+import { homeProcessSteps } from "../../lib/home-process";
 import { NewsEditor } from "./NewsEditor";
 import { staffFaqs, jobFaqs } from "./FaqSection";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -70,6 +71,11 @@ const builtInDefaults: ContentMap = {...{"home.hero.badge":"Trusted for 22+ year
   "home.hero.image":homeImage,"about.hero.image":aboutImage,"staff.hero.image":staffImage,
   "jobs.hero.image":jobsImage,"global.logo":logoImage
 };
+homeProcessSteps.forEach((step,i) => {
+  const id=`home.process.step.${i + 1}.image`;
+  groups.find(group=>group.id==="home")!.fields.push({id,label:`How it works — step ${i + 1}: ${step.title}`,type:"image"});
+  builtInDefaults[id]=step.image;
+});
 Object.assign(builtInDefaults,jobPageCopy);
 const jobGroup=groups.find(g=>g.id==="jobs")!;
 for (const [id,value] of Object.entries(jobPageCopy)) {

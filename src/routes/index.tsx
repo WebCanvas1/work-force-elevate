@@ -25,7 +25,8 @@ import {
 
 import certificationsImg from "../assets/certifications.png";
 import heroImg from "../assets/hero-construction.jpg";
-import { ContentText, useContentValue } from "../lib/site-content";
+import { homeProcessSteps } from "../lib/home-process";
+import { ContentImage, ContentText, useContentValue } from "../lib/site-content";
 import constructionImg from "../assets/service-construction.jpg";
 import manufacturingImg from "../assets/service-manufacturing.jpg";
 import maintenanceImg from "../assets/service-maintenance.jpg";
@@ -396,44 +397,28 @@ function Certifications() {
   );
 }
 
-const steps = [
-  { title: "Tell us your needs", desc: "Reach out and we'll discuss your project, roles and timelines in detail." },
-  { title: "We source skilled workers", desc: "We match your requirements, culture and site with the right people from our pool." },
-  { title: "Workers are ready", desc: "Fully inducted, PPE-ready workers arrive on site and get straight to work." },
-  { title: "Ongoing support", desc: "We stay close, adjusting the crew as needs change through the life of the project." },
-];
-
 function HowItWorks() {
   return (
-    <section className="relative overflow-hidden bg-white py-24 text-primary md:py-32">
+    <section id="how-it-works" aria-labelledby="how-it-works-heading" className="bg-white py-20 text-primary md:py-28">
       <div className="container-x">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">How it works</p>
-          <h2 className="text-balance mt-3 text-4xl font-bold tracking-tight md:text-5xl">
+          <h2 id="how-it-works-heading" className="text-balance mt-3 text-4xl font-bold tracking-tight md:text-5xl">
             <ContentText id="home.process.title" fallback="Four steps to the right crew on your site." />
           </h2>
         </div>
-
-        <ol className="mx-auto mt-16 grid max-w-5xl gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {steps.map((s, i) => (
-            <motion.li
-              key={s.title}
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-              className="group relative rounded-2xl border border-border bg-white p-7 shadow-sm transition-all hover:-translate-y-1 hover:border-accent/50 hover:shadow-lg"
-            >
-              <div className="flex items-center gap-4">
-                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-accent text-primary shadow-lg shadow-accent/20">
-                  {[<HardHat key="a" className="h-6 w-6" />, <Users key="b" className="h-6 w-6" />, <ShieldCheck key="c" className="h-6 w-6" />, <Sparkles key="d" className="h-6 w-6" />][i]}
-                </span>
-                <span className="text-3xl font-extrabold text-primary/20">{String(i + 1).padStart(2, "0")}</span>
+        <ol className="mx-auto mt-12 grid max-w-6xl items-stretch gap-8 md:grid-cols-2">
+          {homeProcessSteps.map((step, i) => (
+            <li key={step.title} className="flex min-w-0 flex-col overflow-hidden rounded-3xl border border-border bg-white shadow-sm">
+              <div className="relative aspect-[16/9] overflow-hidden bg-surface">
+                <ContentImage id={`home.process.step.${i + 1}.image`} fallback={step.image} alt={step.alt} className="h-full w-full object-cover" />
+                <span aria-hidden="true" className="absolute left-5 top-5 grid h-12 w-12 place-items-center rounded-full bg-accent text-xl font-extrabold text-primary shadow-md">{String(i + 1).padStart(2, "0")}</span>
               </div>
-              <h3 className="mt-5 text-lg font-bold text-primary">{s.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
-              {i < steps.length - 1 && (
-                <ChevronRight className="absolute -right-3 top-1/2 hidden h-5 w-5 -translate-y-1/2 text-primary/20 lg:block" />
-              )}
-            </motion.li>
+              <div className="flex-1 p-6 md:p-8">
+                <h3 className="text-2xl font-bold leading-snug text-primary"><span className="sr-only">Step {i + 1}: </span>{step.title}</h3>
+                <p className="mt-3 leading-relaxed text-muted-foreground">{step.desc}</p>
+              </div>
+            </li>
           ))}
         </ol>
       </div>
