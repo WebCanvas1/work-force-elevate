@@ -63,8 +63,7 @@ export default function About() {
               professionals who seamlessly integrate into your team and contribute to your success.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              Our Melbourne-based team is nimble, responsive and just a phone call away. We come to
-              you, listen to your needs and find the right people for your environment and culture.
+              Our team is based in Ringwood, with meetings and appointments available at any Waterman Workspaces location.
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
