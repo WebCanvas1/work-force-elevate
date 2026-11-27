@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ArrowRight, Award, Handshake, Compass, ShieldCheck, HeartHandshake, Sparkles } from "lucide-react";
+import { ArrowRight, UserRound, MessageCircle, Award, Handshake, Compass, ShieldCheck, HeartHandshake, Sparkles } from "lucide-react";
 import aboutTeam from "../assets/about-team.jpg";
 import { ContentText, useContentValue } from "../lib/site-content";
 
@@ -67,16 +67,19 @@ export default function About() {
               you, listen to your needs and find the right people for your environment and culture.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="flex min-h-44 flex-col justify-center rounded-2xl border border-border bg-background p-6">
+              <p className="text-3xl font-extrabold text-primary">22+</p>
+              <p className="mt-1 text-sm uppercase tracking-wider text-muted-foreground">Years of service</p>
+            </div>
             {[
-              ["22+", "Years experience"],
-              ["750+", "Projects delivered"],
-              ["3,200+", "Workers placed"],
-              ["1,800+", "Active workers"],
-            ].map(([n, l]) => (
-              <div key={l} className="rounded-2xl border border-border bg-background p-6">
-                <p className="text-3xl font-extrabold text-primary">{n}</p>
-                <p className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{l}</p>
+              { icon: UserRound, title: "Own Manager" },
+              { icon: ShieldCheck, title: "Trusted Service" },
+              { icon: MessageCircle, title: "Great Communication and quick response." },
+            ].map(({ icon: Icon, title }) => (
+              <div key={title} className="flex min-h-44 flex-col justify-center rounded-2xl border border-border bg-background p-6">
+                <Icon className="mb-4 h-8 w-8 text-primary" aria-hidden="true" />
+                <p className="text-xl font-bold leading-snug text-primary">{title}</p>
               </div>
             ))}
           </div>
