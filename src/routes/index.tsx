@@ -23,6 +23,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+import certificationsImg from "../assets/certifications.png";
 import heroImg from "../assets/hero-construction.jpg";
 import { ContentText, useContentValue } from "../lib/site-content";
 import constructionImg from "../assets/service-construction.jpg";
@@ -72,10 +73,11 @@ function Index() {
   return (
     <div>
       <Hero />
-      <FloatingFeatures />
+      <WorkforceFeatures />
       <Services />
       <WhyUs />
       <Industries />
+      <Certifications />
       <HowItWorks />
       <Testimonials />
       <CTABanner />
@@ -85,14 +87,14 @@ function Index() {
   );
 }
 
-function FloatingFeatures() {
+function WorkforceFeatures() {
   const items = [
     { icon: ShieldCheck, t: "Skilled Workers", d: "Pre-screened tradespeople ready for site." },
     { icon: Zap, t: "Fast Placements", d: "Workers deployed in as little as 24 hours." },
     { icon: MapPin, t: "Australia Wide", d: "Melbourne based, servicing statewide & interstate." },
   ];
   return (
-    <section className="relative -mt-16 md:-mt-24 z-10">
+    <section className="bg-surface py-10 md:py-12">
       <div className="container-x">
         <div className="grid gap-5 rounded-3xl bg-white p-5 shadow-[0_30px_60px_-30px_rgba(14,45,79,0.35)] ring-1 ring-border sm:grid-cols-3 md:p-6">
           {items.map((it, i) => (
@@ -225,20 +227,6 @@ function Hero() {
             height={1100}
           />
 
-          <div className="absolute bottom-6 left-6 right-6 rounded-3xl border border-white/50 bg-white/90 p-5 shadow-xl backdrop-blur sm:bottom-8 sm:left-8 sm:right-8">
-            <div className="flex items-center gap-3">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent text-primary">
-                <Zap className="h-5 w-5" />
-              </span>
-
-              <div>
-                <p className="font-semibold text-primary">Rapid deployment</p>
-                <p className="text-sm text-muted-foreground">
-                  Workers on site in as little as 24 hours
-                </p>
-              </div>
-            </div>
-          </div>
         </motion.div>
       </div>
     </section>
@@ -436,10 +424,32 @@ function Industries() {
   );
 }
 
+function Certifications() {
+  const certificates = [
+    { title: "Labour Hire Authority certified", offset: "-9.6354%" },
+    { title: "Your Crew 2015 Enterprise Agreement for Manufacturing Workers", offset: "-115.8854%" },
+    { title: "Your Crew 2024 Enterprise Agreement for On Site Construction Workers", offset: "-222.1354%" },
+  ];
+  return (
+    <section aria-labelledby="certifications-heading" className="bg-surface py-16 md:py-24">
+      <div className="container-x">
+        <h2 id="certifications-heading" className="text-center text-3xl font-bold text-primary md:text-4xl">Certifications and enterprise agreements</h2>
+        <div className="mx-auto mt-10 grid max-w-6xl gap-6 md:grid-cols-3">
+          {certificates.map(certificate => (
+            <div key={certificate.title} className="relative mx-auto aspect-square w-full max-w-sm overflow-hidden">
+              <img src={certificationsImg} alt={certificate.title} loading="lazy" width={1276} height={418} className="absolute max-w-none" style={{ width: "332.2917%", height: "108.8542%", top: "-2.34375%", left: certificate.offset }} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const steps = [
   { title: "Tell us your needs", desc: "Reach out and we'll discuss your project, roles and timelines in detail." },
   { title: "We source skilled workers", desc: "We match your requirements, culture and site with the right people from our pool." },
-  { title: "Workers are deployed", desc: "Fully inducted, PPE-ready workers arrive on site and get straight to work." },
+  { title: "Workers are ready", desc: "Fully inducted, PPE-ready workers arrive on site and get straight to work." },
   { title: "Ongoing support", desc: "We stay close, adjusting the crew as needs change through the life of the project." },
 ];
 
