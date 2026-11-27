@@ -79,7 +79,6 @@ function Index() {
       <Certifications />
       <HowItWorks />
       <CTABanner />
-      <LatestJobs />
       <ContactStrip />
     </div>
   );
@@ -455,62 +454,6 @@ function CTABanner() {
               </a>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-const jobs = [
-  { title: "Formworker — CBD Project", cat: "Construction", loc: "Melbourne CBD", type: "Full time" },
-  { title: "Forklift Operator", cat: "Manufacturing", loc: "Dandenong", type: "Ongoing" },
-  { title: "General Labourer", cat: "Construction", loc: "Preston", type: "Casual" },
-  { title: "Maintenance Technician", cat: "Maintenance", loc: "Laverton", type: "Full time" },
-];
-
-function LatestJobs() {
-  return (
-    <section className="bg-white py-24 md:py-32">
-      <div className="container-x">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Careers</p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
-              <ContentText id="home.jobs.title" fallback="Latest opportunities" />
-            </h2>
-          </div>
-          <Link
-            to="/find-a-job"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-accent"
-          >
-            View all jobs <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-
-        <div className="mt-10 divide-y divide-border rounded-2xl border border-border bg-card">
-          {jobs.map((j, i) => (
-            <motion.div
-              key={j.title}
-              {...fadeUp}
-              transition={{ ...fadeUp.transition, delay: i * 0.05 }}
-              className="group grid gap-4 p-6 md:grid-cols-[1.6fr_1fr_1fr_auto] md:items-center"
-            >
-              <div>
-                <p className="text-base font-semibold text-primary transition-colors group-hover:text-accent">{j.title}</p>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">{j.cat}</p>
-              </div>
-              <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                <MapPin className="h-4 w-4 text-accent" /> {j.loc}
-              </p>
-              <p className="text-sm text-muted-foreground">{j.type}</p>
-              <Link
-                to="/find-a-job"
-                className="inline-flex w-fit items-center gap-1 rounded-full bg-primary px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-accent"
-              >
-                Apply <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </motion.div>
-          ))}
         </div>
       </div>
     </section>
