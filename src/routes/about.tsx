@@ -33,7 +33,7 @@ const milestones = [
 export default function About() {
   return (
     <div>
-      <section className="relative isolate overflow-hidden bg-primary pt-32 pb-24 text-white md:pt-40 md:pb-32">
+      <section className="relative isolate overflow-hidden bg-primary pt-32 pb-14 text-white md:pt-40 md:pb-20">
         <div className="absolute inset-0 -z-10">
           <img src={useContentValue("about.hero.image", aboutTeam)} alt="Your Crew team" className="h-full w-full object-cover opacity-40" />
           <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/70 to-primary" />
@@ -50,8 +50,8 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-white py-24 md:py-32">
-        <div className="container-x grid gap-14 lg:grid-cols-2 lg:items-center">
+      <section className="bg-white py-12 md:py-16">
+        <div className="container-x grid gap-8 lg:grid-cols-2 lg:items-center">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Mission & Vision</p>
             <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
@@ -85,7 +85,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-background py-24 md:py-32">
+      <section className="bg-background py-12 md:py-16">
         <div className="container-x">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Our Values</p>
@@ -93,7 +93,7 @@ export default function About() {
               <ContentText id="about.values.title" fallback="The principles behind every placement." />
             </h2>
           </div>
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
             {values.map((v, i) => (
               <motion.div
                 key={v.title}
@@ -114,7 +114,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-white py-24 md:py-32">
+      <section className="bg-white py-12 md:py-16">
         <div className="container-x">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Timeline</p>
@@ -122,7 +122,7 @@ export default function About() {
               <ContentText id="about.timeline.title" fallback="22+ years of growth." />
             </h2>
           </div>
-          <div className="mx-auto mt-16 grid max-w-5xl gap-6 md:grid-cols-2">
+          <div className="mx-auto mt-8 grid max-w-5xl gap-6 md:grid-cols-2">
             {milestones.map((m, i) => (
               <motion.div
                 key={m.year}
@@ -141,7 +141,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-background py-24 md:py-32">
+      <section className="bg-background py-12 md:py-16">
         <div className="container-x grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Why businesses trust us</p>
@@ -181,7 +181,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-primary py-20 text-white md:py-28">
+      <section className="bg-primary py-12 text-white md:py-16">
         <div className="container-x flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
           <h2 className="text-balance text-3xl font-bold md:text-4xl">
             <ContentText id="about.cta.title" fallback="Ready to build your dream team?" />
