@@ -3,7 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowRight, Newspaper } from "lucide-react";
 import { ContentText, useContentValue } from "../lib/site-content";
-import { parseNews, formatNewsDate, isPublishedArticle } from "../lib/news";
+import { parseNews, formatNewsDate, isPublishedArticle, newsImageUrl } from "../lib/news";
 
 export const Route = createFileRoute("/news")({
   head: () => ({ meta: [{ title: "News | Your Crew" }, { name: "description", content: "News and updates from Your Crew across Melbourne and Victoria." }] }),
@@ -30,11 +30,14 @@ function News() {
           <label className="grid gap-2 font-semibold text-primary">Sort by<select value={sort} onChange={e => {setSort(e.target.value);setLimit(9);}} className="rounded-xl border border-border bg-white px-4 py-3 font-medium"><option value="newest">Newest first</option><option value="oldest">Oldest first</option></select></label>
         </div>
         <p className="mt-8 text-muted-foreground" role="status">{filtered.length} {filtered.length === 1 ? "article" : "articles"}</p>
-        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.slice(0,limit).map(a => <article key={a.id} className="flex flex-col rounded-2xl border border-border bg-white p-7 shadow-sm">
+        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">{filtered.slice(0,limit).map(a => <article key={a.id} className="flex flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
+          {newsImageUrl(a.image) && <img src={newsImageUrl(a.image)} alt={a.imageAlt || a.title} loading="lazy" width={800} height={450} className="aspect-[16/9] w-full object-cover" />}
+          <div className="flex flex-1 flex-col p-7">
           <p className="font-semibold text-muted-foreground">News · <time dateTime={a.date}>{formatNewsDate(a.date)}</time></p>
           <h2 className="mt-5 text-2xl font-bold text-primary"><Link to="/news/$articleId" params={{articleId:a.id}} className="hover:underline">{a.title}</Link></h2>
           <p className="mt-4 flex-1 text-muted-foreground">{a.excerpt}</p>
           <Link to="/news/$articleId" params={{articleId:a.id}} className="mt-7 inline-flex items-center gap-2 font-semibold text-primary" aria-label={`Read full story: ${a.title}`}>Read full story <ArrowRight className="h-5 w-5" /></Link>
+          </div>
         </article>)}</div>
         {filtered.length === 0 && <p className="py-12">No articles match your search. Try another keyword.</p>}
         {limit < filtered.length && <button onClick={()=>setLimit(n=>n+9)} className="mx-auto mt-12 block rounded-full bg-primary px-8 py-4 font-semibold text-white">Load more articles</button>}

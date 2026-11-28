@@ -1,4 +1,4 @@
-import { parseNews, type NewsArticle } from "../../lib/news";
+import { parseNews, newsImageUrl, type NewsArticle } from "../../lib/news";
 
 export function NewsEditor({value,onChange}:{value:string;onChange:(value:string)=>void}) {
   const articles=parseNews(value);
@@ -8,6 +8,9 @@ export function NewsEditor({value,onChange}:{value:string;onChange:(value:string
     {articles.map(a=><article key={a.id} className="cms-builder-section"><div className="cms-builder-toolbar"><strong>{a.title||"New article"}</strong><div><button type="button" onClick={()=>{if(window.confirm("Delete this article?"))onChange(JSON.stringify(articles.filter(x=>x.id!==a.id)))}}>Delete article</button></div></div><div className="cms-builder-body">
       <label>Title<input value={a.title} onChange={e=>update(a.id,{title:e.target.value})}/></label>
       <label>Publication date<input type="date" value={a.date} onChange={e=>update(a.id,{date:e.target.value})}/></label>
+      <label>Article image URL (optional)<input type="url" value={a.image||""} onChange={e=>update(a.id,{image:e.target.value})} placeholder="https://…" /></label>
+      <label>Image description<input value={a.imageAlt||""} onChange={e=>update(a.id,{imageAlt:e.target.value})} /></label>
+      {newsImageUrl(a.image) && <img src={newsImageUrl(a.image)} alt={a.imageAlt||a.title} style={{width:"100%",maxHeight:220,objectFit:"cover",borderRadius:8}} />}
       <label>Summary<textarea rows={3} value={a.excerpt} onChange={e=>update(a.id,{excerpt:e.target.value})}/></label>
       <label>Article text (separate paragraphs with a blank line)<textarea rows={10} value={a.body} onChange={e=>update(a.id,{body:e.target.value})}/></label>
       <label><span><input type="checkbox" style={{width:"auto"}} checked={a.published} onChange={e=>update(a.id,{published:e.target.checked})}/> Published</span></label>

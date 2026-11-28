@@ -1,4 +1,4 @@
-export type NewsArticle = { id: string; title: string; date: string; excerpt: string; body: string; published: boolean };
+export type NewsArticle = { id: string; title: string; date: string; excerpt: string; body: string; published: boolean; image?: string; imageAlt?: string };
 
 export function parseNews(raw: string): NewsArticle[] {
   try {
@@ -13,3 +13,10 @@ export function formatNewsDate(date: string) {
 }
 
 export const isPublishedArticle = (a: NewsArticle) => a.published && Boolean(a.title.trim()) && /^\d{4}-\d{2}-\d{2}$/.test(a.date) && Number.isFinite(Date.parse(a.date));
+
+export function newsImageUrl(value?: string): string {
+  if (!value) return "";
+  if (value.startsWith("/") && !value.startsWith("//")) return value;
+  try { return ["https:","http:"].includes(new URL(value).protocol) ? value : ""; }
+  catch { return ""; }
+}

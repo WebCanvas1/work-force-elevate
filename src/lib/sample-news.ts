@@ -1,3 +1,10 @@
+import planning from "../assets/hero-construction.jpg";
+import welcome from "../assets/about-team.jpg";
+import manufacturing from "../assets/service-manufacturing.jpg";
+import candidate from "../assets/service-construction.jpg";
+import maintenance from "../assets/service-maintenance.jpg";
+import communication from "../assets/your-crew-recruitment.jpg";
+
 import type { NewsArticle } from "./news";
 
 const samples = [
@@ -63,6 +70,15 @@ const samples = [
   },
 ];
 
+const sampleImages = [
+  {image:planning,alt:"Construction team planning work on site"},
+  {image:welcome,alt:"Workers in safety equipment ready to join a site team"},
+  {image:manufacturing,alt:"Manufacturing workers in a production facility"},
+  {image:candidate,alt:"Worker in PPE reviewing construction plans"},
+  {image:maintenance,alt:"Property maintenance work in progress"},
+  {image:communication,alt:"Your Crew team discussing workforce needs"},
+];
+
 export const sampleNews: NewsArticle[] = samples.map((sample, i) => ({
   id: `sample-${sample.id}`,
   title: `Sample: ${sample.title}`,
@@ -70,6 +86,8 @@ export const sampleNews: NewsArticle[] = samples.map((sample, i) => ({
   excerpt: `Sample content — ${sample.summary}`,
   body: "SAMPLE ARTICLE — for website demonstration only. Edit or delete this article in the admin News section, then click Publish changes.\n\n" + sample.paragraphs.join("\n\n"),
   published: true,
+  image: sampleImages[i].image,
+  imageAlt: sampleImages[i].alt,
 }));
 
 // Only use samples when no article list has ever been saved. An explicit []
