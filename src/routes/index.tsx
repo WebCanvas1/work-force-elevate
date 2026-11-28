@@ -1,3 +1,4 @@
+import { useSetting, safeMapUrl, safeWebUrl, editableDefaults } from "../lib/editable-settings";
 import { contactServices } from "../lib/contact-services";
 import officeImg from "../assets/your-crew-recruitment.jpg";
 import { ContentVisibility } from "../components/site/ContentVisibility";
@@ -21,6 +22,7 @@ import {
   Home as HomeIcon,
   Phone,
   Mail,
+  Clock,
   Check,
   ChevronRight,
 } from "lucide-react";
@@ -476,6 +478,11 @@ function CTABanner() {
 }
 
 function ContactStrip() {
+  const officeLabel=useSetting("contact.office.label");
+  const officeAddress=useSetting("contact.office.address");
+  const hours=useSetting("contact.hours");
+  const map=safeMapUrl(useSetting("contact.office.map"));
+  const directions=safeWebUrl(useSetting("contact.office.directions"),editableDefaults["contact.office.directions"]);
   return (
     <section className="bg-white py-24 md:py-32">
       <div className="container-x grid gap-10 lg:grid-cols-[1.1fr_1fr]">
@@ -496,15 +503,19 @@ function ContactStrip() {
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-white"><Mail className="h-4 w-4" /></span>
               <a href="mailto:sales@yourcrew.com.au" className="font-semibold text-primary">sales@yourcrew.com.au</a>
             </li>
-            <li className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-white"><MapPin className="h-4 w-4" /></span>
-              <span className="font-semibold text-primary">Melbourne, Victoria — servicing statewide</span>
+            <li className="flex items-start gap-3">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary text-white"><MapPin className="h-4 w-4" /></span>
+              <div><p className="font-semibold text-primary">{officeLabel}</p><a href={directions} target="_blank" rel="noopener noreferrer" className="mt-1 block whitespace-pre-line text-primary hover:underline">{officeAddress}</a></div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary text-white"><Clock className="h-4 w-4" /></span>
+              <div><p className="font-semibold text-primary">Business hours</p><p className="mt-1 whitespace-pre-line text-primary">{hours}</p></div>
             </li>
           </ul>
           <div className="mt-8 overflow-hidden rounded-2xl border border-border">
             <iframe
-              title="Melbourne map"
-              src="https://www.openstreetmap.org/export/embed.html?bbox=144.85%2C-37.87%2C145.05%2C-37.76&layer=mapnik"
+              title="Waterman Eastland — Melbourne Office, Ringwood"
+              src={map}
               className="h-64 w-full"
               loading="lazy"
             />

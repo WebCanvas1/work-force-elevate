@@ -39,7 +39,7 @@ export const editableSettings: Record<string,EditorSetting[]> = {
     {id:"contact.office.map",label:"Google Maps embed URL",value:"https://maps.google.com/maps?cid=11839961445765829978&z=17&output=embed"},
     {id:"contact.office.directions",label:"Office directions link",value:"https://maps.app.goo.gl/9MCphiEC5VmmB88p7"},
     {id:"contact.office.maplabel",label:"Directions link label",value:"Get directions to Waterman Eastland"},
-    {id:"contact.hours",label:"Business hours",value:"Mon – Fri, 7:00am – 6:00pm"},
+    {id:"contact.hours",label:"Business hours",type:"textarea",value:"Monday - Saturday 7:30am - 5:30pm\nSunday - Closed"},
     {id:"contact.services.visible",label:"Service tiles visibility",value:"true",type:"select",options:visibility},
     {id:"contact.services.position",label:"Service tiles position",value:"after",type:"select",options:[{label:"Below map and contact form",value:"after"},{label:"Above map and contact form",value:"before"}]},
   ],
