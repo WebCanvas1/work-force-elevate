@@ -23,13 +23,6 @@ const values = [
   { icon: Sparkles, title: "Flexibility", desc: "Hiring solutions tailored to your project, timeline and culture." },
 ];
 
-const milestones = [
-  { year: "2003", title: "Founded in Melbourne", desc: "Your Crew begins supplying construction labour across metro Melbourne." },
-  { year: "2010", title: "Manufacturing expansion", desc: "New division launched to service Victoria's production and warehousing sector." },
-  { year: "2017", title: "Maintenance division", desc: "Dedicated maintenance crews added for facilities and property partners." },
-  { year: "2025", title: "1,800+ active workers", desc: "A trusted pool of screened workers deployed across Victoria every week." },
-];
-
 export default function About() {
   return (
     <div>
@@ -114,32 +107,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-white py-12 md:py-16">
-        <div className="container-x">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Timeline</p>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-primary md:text-5xl">
-              <ContentText id="about.timeline.title" fallback="22+ years of growth." />
-            </h2>
-          </div>
-          <div className="mx-auto mt-8 grid max-w-5xl gap-6 md:grid-cols-2">
-            {milestones.map((m, i) => (
-              <motion.div
-                key={m.year}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="relative overflow-hidden rounded-2xl border border-border bg-background p-8"
-              >
-                <span className="text-xs font-bold uppercase tracking-widest text-accent">{m.year}</span>
-                <h3 className="mt-2 text-xl font-bold text-primary">{m.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{m.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       <section className="bg-background py-12 md:py-16">
         <div className="container-x grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">

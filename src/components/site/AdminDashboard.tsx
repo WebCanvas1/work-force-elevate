@@ -36,7 +36,6 @@ const groups: Group[] = [
     {id:"about.hero.image",label:"Hero background image",type:"image"},
     {id:"about.mission.title",label:"Mission heading"},
     {id:"about.values.title",label:"Values heading"},
-    {id:"about.timeline.title",label:"Timeline heading"},
     {id:"about.trust.title",label:"Why trust us heading"},
     {id:"about.cta.title",label:"Closing call to action"}
   ]},
