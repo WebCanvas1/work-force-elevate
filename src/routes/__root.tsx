@@ -87,12 +87,13 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname=useRouterState({select:s=>s.location.pathname});
   const showKeepInTouch=["/about","/contact","/faq","/news"].includes(pathname);
+  const sectionSpacing=useSetting("global.section.spacing");
   const textSize=useSetting("global.text.size")==="20"?"1.25rem":"1.125rem";
 
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="public-site" style={{"--public-text-size":textSize} as CSSProperties}>
+      <div className="public-site" data-section-spacing={sectionSpacing} style={{"--public-text-size":textSize} as CSSProperties}>
       <Navigation />
       <main className="min-h-screen"><Outlet /><DynamicSections />{showKeepInTouch&&<KeepInTouch />}</main>
       <Footer />

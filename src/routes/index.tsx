@@ -124,7 +124,7 @@ function WorkforceFeatures() {
 function Hero() {
   return (
     <section className="relative overflow-hidden bg-[#f7f3e8] pt-24 text-primary md:pt-28">
-      <div className="container-x grid min-h-[720px] gap-12 py-16 lg:grid-cols-[1fr_0.95fr] lg:items-center lg:py-20">
+      <div className="container-x grid min-h-[600px] gap-10 py-12 lg:grid-cols-[1fr_0.95fr] lg:items-center lg:py-14">
         {/* Left content */}
         <div className="relative z-10">
           <motion.div

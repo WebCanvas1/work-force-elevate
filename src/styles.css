@@ -358,3 +358,18 @@
 
 .cms-field>select{width:100%;min-height:46px;border:1px solid #d5dfe9;border-radius:8px;background:white;color:#20364d;padding:12px;font-size:14px}
 .cms-field>select:focus-visible{outline:3px solid #e5b44b;outline-offset:2px}
+
+/* Shared section rhythm keeps stacked page sections compact without reducing
+   hero clearance beneath the fixed navigation or padding inside cards/forms. */
+.public-site { --section-space: 2rem; }
+.public-site[data-section-spacing="comfortable"] { --section-space: 3rem; }
+.public-site main section[class*="py-"] {
+  padding-block: var(--section-space);
+}
+.public-site main section[class*="pb-"] {
+  padding-bottom: var(--section-space);
+}
+@media (min-width: 768px) {
+  .public-site { --section-space: 3rem; }
+  .public-site[data-section-spacing="comfortable"] { --section-space: 4rem; }
+}

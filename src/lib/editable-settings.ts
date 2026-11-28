@@ -52,6 +52,7 @@ export const editableSettings: Record<string,EditorSetting[]> = {
     {id:"news.article.width",label:"Article page width",value:"wide",type:"select",options:[{label:"Wide",value:"wide"},{label:"Standard",value:"standard"}]},
   ],
   settings: [
+    {id:"global.section.spacing",label:"Spacing between page sections",value:"compact",type:"select",options:[{label:"Compact",value:"compact"},{label:"Comfortable",value:"comfortable"}]},
     {id:"global.social.linkedin",label:"LinkedIn profile URL",value:"https://www.linkedin.com/company/your-crew-pty-ltd/"},
     {id:"global.social.facebook",label:"Facebook profile URL",value:"https://www.facebook.com/yourcrewaustralia"},
     {id:"global.social.instagram",label:"Instagram profile URL (optional)",value:""},
