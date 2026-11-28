@@ -1,8 +1,7 @@
 import { EmployerFaqContent } from "../components/site/EmployerFaqContent";
 import { ContentText, useContentValue } from "../lib/site-content";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import {
   ArrowRight,
   HardHat,
@@ -66,9 +65,9 @@ function FindStaff() {
             Fully screened workers, 24-hour response, Victoria wide.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#request" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary shadow-lg shadow-accent/30">
+            <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary shadow-lg shadow-accent/30">
               Request staff <ArrowRight className="h-4 w-4" />
-            </a>
+            </Link>
             <a href="tel:+61451267768" className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white">
               Call 0451 267 768
             </a>
@@ -159,10 +158,10 @@ function FindStaff() {
 }
 
 function RequestForm() {
-  const [sent, setSent] = useState(false);
+  const navigate = useNavigate();
   return (
     <form
-      onSubmit={(e) => { e.preventDefault(); setSent(true); }}
+      onSubmit={(e) => { e.preventDefault(); void navigate({ to: "/contact" }); }}
       className="mt-10 rounded-3xl border border-border bg-background p-8 md:p-12"
     >
       <div className="grid gap-4 sm:grid-cols-2">
@@ -180,10 +179,9 @@ function RequestForm() {
       <div className="mt-4">
         <Field label="Tell us about the role" name="details" as="textarea" />
       </div>
-      <button type="submit" className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-semibold text-white transition-colors hover:bg-accent">
+      <button type="button" onClick={() => void navigate({ to: "/contact" })} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-semibold text-white transition-colors hover:bg-accent">
         Request staff <ArrowRight className="h-4 w-4" />
       </button>
-      {sent && <p className="mt-4 rounded-xl bg-accent/10 px-4 py-3 text-sm text-accent">Request received — our team will be in touch shortly.</p>}
     </form>
   );
 }

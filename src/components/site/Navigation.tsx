@@ -52,7 +52,7 @@ export function Navigation() {
 
         <div className="hidden xl:block">
           <Link
-            to="/find-staff"
+            to="/contact"
             className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-lg font-semibold text-primary shadow-lg shadow-accent/30 transition-all duration-300 hover:-translate-y-px hover:bg-accent/90"
           >
             Request Staff
@@ -99,7 +99,7 @@ export function Navigation() {
 
             <li className="mt-2">
               <Link
-                to="/find-staff"
+                to="/contact"
                 onClick={() => setOpen(false)}
                 className="block rounded-full bg-accent px-5 py-3 text-center text-base font-semibold text-primary transition-colors hover:bg-accent/90"
               >
