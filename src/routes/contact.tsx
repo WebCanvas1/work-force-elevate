@@ -35,22 +35,6 @@ function Contact() {
         </div>
       </section>
 
-      <section aria-label="Our staffing services" className="bg-white pt-12 md:pt-16">
-        <div className="container-x grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-          {contactServices.map(service => (
-            <a key={service.id} href={service.href} className="group flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition-shadow hover:shadow-lg">
-              <div className="aspect-[16/10] overflow-hidden bg-surface">
-                <ContentImage id={`contact.service.${service.id}.image`} fallback={service.image} alt={service.alt} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
-              </div>
-              <div className="flex flex-1 items-center justify-between gap-3 bg-primary p-5 text-white">
-                <h2 className="text-xl font-bold leading-snug">{service.title}</h2>
-                <ArrowRight className="h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
-
       <section className="bg-background py-12 md:py-16">
         <div className="container-x grid gap-12 lg:grid-cols-[1fr_1.1fr]">
           <div>
@@ -77,6 +61,21 @@ function Contact() {
           <ContactForm />
         </div>
       </section>
+      <section aria-label="Our staffing services" className="bg-white pb-12 md:pb-16">
+        <div className="container-x grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          {contactServices.map(service => (
+            <article key={service.id} className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
+              <div className="aspect-[16/10] overflow-hidden bg-surface">
+                <ContentImage id={`contact.service.${service.id}.image`} fallback={service.image} alt={service.alt} className="h-full w-full object-cover" />
+              </div>
+              <div className="flex flex-1 items-center justify-between gap-3 bg-primary p-5 text-white">
+                <h2 className="text-xl font-bold leading-snug">{service.title}</h2>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
     </div>
   );
 }
