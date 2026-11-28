@@ -1,3 +1,5 @@
+import { contactServices } from "../lib/contact-services";
+import officeImg from "../assets/your-crew-recruitment.jpg";
 import { ContentVisibility } from "../components/site/ContentVisibility";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
@@ -241,17 +243,24 @@ const services = [
   },
   {
     icon: Factory,
-    title: "Manufacturing",
+    title: "Manufacturing Labour Hire",
     img: manufacturingImg,
     desc: "Keep production moving with experienced factory workers, forklift operators, machine operators and warehouse staff ready when you need them.",
     bullets: ["Machine Operators", "Forklift & Logistics", "Cleaners & Labourers", "Maintenance Technicians"],
   },
   {
     icon: Wrench,
-    title: "Maintenance",
+    title: "Property Maintenance Staff",
     img: maintenanceImg,
     desc: "Reliable maintenance professionals to help keep your properties, facilities and assets safe, functional and well maintained.",
     bullets: ["Handyman Services", "Plumbing & Electrical", "Landscaping & Grounds", "Emergency Repairs"],
+  },
+  {
+    icon: Users,
+    title: "Office Support Staff",
+    img: officeImg,
+    desc: "Reliable office and administration support to help keep your business running smoothly.",
+    bullets: ["Reception & Customer Support", "Office Administration", "Data Entry", "Accounts & Payroll Support"],
   },
 ];
 
@@ -272,7 +281,7 @@ function Services() {
           </motion.p>
         </div>
 
-        <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid gap-6 md:grid-cols-2">
           {services.map((s, i) => {
             const featured = i === 1;
             return (
@@ -301,7 +310,7 @@ function Services() {
                 >
                   <s.icon className="h-6 w-6" />
                 </span>
-                <h3 className={`relative mt-6 text-xl font-bold ${featured ? "text-primary" : "text-primary"}`}>{s.title}</h3>
+                <h3 className={`relative mt-6 text-xl font-bold ${featured ? "text-primary" : "text-primary"}`}><ContentText id={`contact.service.${contactServices[i].id}.title`} fallback={s.title} /></h3>
                 <p className={`relative mt-3 text-sm leading-relaxed ${featured ? "text-primary/80" : "text-muted-foreground"}`}>{s.desc}</p>
                 <ul className="relative mt-5 space-y-2 text-sm">
                   {s.bullets.map((b) => (

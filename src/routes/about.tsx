@@ -1,4 +1,4 @@
-import { useSetting, useRequestDestination, editableDefaults } from "../lib/editable-settings";
+import { useSetting, editableDefaults } from "../lib/editable-settings";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, UserRound, MessageCircle, Award, Handshake, Compass, ShieldCheck, HeartHandshake, Sparkles } from "lucide-react";
@@ -26,7 +26,6 @@ const values = [
 
 export default function About() {
   const spacing=useSetting("about.spacing");
-  const requestTo=useRequestDestination();
   return (
     <div>
       <section className="relative isolate overflow-hidden bg-primary pt-32 pb-14 text-white md:pt-40 md:pb-20">
@@ -152,21 +151,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-primary py-12 text-white md:py-16">
-        <div className="container-x flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-          <h2 className="text-balance text-3xl font-bold md:text-4xl">
-            <ContentText id="about.cta.title" fallback="Ready to build your dream team?" />
-          </h2>
-          <div className="flex gap-3">
-            <Link to={requestTo} className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary">
-              Request staff <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link to="/contact" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-sm font-semibold">
-              Contact us
-            </Link>
-          </div>
-        </div>
-      </section>
+
     </div>
   );
 }

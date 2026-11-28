@@ -1,3 +1,4 @@
+import { useSetting } from "../lib/editable-settings";
 import { defaultNewsJson } from "../lib/sample-news";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useContentValue } from "../lib/site-content";
@@ -5,9 +6,10 @@ import { parseNews, formatNewsDate, isPublishedArticle, newsImageUrl } from "../
 
 export const Route = createFileRoute("/news_/$articleId")({ component: NewsArticle });
 function NewsArticle() {
+  const width=useSetting("news.article.width");
   const { articleId } = Route.useParams();
   const article = parseNews(useContentValue("news.articles", defaultNewsJson)).find(a=>a.id===articleId && isPublishedArticle(a));
-  return <section className="pt-40 pb-24 md:pt-48"><div className="container-x max-w-3xl">
+  return <section className="pt-40 pb-24 md:pt-48"><div className={"container-x "+(width==="standard"?"max-w-3xl":"max-w-6xl")}>
     <Link to="/news" className="font-semibold text-primary hover:underline">← Back to News</Link>
     {article ? <article>
       <p className="mt-10 text-muted-foreground"><time dateTime={article.date}>{formatNewsDate(article.date)}</time></p>

@@ -1,3 +1,4 @@
+import faqImage from "../assets/your-crew-recruitment.jpg";
 import { useContentValue } from "./site-content";
 
 export type EditorSetting = { id:string; label:string; value:string; type?:"textarea"|"image"|"select"; options?:{label:string;value:string}[] };
@@ -42,7 +43,22 @@ export const editableSettings: Record<string,EditorSetting[]> = {
     {id:"contact.services.visible",label:"Service tiles visibility",value:"true",type:"select",options:visibility},
     {id:"contact.services.position",label:"Service tiles position",value:"after",type:"select",options:[{label:"Below map and contact form",value:"after"},{label:"Above map and contact form",value:"before"}]},
   ],
+  faq: [
+    {id:"faq.hero.title",label:"FAQ hero heading",value:"FAQ"},
+    {id:"faq.hero.body",label:"FAQ introduction",value:"Find answers to commonly asked questions about Your Crew services.",type:"textarea"},
+    {id:"faq.hero.image",label:"FAQ hero image",value:faqImage,type:"image"},
+  ],
+  news: [
+    {id:"news.article.width",label:"Article page width",value:"wide",type:"select",options:[{label:"Wide",value:"wide"},{label:"Standard",value:"standard"}]},
+  ],
   settings: [
+    {id:"global.social.linkedin",label:"LinkedIn profile URL",value:"https://www.linkedin.com/company/your-crew-pty-ltd/"},
+    {id:"global.social.facebook",label:"Facebook profile URL",value:"https://www.facebook.com/yourcrewaustralia"},
+    {id:"global.social.instagram",label:"Instagram profile URL (optional)",value:""},
+    {id:"global.keep.title",label:"Keep in touch heading",value:"Keep in touch"},
+    {id:"global.keep.body",label:"Keep in touch text",value:"Follow Your Crew for news and updates, or get in touch to discuss your staffing needs.",type:"textarea"},
+    {id:"global.keep.button",label:"Keep in touch button",value:"Contact us"},
+    {id:"global.keep.visible",label:"Keep in touch section visibility",value:"true",type:"select",options:visibility},
     {id:"global.text.size",label:"Minimum public text size",value:"18",type:"select",options:[{label:"18 pixels",value:"18"},{label:"20 pixels",value:"20"}]},
     {id:"global.logo.size",label:"Header logo size",value:"large",type:"select",options:[{label:"Large",value:"large"},{label:"Compact",value:"compact"}]},
     {id:"global.request.destination",label:"Request staff button destination",value:"/contact",type:"select",options:[{label:"Contact page",value:"/contact"},{label:"Find Staff page",value:"/find-staff"}]},

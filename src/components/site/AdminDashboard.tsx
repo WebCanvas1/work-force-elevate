@@ -40,7 +40,6 @@ const groups: Group[] = [
     {id:"about.mission.title",label:"Mission heading"},
     {id:"about.values.title",label:"Values heading"},
     {id:"about.trust.title",label:"Why trust us heading"},
-    {id:"about.cta.title",label:"Closing call to action"}
   ]},
   {id:"staff",title:"Find Staff",description:"Manage employer-facing page headings and photo.",page:"/find-staff",fields:[
     {id:"staff.hero.title",label:"Page headline",type:"textarea"},
@@ -64,6 +63,7 @@ const groups: Group[] = [
     {id:"contact.form.title",label:"Contact form heading"}
   ]},
   {id:"news",title:"News",description:"Write and publish news articles.",page:"/news",fields:[{id:"news.title",label:"Page heading"},{id:"news.intro",label:"Introduction",type:"textarea"}]},
+  {id:"faq",title:"FAQ",description:"Edit the FAQ hero. Shared employer questions are managed in Find Staff.",page:"/faq",fields:[]},
   {id:"settings",title:"Website Settings",description:"Company branding, navigation logo and contact details.",page:"/",fields:[
     {id:"global.company",label:"Footer company name"},
     {id:"global.logo",label:"Website logo",type:"image"},

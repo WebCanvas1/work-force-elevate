@@ -1,3 +1,4 @@
+import { KeepInTouch } from "../components/site/KeepInTouch";
 import { useSetting } from "../lib/editable-settings";
 import type { CSSProperties } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -6,6 +7,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
 } from "@tanstack/react-router";
 import { useEffect } from "react";
 
@@ -83,6 +85,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname=useRouterState({select:s=>s.location.pathname});
+  const showKeepInTouch=["/about","/contact","/faq"].includes(pathname);
   const textSize=useSetting("global.text.size")==="20"?"1.25rem":"1.125rem";
 
 
@@ -90,7 +94,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <div className="public-site" style={{"--public-text-size":textSize} as CSSProperties}>
       <Navigation />
-      <main className="min-h-screen"><Outlet /><DynamicSections /></main>
+      <main className="min-h-screen"><Outlet /><DynamicSections />{showKeepInTouch&&<KeepInTouch />}</main>
       <Footer />
       </div>
     </QueryClientProvider>
