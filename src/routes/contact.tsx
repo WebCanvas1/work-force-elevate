@@ -59,17 +59,18 @@ function Contact() {
               <ul className="mt-6 space-y-5">
                 <ContactRow icon={Phone} label="Phone" value={phone} href={"tel:"+phone.replace(/[^+0-9]/g,"")} />
                 <ContactRow icon={Mail} label="Email" value={email} href={"mailto:"+email} />
-                <ContactRow icon={MapPin} label="Office" value="Melbourne, Victoria — servicing statewide" />
+                <ContactRow icon={MapPin} label="Melbourne Office" value={"Waterman Suite 586, C307,\nEastland Shopping Centre,\nLevel 3, 175 Maroondah Highway,\nRingwood VIC 3134"} href="https://maps.app.goo.gl/9MCphiEC5VmmB88p7" />
                 <ContactRow icon={Clock} label="Business hours" value="Mon – Fri, 7:00am – 6:00pm" />
               </ul>
             </div>
             <div className="mt-6 overflow-hidden rounded-3xl border border-border">
               <iframe
-                title="Melbourne map"
-                src="https://www.openstreetmap.org/export/embed.html?bbox=144.85%2C-37.87%2C145.05%2C-37.76&layer=mapnik"
+                title="Waterman Eastland — Melbourne Office, Ringwood"
+                src="https://maps.google.com/maps?cid=11839961445765829978&z=17&output=embed"
                 className="h-80 w-full"
                 loading="lazy"
               />
+              <a href="https://maps.app.goo.gl/9MCphiEC5VmmB88p7" target="_blank" rel="noopener noreferrer" className="block border-t border-border bg-white px-5 py-4 font-semibold text-primary underline underline-offset-4">Get directions to Waterman Eastland</a>
             </div>
           </div>
 
@@ -81,7 +82,7 @@ function Contact() {
 }
 
 function ContactRow({ icon: I, label, value, href }: { icon: typeof Phone; label: string; value: string; href?: string }) {
-  const body = <span className="font-semibold text-primary">{value}</span>;
+  const body = <span className="whitespace-pre-line font-semibold text-primary">{value}</span>;
   return (
     <li className="flex items-start gap-4">
       <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-primary text-white">
