@@ -330,18 +330,19 @@
 /* Public typography: the homepage introduction (18px) is the minimum size.
    Keep the protected editor's compact interface independent. */
 .public-site {
-  --text-xs: 1.125rem;
+  --text-xs: var(--public-text-size, 1.125rem);
   --text-xs--line-height: 1.65;
-  --text-sm: 1.125rem;
+  --text-sm: var(--public-text-size, 1.125rem);
   --text-sm--line-height: 1.65;
-  --text-base: 1.125rem;
+  --text-base: var(--public-text-size, 1.125rem);
+  --text-lg: var(--public-text-size, 1.125rem);
   --text-base--line-height: 1.65;
   --muted-foreground: oklch(0.44 0.025 260);
-  font-size: 1.125rem;
+  font-size: var(--public-text-size, 1.125rem);
   line-height: 1.7;
   font-weight: 500;
 }
-.public-site small { font-size: 1.125rem; }
+.public-site small { font-size: var(--public-text-size, 1.125rem); }
 .public-site :where(a, button, input, textarea, select, summary):focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 4px;
@@ -354,3 +355,6 @@
 @media (prefers-reduced-motion: reduce) {
   .public-site { scroll-behavior: auto; }
 }
+
+.cms-field>select{width:100%;min-height:46px;border:1px solid #d5dfe9;border-radius:8px;background:white;color:#20364d;padding:12px;font-size:14px}
+.cms-field>select:focus-visible{outline:3px solid #e5b44b;outline-offset:2px}

@@ -1,8 +1,11 @@
+import { faqGroups as employerFaqGroups } from "../../lib/faq-data";
+import { editableSettings, editableDefaults } from "../../lib/editable-settings";
+import { parseNews } from "../../lib/news";
 import { defaultNewsJson } from "../../lib/sample-news";
 import { contactServices } from "../../lib/contact-services";
 import { homeProcessSteps } from "../../lib/home-process";
 import { NewsEditor } from "./NewsEditor";
-import { staffFaqs, jobFaqs } from "./FaqSection";
+import { jobFaqs } from "./FaqSection";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Save, Eye, Image as ImageIcon, LayoutDashboard, Settings, FileText, LogOut, RotateCcw, Search, CheckCircle2, AlertCircle, ExternalLink } from "lucide-react";
 import { setContent, type ContentMap } from "../../lib/site-content";
@@ -14,7 +17,7 @@ import jobsImage from "../../assets/your-crew-recruitment.jpg";
 import { jobPageCopy, jobBenefits } from "../../lib/job-page-content";
 import logoImage from "../../assets/your-crew-logo.png";
 
-type Field = { id: string; label: string; type?: "text" | "textarea" | "image"; hint?: string };
+type Field = { id: string; label: string; type?: "text" | "textarea" | "image" | "select"; options?: {label:string;value:string}[]; hint?: string };
 type Group = { id: string; title: string; description: string; fields: Field[]; page: string };
 const groups: Group[] = [
   { id:"home", title:"Homepage", description:"Edit the main landing page and its sections.", page:"/", fields:[
@@ -76,13 +79,35 @@ homeProcessSteps.forEach((step,i) => {
   const id=`home.process.step.${i + 1}.image`;
   groups.find(group=>group.id==="home")!.fields.push({id,label:`How it works — step ${i + 1}: ${step.title}`,type:"image"});
   builtInDefaults[id]=step.image;
+  for (const [suffix,label,value] of [["title","Heading",step.title],["description","Description",step.desc]]) {
+    const key=`home.process.step.${i+1}.${suffix}`;
+    groups.find(g=>g.id==="home")!.fields.push({id:key,label:`Step ${i+1} ${label}`,type:"textarea"});
+    builtInDefaults[key]=value;
+  }
 });
 contactServices.forEach(service => {
   const id=`contact.service.${service.id}.image`;
   groups.find(group=>group.id==="contact")!.fields.push({id,label:`${service.title} image`,type:"image"});
   builtInDefaults[id]=service.image;
+  const titleId=`contact.service.${service.id}.title`;
+  groups.find(g=>g.id==="contact")!.fields.push({id:titleId,label:`${service.title} title`});
+  builtInDefaults[titleId]=service.title;
+  const urlId=`contact.service.${service.id}.url`;
+  groups.find(g=>g.id==="contact")!.fields.push({id:urlId,label:`${service.title} link (optional; leave empty for no link)`});
+  builtInDefaults[urlId]="";
 });
-Object.assign(builtInDefaults,jobPageCopy);
+["Labour Hire Authority", "Manufacturing agreement", "Construction agreement"].forEach((name,i)=>{
+  const id=`home.certification.${i+1}.image`;
+  groups.find(g=>g.id==="home")!.fields.push({id,label:`${name} replacement image (leave empty for original)`,type:"image"});
+  builtInDefaults[id]="";
+});
+Object.assign(builtInDefaults,jobPageCopy,editableDefaults);
+for (const [groupId,fields] of Object.entries(editableSettings)) {
+  const group=groups.find(g=>g.id===groupId)!;
+  fields.forEach(({value,...field})=>{if(!group.fields.some(f=>f.id===field.id))group.fields.push(field);});
+}
+groups.find(g=>g.id==="home")!.fields=groups.find(g=>g.id==="home")!.fields.filter(f=>!["home.industries.title","home.jobs.title"].includes(f.id));
+
 const jobGroup=groups.find(g=>g.id==="jobs")!;
 for (const [id,value] of Object.entries(jobPageCopy)) {
   if (!jobGroup.fields.some(f=>f.id===id)) jobGroup.fields.push({id,label:id.replace("jobs.","").replaceAll("."," "),type:"textarea"});
@@ -94,15 +119,20 @@ jobBenefits.forEach((benefit,i)=> {
     jobGroup.fields.push({id,label:`${benefit.title}: ${suffix}`,type:"textarea"});
   }
 });
-for (const [audience, faqGroups] of [["staff",staffFaqs],["jobs",jobFaqs]] as const) {
+for (const [audience, faqGroups] of [["staff",employerFaqGroups.map(g=>({...g,items:g.items.map(([q,a])=>({q,a}))}))],["jobs",jobFaqs]] as const) {
   const group=groups.find(g=>g.id===audience)!;
-  for (const topic of faqGroups) topic.items.forEach((faq,i)=> {
+  for (const topic of faqGroups) {
+    const titleId=`${audience}.faq.group.${topic.id}.title`;
+    group.fields.push({id:titleId,label:`FAQ category: ${topic.title}`});
+    builtInDefaults[titleId]=topic.title;
+    topic.items.forEach((faq,i)=> {
     for (const [suffix,label,value] of [["question","question",faq.q],["answer","answer",faq.a]]) {
       const id=`${audience}.faq.${topic.id}.${i}.${suffix}`;
       group.fields.push({id,label:`${topic.title}: ${faq.q} (${label})`,type:"textarea"});
       builtInDefaults[id]=value;
     }
   });
+  }
 }
 builtInDefaults["news.articles"]=defaultNewsJson;
 builtInDefaults["news.title"]="News";
@@ -211,7 +241,7 @@ export function AdminDashboard() {
       const response=await fetch("/api/admin/upload",{method:"POST",credentials:"same-origin",body});
       const data=await response.json() as {url?:string;error?:string};
       if(!response.ok || !data.url)throw new Error(data.error||"Image upload failed");
-      setDraft(prev=>{if(id.startsWith("section-image.")){const sectionId=id.slice("section-image.".length);const key=sectionKey(tab);const items=parseSections(prev[key]??"[]").map(s=>s.id===sectionId?{...s,image:data.url!}:s);return {...prev,[key]:JSON.stringify(items)}}return {...prev,[id]:data.url!}});setStatus("Image uploaded. Click Publish Changes to use it on your website.");
+      setDraft(prev=>{if(id.startsWith("news-image.")){const articleId=id.slice("news-image.".length);const articles=parseNews(prev["news.articles"]??defaults["news.articles"]??defaultNewsJson).map(a=>a.id===articleId?{...a,image:data.url!}:a);return {...prev,"news.articles":JSON.stringify(articles)}}if(id.startsWith("section-image.")){const sectionId=id.slice("section-image.".length);const key=sectionKey(tab);const items=parseSections(prev[key]??"[]").map(s=>s.id===sectionId?{...s,image:data.url!}:s);return {...prev,[key]:JSON.stringify(items)}}return {...prev,[id]:data.url!}});setStatus("Image uploaded. Click Publish Changes to use it on your website.");
     }catch(e){setError((e as Error).message)}finally{setBusy(false)}
   }
   const filtered=useMemo(()=>selected.fields.filter(f=>!query||`${f.label} ${f.id}`.toLowerCase().includes(query.toLowerCase())),[selected,query]);
@@ -225,7 +255,7 @@ export function AdminDashboard() {
     {status&&<div className="cms-success" role="status"><CheckCircle2 size={18}/>{status}</div>}
     {showPreview&&<div className="cms-preview"><div><strong>Live preview — unpublished changes</strong><a href={preview(selected.page)} target="_blank" rel="noreferrer">Open in new tab <ExternalLink size={14}/></a></div><iframe ref={previewFrame} title="Live website draft preview" src={preview(selected.page)} onLoad={sendDraftPreview}/></div>}
     {tab!=="settings"&&<div className="cms-editor-tabs"><button type="button" className={editorMode==="fields"?"active":""} onClick={()=>setEditorMode("fields")}>Edit existing content</button><button type="button" className={editorMode==="sections"?"active":""} onClick={()=>setEditorMode("sections")}>Page builder ({sections.length})</button></div>}
-    {tab==="news"&&<NewsEditor value={draft["news.articles"]??defaults["news.articles"]??defaultNewsJson} onChange={value=>setDraft(prev=>({...prev,"news.articles":value}))}/>}
+    {tab==="news"&&<NewsEditor onUpload={(file,id)=>upload(file,"news-image."+id)} value={draft["news.articles"]??defaults["news.articles"]??defaultNewsJson} onChange={value=>setDraft(prev=>({...prev,"news.articles":value}))}/>}
     {editorMode==="sections"&&tab!=="settings"?<div className="cms-builder"><div className="cms-builder-intro"><h3>Custom sections</h3><p>Add sections below the existing page content. Reorder, hide, duplicate or remove them. Publish when ready.</p><label>Add a section <select defaultValue="" onChange={e=>{if(e.target.value)addSection(e.target.value as SectionKind);e.target.value=""}}><option value="" disabled>Choose a layout…</option>{(["text","image","cards","faq","cta","video","stats"] as SectionKind[]).map(kind=><option key={kind} value={kind}>{kind.charAt(0).toUpperCase()+kind.slice(1)}</option>)}</select></label></div>{sections.length===0&&<div className="cms-builder-empty">No custom sections yet. Choose a layout above to add one.</div>}{sections.map((s,i)=><article className="cms-builder-section" key={s.id}><div className="cms-builder-toolbar"><strong>{i+1}. {s.title||"Untitled section"}</strong><span>{s.kind}</span><div><button disabled={i===0} onClick={()=>moveSection(i,-1)} aria-label="Move up">↑</button><button disabled={i===sections.length-1} onClick={()=>moveSection(i,1)} aria-label="Move down">↓</button><button onClick={()=>changeSection(s.id,{hidden:!s.hidden})}>{s.hidden?"Show":"Hide"}</button><button disabled={sections.length>=40} onClick={()=>setSections([...sections.slice(0,i+1),{...s,id:crypto.randomUUID(),title:s.title+" (copy)"},...sections.slice(i+1)])}>Duplicate</button><button onClick={()=>{if(window.confirm("Delete this section?"))setSections(sections.filter(x=>x.id!==s.id))}}>Delete</button></div></div><div className="cms-builder-body"><label>Heading<input value={s.title} onChange={e=>changeSection(s.id,{title:e.target.value})}/></label><label>Description<textarea rows={4} value={s.body} onChange={e=>changeSection(s.id,{body:e.target.value})}/></label>{(["image","text","cta"] as string[]).includes(s.kind)&&<label>Image URL (optional)<input value={s.image||""} onChange={e=>changeSection(s.id,{image:e.target.value})}/><input type="file" accept="image/png,image/jpeg,image/webp,image/gif" onChange={async e=>{const file=e.target.files?.[0];if(!file)return;const id="section-image."+s.id;await upload(file,id);e.target.value=""}}/><small>Use the upload option, then publish. The uploaded image will be applied automatically.</small></label>}{(s.kind==="cta"||s.kind==="text"||s.kind==="image")&&<><label>Button label<input value={s.buttonText||""} onChange={e=>changeSection(s.id,{buttonText:e.target.value})}/></label><label>Button URL<input value={s.buttonUrl||""} onChange={e=>changeSection(s.id,{buttonUrl:e.target.value})} placeholder="/contact"/></label></>}{s.kind==="video"&&<label>Embed URL (YouTube or Vimeo)<input value={s.buttonUrl||""} onChange={e=>changeSection(s.id,{buttonUrl:e.target.value})} placeholder="https://www.youtube.com/embed/…"/></label>}{(s.kind==="cards"||s.kind==="faq"||s.kind==="stats")&&<div className="cms-builder-items"><strong>Items</strong>{(s.items||[]).map((item,j)=><div key={j}><input aria-label={"Item "+(j+1)+" title"} placeholder="Item title" value={item.title} onChange={e=>changeSection(s.id,{items:(s.items||[]).map((v,k)=>k===j?{...v,title:e.target.value}:v)})}/><textarea aria-label={"Item "+(j+1)+" description"} placeholder="Description" rows={2} value={item.body} onChange={e=>changeSection(s.id,{items:(s.items||[]).map((v,k)=>k===j?{...v,body:e.target.value}:v)})}/><button onClick={()=>changeSection(s.id,{items:(s.items||[]).filter((_,k)=>k!==j)})}>Remove item</button></div>)}<button disabled={(s.items||[]).length>=16} onClick={()=>changeSection(s.id,{items:[...(s.items||[]),{title:"New item",body:""}]})}>+ Add item</button></div>}</div></article>)}</div>:<>
     <div className="cms-edit-heading"><h3>Editable sections <small>{filtered.length} editable fields</small></h3><label><Search size={16}/><input placeholder="Search fields…" value={query} onChange={e=>setQuery(e.target.value)}/></label></div>
     <div className="cms-fields">{filtered.map(field=>{
@@ -236,7 +266,7 @@ export function AdminDashboard() {
         <div className="cms-field-head"><label htmlFor={field.id}>{field.label}</label>{modified&&<span className="cms-change-label">Unpublished change</span>}</div>
         <div className="cms-current"><span className="cms-field-caption">CURRENTLY ON YOUR WEBSITE</span>{field.type==="image"?<div className="cms-current-image">{current?<img src={current} alt={field.label+" currently live"}/>:<span>No image set</span>}</div>:<p>{current||"No content set"}</p>}</div>
         <label className="cms-field-caption cms-edit-label" htmlFor={field.id}>{field.type==="image"?"REPLACEMENT IMAGE":"EDIT CONTENT"}</label>
-        {field.type==="image"?<><div className="cms-image-preview">{next?<img src={next} alt={"New "+field.label}/>:<ImageIcon size={35}/>}</div><div className="cms-image-actions"><label className="cms-upload">Choose new image<input type="file" hidden accept="image/jpeg,image/png,image/webp,image/gif" onChange={e=>{const file=e.target.files?.[0];if(file)void upload(file,field.id);e.target.value=""}}/></label><input id={field.id} aria-label={"Image URL for "+field.label} placeholder="Or paste an image URL" value={next} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/></div></>:field.type==="textarea"?<textarea id={field.id} rows={3} value={next} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/>:<input id={field.id} value={next} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/>}
+        {field.type==="image"?<><div className="cms-image-preview">{next?<img src={next} alt={"New "+field.label}/>:<ImageIcon size={35}/>}</div><div className="cms-image-actions"><label className="cms-upload">Choose new image<input type="file" hidden accept="image/jpeg,image/png,image/webp,image/gif" onChange={e=>{const file=e.target.files?.[0];if(file)void upload(file,field.id);e.target.value=""}}/></label><input id={field.id} aria-label={"Image URL for "+field.label} placeholder="Or paste an image URL" value={next} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/></div></>:field.type==="select"?<select id={field.id} value={next} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}>{field.options?.map(option=><option key={option.value} value={option.value}>{option.label}</option>)}</select>:field.type==="textarea"?<textarea id={field.id} rows={3} value={next} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/>:<input id={field.id} value={next} onChange={e=>setDraft(p=>({...p,[field.id]:e.target.value}))}/>}
         <div className="cms-field-footer"><span>{modified?"Your website will not change until you publish.":"Showing the current published content above."}</span><div className="cms-field-buttons"><button type="button" disabled={!modified} onClick={()=>setDraft(p=>({...p,[field.id]:current}))}>Undo edit</button><button type="button" onClick={()=>setDraft(p=>({...p,[field.id]:defaults[field.id]??""}))}><RotateCcw size={13}/> Restore original</button></div></div>
       </section>;
     })}</div>

@@ -1,3 +1,5 @@
+import { useSetting, safeWebUrl } from "../lib/editable-settings";
+import { ContentVisibility } from "../components/site/ContentVisibility";
 import { workforceOne } from "../lib/workforce-one";
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, Check } from "lucide-react";
@@ -30,6 +32,12 @@ function Copy({ id }: { id: keyof typeof jobPageCopy }) {
 }
 
 function FindAJob() {
+  const registrationUrl=safeWebUrl(useSetting("jobs.register.url"),workforceOne.registration);
+  const registrationTheme=useSetting("jobs.register.theme");
+  const registrationLabel=useSetting("jobs.register.button");
+  const recruitmentEmail=useSetting("jobs.contact.email");
+  const recruitmentPhone=useSetting("jobs.contact.phone");
+  const sectionOrder=useSetting("jobs.section.order");
   const photo = useContentValue("jobs.hero.image", recruitmentPhoto);
   return <div>
     <section className="bg-primary pt-36 pb-16 text-white md:pt-44 md:pb-24">
@@ -77,18 +85,22 @@ function FindAJob() {
       <WorkforceOneEmbed kind="jobs" />
     </div></section>
 
-    <section className="bg-primary py-16 text-white"><div className="container-x">
+    <div className="flex flex-col">
+    <section className={(sectionOrder==="register-first"?"order-2 ":"order-1 ")+"bg-primary py-16 text-white"}><div className="container-x">
       <h2 className="max-w-3xl text-3xl font-bold md:text-4xl"><Copy id="jobs.contact.title" /></h2>
-      <p className="mt-6">Please contact our recruitment team by emailing <a href="mailto:recruit@yourcrew.com.au" className="font-semibold text-accent underline underline-offset-4">recruit@yourcrew.com.au</a> or by phoning <a href="tel:+61391081102" className="whitespace-nowrap font-semibold text-accent underline underline-offset-4">03 9108 1102</a>.</p>
+      <p className="mt-6">Please contact our recruitment team by emailing <a href={"mailto:"+recruitmentEmail} className="font-semibold text-accent underline underline-offset-4">{recruitmentEmail}</a> or by phoning <a href={"tel:"+recruitmentPhone.replace(/[^+0-9]/g,"")} className="whitespace-nowrap font-semibold text-accent underline underline-offset-4">{recruitmentPhone}</a>.</p>
     </div></section>
 
-    <section id="register" tabIndex={-1} aria-label="Register with Your Crew" className="border-t border-white/15 bg-primary py-16 text-white md:py-20">
+    <ContentVisibility id="jobs.register.visible">
+    <section id="register" tabIndex={-1} aria-label="Register with Your Crew" className={(sectionOrder==="register-first"?"order-1 ":"order-2 ")+"border-t py-16 md:py-20 "+(registrationTheme==="light"?"border-border bg-surface text-primary":"border-white/15 bg-primary text-white")}>
       <div className="container-x flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
-        <p className="max-w-3xl text-xl leading-relaxed text-white/90"><Copy id="jobs.register.intro" /></p>
-        <a href={workforceOne.registration} className="inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-accent px-8 py-4 font-bold text-primary shadow-lg transition-colors hover:bg-accent/90">Register now <ArrowRight className="h-5 w-5" aria-hidden="true" /></a>
+        <p className={"max-w-3xl text-xl leading-relaxed "+(registrationTheme==="light"?"text-primary":"text-white/90")}><Copy id="jobs.register.intro" /></p>
+        <a href={registrationUrl} className="inline-flex shrink-0 items-center justify-center gap-3 rounded-full bg-accent px-8 py-4 font-bold text-primary shadow-lg transition-colors hover:bg-accent/90">{registrationLabel} <ArrowRight className="h-5 w-5" aria-hidden="true" /></a>
       </div>
     </section>
 
+    </ContentVisibility>
+    </div>
     <FaqSection audience="jobs" groups={jobFaqs} />
   </div>;
 }

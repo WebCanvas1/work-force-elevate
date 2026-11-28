@@ -1,3 +1,4 @@
+import { useRequestDestination } from "../lib/editable-settings";
 import { EmployerFaqContent } from "../components/site/EmployerFaqContent";
 import { ContentText, useContentValue } from "../lib/site-content";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
@@ -48,6 +49,7 @@ const workforce = [
 const industries = ["Construction", "Civil", "Warehousing", "Manufacturing", "Maintenance", "Commercial", "Property", "Infrastructure"];
 
 function FindStaff() {
+  const requestTo=useRequestDestination();
   return (
     <div>
       <section className="relative isolate overflow-hidden bg-primary pt-32 pb-24 text-white md:pt-40 md:pb-32">
@@ -65,7 +67,7 @@ function FindStaff() {
             Fully screened workers, 24-hour response, Victoria wide.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary shadow-lg shadow-accent/30">
+            <Link to={requestTo} className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary shadow-lg shadow-accent/30">
               Request staff <ArrowRight className="h-4 w-4" />
             </Link>
             <a href="tel:+61451267768" className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white">
@@ -158,10 +160,11 @@ function FindStaff() {
 }
 
 function RequestForm() {
+  const requestTo=useRequestDestination();
   const navigate = useNavigate();
   return (
     <form
-      onSubmit={(e) => { e.preventDefault(); void navigate({ to: "/contact" }); }}
+      onSubmit={(e) => { e.preventDefault(); void navigate({ to: requestTo }); }}
       className="mt-10 rounded-3xl border border-border bg-background p-8 md:p-12"
     >
       <div className="grid gap-4 sm:grid-cols-2">
@@ -179,7 +182,7 @@ function RequestForm() {
       <div className="mt-4">
         <Field label="Tell us about the role" name="details" as="textarea" />
       </div>
-      <button type="button" onClick={() => void navigate({ to: "/contact" })} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-semibold text-white transition-colors hover:bg-accent">
+      <button type="button" onClick={() => void navigate({ to: requestTo })} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-4 text-sm font-semibold text-white transition-colors hover:bg-accent">
         Request staff <ArrowRight className="h-4 w-4" />
       </button>
     </form>

@@ -1,3 +1,5 @@
+import { useSetting } from "../lib/editable-settings";
+import type { CSSProperties } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -81,11 +83,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const textSize=useSetting("global.text.size")==="20"?"1.25rem":"1.125rem";
 
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="public-site">
+      <div className="public-site" style={{"--public-text-size":textSize} as CSSProperties}>
       <Navigation />
       <main className="min-h-screen"><Outlet /><DynamicSections /></main>
       <Footer />

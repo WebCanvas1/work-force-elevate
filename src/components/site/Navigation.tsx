@@ -1,3 +1,4 @@
+import { useRequestDestination, useSetting } from "../../lib/editable-settings";
 import { Link } from "@tanstack/react-router";
 import logo from "../../assets/your-crew-logo.png";
 import { useContentValue } from "../../lib/site-content";
@@ -15,6 +16,8 @@ const links = [
 ] as const;
 
 export function Navigation() {
+  const requestTo=useRequestDestination();
+  const compactLogo=useSetting("global.logo.size")==="compact";
   const [open, setOpen] = useState(false);
   const logoUrl = useContentValue("global.logo", logo);
 
@@ -24,12 +27,12 @@ export function Navigation() {
         <Link
           to="/"
           aria-label="Your Crew home"
-          className="relative block h-[88px] w-[185px] shrink-0 overflow-hidden md:h-[104px] md:w-[220px] transition-transform duration-300 hover:scale-[1.03]"
+          className={"relative block shrink-0 overflow-hidden transition-transform duration-300 hover:scale-[1.03] "+(compactLogo?"h-[70px] w-[150px] md:h-20 md:w-[170px]":"h-[88px] w-[185px] md:h-[104px] md:w-[220px]")}
         >
           <img
             src={logoUrl}
             alt="Your Crew — Flexible Workforce Specialists"
-            className={logoUrl === logo ? "absolute left-1/2 top-1/2 h-auto w-[260px] max-w-none -translate-x-1/2 -translate-y-[45%] md:w-[310px]" : "h-full w-full object-contain"}
+            className={logoUrl === logo ? "absolute left-1/2 top-1/2 h-auto max-w-none -translate-x-1/2 -translate-y-[45%] "+(compactLogo?"w-[210px] md:w-[240px]":"w-[260px] md:w-[310px]") : "h-full w-full object-contain"}
           />
         </Link>
 
@@ -52,7 +55,7 @@ export function Navigation() {
 
         <div className="hidden xl:block">
           <Link
-            to="/contact"
+            to={requestTo}
             className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-lg font-semibold text-primary shadow-lg shadow-accent/30 transition-all duration-300 hover:-translate-y-px hover:bg-accent/90"
           >
             Request Staff
@@ -99,7 +102,7 @@ export function Navigation() {
 
             <li className="mt-2">
               <Link
-                to="/contact"
+                to={requestTo}
                 onClick={() => setOpen(false)}
                 className="block rounded-full bg-accent px-5 py-3 text-center text-base font-semibold text-primary transition-colors hover:bg-accent/90"
               >

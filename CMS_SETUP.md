@@ -18,7 +18,7 @@ The repository now includes a WordPress-style editing interface at the hash URL 
 
 ## Editing coverage
 
-The editor currently supports page headings, hero images, logo, brand name, phone and email in the footer, with protected publishing and stored images. It does **not** yet edit every paragraph, service card, job listing, form field, or navigation item. Further integration is needed for complete front-end coverage.
+The editor supports the page content and settings listed under Current admin controls below. Additional sections can be created with the Page builder.
 
 ## Architecture and security
 
@@ -32,5 +32,20 @@ The editor currently supports page headings, hero images, logo, brand name, phon
 ## Limitations
 
 - There is currently no version history or user-roles feature.
-- Page preview displays the live published page. Unpublished drafts are not shown in the preview.
+- The Preview panel shows unpublished drafts using same-origin preview messages.
 - Changes may take up to roughly 45 seconds to appear for visitors due to cache headers.
+
+
+## Current admin controls
+
+- Homepage: hero, service and process headings; process step titles, descriptions and photos; certification image replacements; visibility of feature cards, certifications and How it works. Empty certificate replacement fields retain the original supplied images.
+- About Us: headings, hero photo, Ringwood meeting text, years of service and the three service tile labels; compact or spacious section spacing.
+- Find a Job: supplied introductory copy, benefits, all candidate FAQs and categories; registration invitation, button text, destination, colour and visibility; recruitment email and phone; order of recruitment contact and registration sections.
+- Find Staff: headings and hero photo; all 32 employer FAQ questions, answers and category names. These FAQs are shared with the dedicated FAQ page.
+- Contact: headings, shared contact email and phone, office address, business hours, Google Maps embed URL and directions link; four service tile images, titles, visibility, position and optional links. Leave tile link fields empty to keep tiles non-clickable.
+- News: add, edit, unpublish or delete articles; upload or replace article images, edit their descriptions, and preview images. Samples can be deleted permanently by publishing an explicit empty article list.
+- Website Settings: shared Request Staff destination, logo image and size, and minimum public text size (18 or 20px).
+
+Choose a page in the sidebar, make edits, use Preview, then Publish changes. The current design is preserved until a setting is changed and published. Removed built-in sections (Industries, Careers, quoted reviews and the About timeline) remain removed; new content can be added with the Page builder.
+
+Google map URLs must be HTTPS URLs on maps.google.com or www.google.com under /maps. Registration and directions links must be HTTPS. Workforce One listings, applications and registrations are managed in Workforce One, not in this website editor.

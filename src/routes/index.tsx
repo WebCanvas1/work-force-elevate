@@ -1,3 +1,4 @@
+import { ContentVisibility } from "../components/site/ContentVisibility";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -73,11 +74,11 @@ function Index() {
   return (
     <div>
       <Hero />
-      <WorkforceFeatures />
+      <ContentVisibility id="home.features.visible"><WorkforceFeatures /></ContentVisibility>
       <Services />
       <WhyUs />
-      <Certifications />
-      <HowItWorks />
+      <ContentVisibility id="home.certifications.visible"><Certifications /></ContentVisibility>
+      <ContentVisibility id="home.process.visible"><HowItWorks /></ContentVisibility>
       <CTABanner />
       <ContactStrip />
     </div>
@@ -105,8 +106,8 @@ function WorkforceFeatures() {
                 <it.icon className="h-5 w-5" />
               </span>
               <div className="min-w-0">
-                <p className="font-bold text-primary">{it.t}</p>
-                <p className="mt-0.5 text-sm text-muted-foreground">{it.d}</p>
+                <p className="font-bold text-primary"><ContentText id={`home.features.${i}.title`} fallback={it.t} /></p>
+                <p className="mt-0.5 text-sm text-muted-foreground"><ContentText id={`home.features.${i}.body`} fallback={it.d} /></p>
               </div>
             </motion.div>
           ))}
@@ -373,6 +374,11 @@ function WhyUs() {
   );
 }
 
+function CertificationImage({index,title,offset}:{index:number;title:string;offset:string}) {
+  const image=useContentValue(`home.certification.${index+1}.image`,"");
+  return image ? <img src={image} alt={title} loading="lazy" className="h-full w-full object-contain" /> : <img src={certificationsImg} alt={title} loading="lazy" width={1276} height={418} className="absolute max-w-none" style={{width:"332.2917%",height:"108.8542%",top:"-2.34375%",left:offset}} />;
+}
+
 function Certifications() {
   const certificates = [
     { title: "Labour Hire Authority certified", offset: "-9.6354%" },
@@ -383,9 +389,9 @@ function Certifications() {
     <section aria-label="Certifications and enterprise agreements" className="bg-surface py-16 md:py-24">
       <div className="container-x">
         <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
-          {certificates.map(certificate => (
+          {certificates.map((certificate,i) => (
             <div key={certificate.title} className="relative mx-auto aspect-square w-full max-w-sm overflow-hidden">
-              <img src={certificationsImg} alt={certificate.title} loading="lazy" width={1276} height={418} className="absolute max-w-none" style={{ width: "332.2917%", height: "108.8542%", top: "-2.34375%", left: certificate.offset }} />
+              <CertificationImage index={i} title={certificate.title} offset={certificate.offset} />
             </div>
           ))}
         </div>
@@ -412,8 +418,8 @@ function HowItWorks() {
                 <span aria-hidden="true" className="absolute left-5 top-5 grid h-12 w-12 place-items-center rounded-full bg-accent text-xl font-extrabold text-primary shadow-md">{String(i + 1).padStart(2, "0")}</span>
               </div>
               <div className="flex-1 p-6 md:p-8">
-                <h3 className="text-2xl font-bold leading-snug text-primary"><span className="sr-only">Step {i + 1}: </span>{step.title}</h3>
-                <p className="mt-3 leading-relaxed text-muted-foreground">{step.desc}</p>
+                <h3 className="text-2xl font-bold leading-snug text-primary"><span className="sr-only">Step {i + 1}: </span><ContentText id={`home.process.step.${i + 1}.title`} fallback={step.title} /></h3>
+                <p className="mt-3 leading-relaxed text-muted-foreground"><ContentText id={`home.process.step.${i + 1}.description`} fallback={step.desc} /></p>
               </div>
             </li>
           ))}

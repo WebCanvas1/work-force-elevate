@@ -1,6 +1,6 @@
 import { parseNews, newsImageUrl, type NewsArticle } from "../../lib/news";
 
-export function NewsEditor({value,onChange}:{value:string;onChange:(value:string)=>void}) {
+export function NewsEditor({value,onChange,onUpload}:{value:string;onChange:(value:string)=>void;onUpload?:(file:File,id:string)=>Promise<void>}) {
   const articles=parseNews(value);
   const update=(id:string,patch:Partial<NewsArticle>)=>onChange(JSON.stringify(articles.map(a=>a.id===id?{...a,...patch}:a)));
   return <div className="cms-builder">
@@ -8,6 +8,7 @@ export function NewsEditor({value,onChange}:{value:string;onChange:(value:string
     {articles.map(a=><article key={a.id} className="cms-builder-section"><div className="cms-builder-toolbar"><strong>{a.title||"New article"}</strong><div><button type="button" onClick={()=>{if(window.confirm("Delete this article?"))onChange(JSON.stringify(articles.filter(x=>x.id!==a.id)))}}>Delete article</button></div></div><div className="cms-builder-body">
       <label>Title<input value={a.title} onChange={e=>update(a.id,{title:e.target.value})}/></label>
       <label>Publication date<input type="date" value={a.date} onChange={e=>update(a.id,{date:e.target.value})}/></label>
+      {onUpload && <label>Upload article image<input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={e=>{const file=e.target.files?.[0];if(file)void onUpload(file,a.id);e.target.value=""}} /></label>}
       <label>Article image URL (optional)<input type="url" value={a.image||""} onChange={e=>update(a.id,{image:e.target.value})} placeholder="https://…" /></label>
       <label>Image description<input value={a.imageAlt||""} onChange={e=>update(a.id,{imageAlt:e.target.value})} /></label>
       {newsImageUrl(a.image) && <img src={newsImageUrl(a.image)} alt={a.imageAlt||a.title} style={{width:"100%",maxHeight:220,objectFit:"cover",borderRadius:8}} />}

@@ -1,3 +1,4 @@
+import { useSetting, useRequestDestination, editableDefaults } from "../lib/editable-settings";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowRight, UserRound, MessageCircle, Award, Handshake, Compass, ShieldCheck, HeartHandshake, Sparkles } from "lucide-react";
@@ -24,6 +25,8 @@ const values = [
 ];
 
 export default function About() {
+  const spacing=useSetting("about.spacing");
+  const requestTo=useRequestDestination();
   return (
     <div>
       <section className="relative isolate overflow-hidden bg-primary pt-32 pb-14 text-white md:pt-40 md:pb-20">
@@ -43,7 +46,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="bg-white py-12 md:py-16">
+      <section className={spacing==="spacious"?"bg-white py-24 md:py-32":"bg-white py-12 md:py-16"}>
         <div className="container-x grid gap-8 lg:grid-cols-2 lg:items-center">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Mission & Vision</p>
@@ -56,29 +59,29 @@ export default function About() {
               professionals who seamlessly integrate into your team and contribute to your success.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              Our team is based in Ringwood, with meetings and appointments available at any Waterman Workspaces location.
+              <ContentText id="about.location.body" fallback={editableDefaults["about.location.body"]} />
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex min-h-44 flex-col justify-center rounded-2xl border border-border bg-background p-6">
-              <p className="text-3xl font-extrabold text-primary">22+</p>
-              <p className="mt-1 text-sm uppercase tracking-wider text-muted-foreground">Years of service</p>
+              <p className="text-3xl font-extrabold text-primary"><ContentText id="about.service.years" fallback="22+" /></p>
+              <p className="mt-1 text-sm uppercase tracking-wider text-muted-foreground"><ContentText id="about.service.label" fallback="Years of service" /></p>
             </div>
             {[
               { icon: UserRound, title: "Own Manager" },
               { icon: ShieldCheck, title: "Trusted Service" },
               { icon: MessageCircle, title: "Great Communication and quick response." },
-            ].map(({ icon: Icon, title }) => (
+            ].map(({ icon: Icon, title },i) => (
               <div key={title} className="flex min-h-44 flex-col justify-center rounded-2xl border border-border bg-background p-6">
                 <Icon className="mb-4 h-8 w-8 text-primary" aria-hidden="true" />
-                <p className="text-xl font-bold leading-snug text-primary">{title}</p>
+                <p className="text-xl font-bold leading-snug text-primary"><ContentText id={`about.service.tile.${i+1}`} fallback={title} /></p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="bg-background py-12 md:py-16">
+      <section className={spacing==="spacious"?"bg-background py-24 md:py-32":"bg-background py-12 md:py-16"}>
         <div className="container-x">
           <div className="mx-auto max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Our Values</p>
@@ -109,7 +112,7 @@ export default function About() {
 
 
 
-      <section className="bg-background py-12 md:py-16">
+      <section className={spacing==="spacious"?"bg-background py-24 md:py-32":"bg-background py-12 md:py-16"}>
         <div className="container-x grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Why businesses trust us</p>
@@ -155,7 +158,7 @@ export default function About() {
             <ContentText id="about.cta.title" fallback="Ready to build your dream team?" />
           </h2>
           <div className="flex gap-3">
-            <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary">
+            <Link to={requestTo} className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3.5 text-sm font-semibold text-primary">
               Request staff <ArrowRight className="h-4 w-4" />
             </Link>
             <Link to="/contact" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-sm font-semibold">

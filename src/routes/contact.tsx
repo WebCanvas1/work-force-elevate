@@ -1,3 +1,5 @@
+import { useSetting, safeMapUrl, safeWebUrl, editableDefaults } from "../lib/editable-settings";
+import { ContentVisibility } from "../components/site/ContentVisibility";
 import { contactServices } from "../lib/contact-services";
 import { ContentImage, ContentText, useContentValue } from "../lib/site-content";
 import { createFileRoute } from "@tanstack/react-router";
@@ -21,6 +23,20 @@ export const Route = createFileRoute("/contact")({
 function Contact() {
   const phone=useContentValue("global.phone","0451 267 768");
   const email=useContentValue("global.email","sales@yourcrew.com.au");
+  const officeLabel=useSetting("contact.office.label");
+  const officeAddress=useSetting("contact.office.address");
+  const mapUrl=safeMapUrl(useSetting("contact.office.map"));
+  const directions=safeWebUrl(useSetting("contact.office.directions"),editableDefaults["contact.office.directions"]);
+  const directionsLabel=useSetting("contact.office.maplabel");
+  const hours=useSetting("contact.hours");
+  const servicesPosition=useSetting("contact.services.position");
+  const serviceTiles=(<ContentVisibility id="contact.services.visible">      <section aria-label="Our staffing services" className="bg-white py-12 md:py-16">
+        <div className="container-x grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          {contactServices.map(service => (
+            <ServiceTile key={service.id} service={service} />
+          ))}
+        </div>
+      </section></ContentVisibility>);
   return (
     <div>
       <section className="bg-primary pt-32 pb-16 text-white md:pt-40 md:pb-20">
@@ -35,6 +51,7 @@ function Contact() {
         </div>
       </section>
 
+      {servicesPosition==="before" && serviceTiles}
       <section className="bg-background py-12 md:py-16">
         <div className="container-x grid gap-12 lg:grid-cols-[1fr_1.1fr]">
           <div>
@@ -43,41 +60,39 @@ function Contact() {
               <ul className="mt-6 space-y-5">
                 <ContactRow icon={Phone} label="Phone" value={phone} href={"tel:"+phone.replace(/[^+0-9]/g,"")} />
                 <ContactRow icon={Mail} label="Email" value={email} href={"mailto:"+email} />
-                <ContactRow icon={MapPin} label="Melbourne Office" value={"Waterman Suite 586, C307,\nEastland Shopping Centre,\nLevel 3, 175 Maroondah Highway,\nRingwood VIC 3134"} href="https://maps.app.goo.gl/9MCphiEC5VmmB88p7" />
-                <ContactRow icon={Clock} label="Business hours" value="Mon – Fri, 7:00am – 6:00pm" />
+                <ContactRow icon={MapPin} label={officeLabel} value={officeAddress} href={directions} />
+                <ContactRow icon={Clock} label="Business hours" value={hours} />
               </ul>
             </div>
             <div className="mt-6 overflow-hidden rounded-3xl border border-border">
               <iframe
                 title="Waterman Eastland — Melbourne Office, Ringwood"
-                src="https://maps.google.com/maps?cid=11839961445765829978&z=17&output=embed"
+                src={mapUrl}
                 className="h-80 w-full"
                 loading="lazy"
               />
-              <a href="https://maps.app.goo.gl/9MCphiEC5VmmB88p7" target="_blank" rel="noopener noreferrer" className="block border-t border-border bg-white px-5 py-4 font-semibold text-primary underline underline-offset-4">Get directions to Waterman Eastland</a>
+              <a href={directions} target="_blank" rel="noopener noreferrer" className="block border-t border-border bg-white px-5 py-4 font-semibold text-primary underline underline-offset-4">{directionsLabel}</a>
             </div>
           </div>
 
           <ContactForm />
         </div>
       </section>
-      <section aria-label="Our staffing services" className="bg-white pb-12 md:pb-16">
-        <div className="container-x grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-          {contactServices.map(service => (
-            <article key={service.id} className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
-              <div className="aspect-[16/10] overflow-hidden bg-surface">
-                <ContentImage id={`contact.service.${service.id}.image`} fallback={service.image} alt={service.alt} className="h-full w-full object-cover" />
-              </div>
-              <div className="flex flex-1 items-center justify-between gap-3 bg-primary p-5 text-white">
-                <h2 className="text-xl font-bold leading-snug">{service.title}</h2>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+      {servicesPosition!=="before" && serviceTiles}
+
 
     </div>
   );
+}
+
+function ServiceTile({service}:{service:typeof contactServices[number]}) {
+  const configuredUrl=useContentValue(`contact.service.${service.id}.url`,"");
+  const href=safeWebUrl(configuredUrl,"");
+  const Wrapper=href?"a":"article";
+  return <Wrapper href={href||undefined} className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
+    <div className="aspect-[16/10] overflow-hidden bg-surface"><ContentImage id={`contact.service.${service.id}.image`} fallback={service.image} alt={service.alt} className="h-full w-full object-cover" /></div>
+    <div className="flex flex-1 items-center gap-3 bg-primary p-5 text-white"><h2 className="text-xl font-bold leading-snug"><ContentText id={`contact.service.${service.id}.title`} fallback={service.title} /></h2></div>
+  </Wrapper>;
 }
 
 function ContactRow({ icon: I, label, value, href }: { icon: typeof Phone; label: string; value: string; href?: string }) {
