@@ -86,7 +86,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname=useRouterState({select:s=>s.location.pathname});
-  const showKeepInTouch=["/about","/contact","/faq"].includes(pathname);
+  const showKeepInTouch=["/about","/contact","/faq","/news"].includes(pathname);
   const textSize=useSetting("global.text.size")==="20"?"1.25rem":"1.125rem";
 
 
