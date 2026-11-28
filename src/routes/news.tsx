@@ -1,3 +1,4 @@
+import { defaultNewsJson } from "../lib/sample-news";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowRight, Newspaper } from "lucide-react";
@@ -10,7 +11,7 @@ export const Route = createFileRoute("/news")({
 });
 
 function News() {
-  const articles = parseNews(useContentValue("news.articles", "[]")).filter(isPublishedArticle).sort((a,b) => b.date.localeCompare(a.date));
+  const articles = parseNews(useContentValue("news.articles", defaultNewsJson)).filter(isPublishedArticle).sort((a,b) => b.date.localeCompare(a.date));
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("newest");
   const [limit, setLimit] = useState(9);
