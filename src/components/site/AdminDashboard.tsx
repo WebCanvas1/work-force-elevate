@@ -1,3 +1,4 @@
+import { contactServices } from "../../lib/contact-services";
 import { homeProcessSteps } from "../../lib/home-process";
 import { NewsEditor } from "./NewsEditor";
 import { staffFaqs, jobFaqs } from "./FaqSection";
@@ -67,7 +68,7 @@ const groups: Group[] = [
     {id:"global.email",label:"Contact email"}
   ]}
 ];
-const builtInDefaults: ContentMap = {...{"home.hero.badge":"Trusted for 22+ years across Victoria","home.hero.lead":"Australia’s Trusted","home.hero.emphasis":"Labour Hire","home.hero.end":"Partner.","home.services.title":"Workforce solutions for the industries that build Australia.","home.why.title":"Built on reliability, expertise and flexibility.","home.industries.title":"Trusted across the sectors that keep Victoria moving.","home.process.title":"Four steps to the right crew on your site.","home.cta.title":"Need reliable staff? Request workers today.","home.jobs.title":"Latest opportunities","home.contact.title":"Quick enquiry","about.hero.title":"Building strong teams. Empowering Australian businesses.","about.mission.title":"More than staffing — lasting workforce solutions.","about.values.title":"The principles behind every placement.","about.timeline.title":"22+ years of growth.","about.trust.title":"We value our people, so they deliver their best for you.","about.cta.title":"Ready to build your dream team?","staff.hero.title":"The right workers on your site, when you need them.","staff.benefits.title":"Reliable labour hire, without the hassle.","staff.industries.title":"Trusted across every sector we serve.","staff.workforce.title":"Skilled people, ready to work.","staff.faq.title":"Frequently asked questions","staff.form.title":"Tell us what you need.","jobs.hero.title":"Work with a crew that has your back.","jobs.benefits.title":"Benefits of joining Your Crew.","jobs.openings.title":"Current opportunities","jobs.register.title":"Register with Your Crew.","contact.hero.title":"Let’s build your dream team.","contact.info.title":"Company information","contact.form.title":"Send a message","global.company":"Your Crew","global.phone":"0451 267 768","global.email":"info@yourcrew.com.au"},
+const builtInDefaults: ContentMap = {...{"home.hero.badge":"Trusted for 22+ years across Victoria","home.hero.lead":"Australia’s Trusted","home.hero.emphasis":"Labour Hire","home.hero.end":"Partner.","home.services.title":"Workforce solutions for the industries that build Australia.","home.why.title":"Built on reliability, expertise and flexibility.","home.industries.title":"Trusted across the sectors that keep Victoria moving.","home.process.title":"Four steps to the right crew on your site.","home.cta.title":"Need reliable staff? Request workers today.","home.jobs.title":"Latest opportunities","home.contact.title":"Quick enquiry","about.hero.title":"Building strong teams. Empowering Australian businesses.","about.mission.title":"More than staffing — lasting workforce solutions.","about.values.title":"The principles behind every placement.","about.timeline.title":"22+ years of growth.","about.trust.title":"We value our people, so they deliver their best for you.","about.cta.title":"Ready to build your dream team?","staff.hero.title":"The right workers on your site, when you need them.","staff.benefits.title":"Reliable labour hire, without the hassle.","staff.industries.title":"Trusted across every sector we serve.","staff.workforce.title":"Skilled people, ready to work.","staff.faq.title":"Frequently asked questions","staff.form.title":"Tell us what you need.","jobs.hero.title":"Work with a crew that has your back.","jobs.benefits.title":"Benefits of joining Your Crew.","jobs.openings.title":"Current opportunities","jobs.register.title":"Register with Your Crew.","contact.hero.title":"Let’s build your dream team.","contact.info.title":"Company information","contact.form.title":"Send a message","global.company":"Your Crew","global.phone":"0451 267 768","global.email":"sales@yourcrew.com.au"},
   "home.hero.image":homeImage,"about.hero.image":aboutImage,"staff.hero.image":staffImage,
   "jobs.hero.image":jobsImage,"global.logo":logoImage
 };
@@ -75,6 +76,11 @@ homeProcessSteps.forEach((step,i) => {
   const id=`home.process.step.${i + 1}.image`;
   groups.find(group=>group.id==="home")!.fields.push({id,label:`How it works — step ${i + 1}: ${step.title}`,type:"image"});
   builtInDefaults[id]=step.image;
+});
+contactServices.forEach(service => {
+  const id=`contact.service.${service.id}.image`;
+  groups.find(group=>group.id==="contact")!.fields.push({id,label:`${service.title} image`,type:"image"});
+  builtInDefaults[id]=service.image;
 });
 Object.assign(builtInDefaults,jobPageCopy);
 const jobGroup=groups.find(g=>g.id==="jobs")!;

@@ -1,4 +1,5 @@
-import { ContentText, useContentValue } from "../lib/site-content";
+import { contactServices } from "../lib/contact-services";
+import { ContentImage, ContentText, useContentValue } from "../lib/site-content";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Phone, Mail, MapPin, Clock, ArrowRight } from "lucide-react";
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/contact")({
 
 function Contact() {
   const phone=useContentValue("global.phone","0451 267 768");
-  const email=useContentValue("global.email","info@yourcrew.com.au");
+  const email=useContentValue("global.email","sales@yourcrew.com.au");
   return (
     <div>
       <section className="bg-primary pt-32 pb-16 text-white md:pt-40 md:pb-20">
@@ -34,7 +35,23 @@ function Contact() {
         </div>
       </section>
 
-      <section className="bg-background py-20 md:py-28">
+      <section aria-label="Our staffing services" className="bg-white pt-12 md:pt-16">
+        <div className="container-x grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          {contactServices.map(service => (
+            <a key={service.id} href={service.href} className="group flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition-shadow hover:shadow-lg">
+              <div className="aspect-[16/10] overflow-hidden bg-surface">
+                <ContentImage id={`contact.service.${service.id}.image`} fallback={service.image} alt={service.alt} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+              </div>
+              <div className="flex flex-1 items-center justify-between gap-3 bg-primary p-5 text-white">
+                <h2 className="text-xl font-bold leading-snug">{service.title}</h2>
+                <ArrowRight className="h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-background py-12 md:py-16">
         <div className="container-x grid gap-12 lg:grid-cols-[1fr_1.1fr]">
           <div>
             <div className="rounded-3xl border border-border bg-white p-8 md:p-10">

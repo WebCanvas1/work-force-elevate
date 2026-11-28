@@ -479,7 +479,7 @@ function ContactStrip() {
             </li>
             <li className="flex items-center gap-3">
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-white"><Mail className="h-4 w-4" /></span>
-              <a href="mailto:info@yourcrew.com.au" className="font-semibold text-primary">info@yourcrew.com.au</a>
+              <a href="mailto:sales@yourcrew.com.au" className="font-semibold text-primary">sales@yourcrew.com.au</a>
             </li>
             <li className="flex items-center gap-3">
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-primary text-white"><MapPin className="h-4 w-4" /></span>
